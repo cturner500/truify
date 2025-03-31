@@ -1,3 +1,5 @@
+<img src="TruifyLogo.png" width="250" height="81"/>
+
 # truify
 <h1>Introduction/Summary</h1>
 Truify is a module-based open source project to help data and AI pratcitioners prepare training data.  Truify provides CLI and web/GUI access to tooling enabling solutions to the following data preparation challenges:
