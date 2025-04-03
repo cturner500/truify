@@ -55,13 +55,8 @@ def fill_missing_values(df, method):
 # Streamlit app
 st.set_page_config(page_title='TRUIFY')
 st.sidebar.title("TRUIFY.AI")
-<<<<<<< HEAD
-st.sidebar.image("https://github.com/cturner500/truify/blob/main/TruifyLogo.png", use_column_width=True)
-=======
-st.sidebar.image("https://github.com/cturner500/truify/blob/main/TruifyLogo.png")
+st.sidebar.image("TruifyLogo.png")
 
-
->>>>>>> 1135589524f2c1412de531b315d2a3b21c062578
 page = st.sidebar.selectbox("Select a page:", ["Import Data", "Deidentify Data", "Reduce Bias", "Fill Missingness", "Merge Data", "Save Data", "Export Data"])
 
 
