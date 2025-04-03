@@ -56,3 +56,6 @@ Through these approaches, practitioners can achieve the following benefits:
 <h1>Getting Started</h1>
 To install the truify python library: <br>
 <code>pip install truify</code>
+To see a sample application using the truify libraries: <br>
+<code>streamlit run https://github.com/cturner500/truify/blob/main/code/main.py</code>
+
