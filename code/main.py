@@ -100,6 +100,7 @@ if page == "Home":
     st.write("Get started by importing your data, using the button on the left.")
     st.write("")
     st.write("To learn more, contact info@truify.ai")
+    st.image("images/diagram.png")
 
 
 if page == "Import Data":
