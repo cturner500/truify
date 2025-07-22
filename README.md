@@ -1,4 +1,4 @@
-<img src="TruifyLogo.png" width="250" height="81"/>
+<img src="images/TruifyLogo.png" width="250" height="81"/>
 
 # truify
 <h1>Introduction/Summary</h1>
