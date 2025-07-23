@@ -359,11 +359,42 @@ elif page == "Create Compliance Report":
     This tool evaluates your dataset for compliance risks relative to major data protection and AI regulations. It analyzes your data for personally identifiable information (PII), sensitive attributes, missingness, and risks related to automated decision-making. The tool generates a detailed markdown report describing the data, potential compliance risks (with references to GDPR, CCPA, and the EU AI Act), and an action plan for remediation.
     """)
     st.subheader("Select Compliance Policies to Check:")
-    policies = ["GDPR", "EU AI Act", "CCPA", "Other"]
-    selected_policies = st.multiselect("Compliance Policies", policies, default=["GDPR", "EU AI Act", "CCPA"])
-    custom_policy = ""
-    if "Other" in selected_policies:
-        custom_policy = st.text_input("Specify Other Policy:")
+    
+    # Data Protection & Privacy Laws
+    st.write("**Data Protection & Privacy Laws:**")
+    privacy_policies = ["GDPR", "CCPA", "LGPD", "PIPEDA", "PDPA_SG", "PIPL", "APPI", "PDPA_TH", "POPIA", "COPPA", "GLBA", "SOX", "ePrivacy", "NIS2"]
+    selected_privacy = st.multiselect("Privacy Laws", privacy_policies, default=privacy_policies)
+    
+    # AI-Specific Regulations
+    st.write("**AI-Specific Regulations:**")
+    ai_policies = ["EU AI Act", "AI Act CA", "AI Gov SG", "AI Ethics JP", "OECD AI", "UNESCO AI", "G7 AI"]
+    selected_ai = st.multiselect("AI Regulations", ai_policies, default=ai_policies)
+    
+    # Industry-Specific Regulations
+    st.write("**Industry-Specific Regulations:**")
+    industry_policies = ["HIPAA", "Basel", "MiFID II", "Dodd-Frank", "FDA AI", "MDR", "UNECE", "ISO 21434"]
+    selected_industry = st.multiselect("Industry Regulations", industry_policies)
+    
+    # Cybersecurity & Infrastructure
+    st.write("**Cybersecurity & Infrastructure:**")
+    security_policies = ["NIST", "ISO 27001", "SOC 2", "PCI DSS"]
+    selected_security = st.multiselect("Security Standards", security_policies)
+    
+    # Emerging/Proposed Regulations
+    st.write("**Emerging/Proposed Regulations:**")
+    emerging_policies = ["AI Liability", "Data Act", "DSA", "DMA"]
+    selected_emerging = st.multiselect("Emerging Regulations", emerging_policies)
+    
+    # Custom policies
+    st.write("**Custom Policies:**")
+    custom_policies = st.text_area("Add custom policies (one per line):")
+    
+    # Combine all selected policies
+    selected_policies = selected_privacy + selected_ai + selected_industry + selected_security + selected_emerging
+    if custom_policies:
+        custom_list = [p.strip() for p in custom_policies.split('\n') if p.strip()]
+        selected_policies.extend(custom_list)
+    # Generate Report button
     if st.button("Generate Report"):
         if 'df' not in st.session_state:
             st.warning("Please import data first.")
@@ -375,10 +406,610 @@ elif page == "Create Compliance Report":
                     import compliance
                     df = st.session_state['df']
                     # Prepare policy list for compliance.py
-                    policy_args = [p for p in selected_policies if p != "Other"]
-                    if custom_policy:
-                        policy_args.append(custom_policy)
+                    policy_args = selected_policies
                     result = compliance.evaluate_compliance(df, policies=policy_args)
-                    st.markdown(result['markdown'])
+                    
+                    # Store the markdown report in session state
+                    st.session_state['compliance_report_md'] = result['markdown']
+                    st.session_state['compliance_report_generated'] = True
+                    st.rerun()
                 except Exception as e:
                     st.error(f"Error generating compliance report: {e}")
+    
+    # Display report if it exists in session state
+    if 'compliance_report_generated' in st.session_state and st.session_state['compliance_report_generated']:
+        st.markdown(st.session_state['compliance_report_md'])
+        
+        # Add download button
+        try:
+            import tempfile
+            import subprocess
+            import os
+            
+            # Create temporary markdown file with LaTeX image conversion
+            markdown_content = st.session_state['compliance_report_md']
+            
+            # Keep markdown image format as-is to avoid LaTeX escape issues
+            # The base64 embedding and multiple PDF methods should handle images properly
+            
+            # Remove any potential figure captions from the markdown
+            import re
+            # Remove figure captions that might be added by pandoc
+            markdown_content = re.sub(r'\\caption\{[^}]*\}', '', markdown_content)
+            markdown_content = re.sub(r'\\label\{[^}]*\}', '', markdown_content)
+            
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as tmp_md:
+                tmp_md.write(markdown_content)
+                tmp_md_path = tmp_md.name
+            
+            # Create temporary PDF file
+            with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp_pdf:
+                tmp_pdf_path = tmp_pdf.name
+            
+            # Skip custom template for now to avoid LaTeX escape issues
+            tmp_template_path = None
+            
+            # Copy logo file to temporary directory for PDF generation
+            import shutil
+            import base64
+            logo_source = os.path.join(os.path.dirname(__file__), "..", "images", "TruifyLogo.png")
+            logo_dest = os.path.join(os.path.dirname(tmp_md_path), "TruifyLogo.png")
+            
+            # Initialize base64 variables
+            base64_image = None
+            img_data = None
+            
+            if os.path.exists(logo_source):
+                shutil.copy2(logo_source, logo_dest)
+                # Update the markdown content to use the local path
+                markdown_content = markdown_content.replace(logo_source, "TruifyLogo.png")
+                # Also replace any absolute paths with just the filename, removing alt text
+                markdown_content = re.sub(r'!\[.*?\]\([^)]*TruifyLogo\.png\)', '![](TruifyLogo.png)', markdown_content)
+                
+                # Try to embed image as base64 for better compatibility
+                try:
+                    with open(logo_source, 'rb') as img_file:
+                        img_data = base64.b64encode(img_file.read()).decode('utf-8')
+                        base64_image = f'![](data:image/png;base64,{img_data})'
+                        # Replace any logo image with embedded base64, regardless of alt text
+                        markdown_content = re.sub(r'!\[.*?\]\(TruifyLogo\.png\)', base64_image, markdown_content)
+                except:
+                    pass  # Fall back to file reference if base64 fails
+                
+                # Create a version with embedded base64 for PDF tools
+                if base64_image:
+                    markdown_content_for_pdf = markdown_content  # Keep base64 for PDF too
+                else:
+                    markdown_content_for_pdf = markdown_content
+                    # Remove alt text from any remaining logo references
+                    markdown_content_for_pdf = re.sub(r'!\[.*?\]\(TruifyLogo\.png\)', '![](TruifyLogo.png)', markdown_content_for_pdf)
+                
+                # Rewrite the file with updated content
+                with open(tmp_md_path, 'w') as f:
+                    f.write(markdown_content)
+                
+                # Create separate markdown file for PDF generation (with file references)
+                with tempfile.NamedTemporaryFile(mode='w', suffix='_pdf.md', delete=False) as tmp_md_pdf:
+                    tmp_md_pdf.write(markdown_content_for_pdf)
+                    tmp_md_pdf_path = tmp_md_pdf.name
+            
+            # Convert markdown to HTML first, then to PDF
+            try:
+                # Always generate HTML first for debugging
+                html_path = tmp_md_path.replace('.md', '.html')
+                html_generated = False
+                
+                # Generate HTML
+                try:
+                    # Create CSS file with Helvetica font
+                    css_path = tmp_md_path.replace('.md', '.css')
+                    css_content = """
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1.4;
+    margin: 1in;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: bold;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+table {
+    font-family: Helvetica, Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    font-size: 10pt;
+}
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+img {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+"""
+                    with open(css_path, 'w') as f:
+                        f.write(css_content)
+                    
+                    # First generate HTML without embedded resources
+                    subprocess.run([
+                        'pandoc', 
+                        tmp_md_path, 
+                        '-o', html_path,
+                        '--to=html5',
+                        '--standalone',
+                        '--css=' + css_path,
+                        '--metadata=title:Compliance Report'
+                    ], check=True, capture_output=True, timeout=30)
+                    
+                    # Now manually embed the base64 image in the HTML
+                    if base64_image and os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        # Replace any logo references with the base64 image
+                        html_content = re.sub(r'<img[^>]*src="[^"]*TruifyLogo\.png"[^>]*>', f'<img src="data:image/png;base64,{img_data}" alt="Logo" style="max-width: 150px; height: auto; display: block; margin: 0 auto;">', html_content)
+                        
+                        # Write the updated HTML with embedded base64 image
+                        with open(html_path, 'w', encoding='utf-8') as f:
+                            f.write(html_content)
+                    
+                    if os.path.exists(html_path) and os.path.getsize(html_path) > 1000:
+                        html_generated = True
+                    else:
+                        st.error("HTML generation failed: File too small or empty")
+                except Exception as e:
+                    st.error(f"HTML generation failed: {str(e)}")
+                
+                # Try multiple PDF generation methods
+                pdf_generated = False
+                error_messages = []
+                
+                # Method 1: Try converting HTML to PDF using wkhtmltopdf
+                if html_generated:
+                    try:
+                        result = subprocess.run([
+                            'wkhtmltopdf',
+                            '--enable-local-file-access',
+                            '--image-quality', '100',
+                            '--image-dpi', '300',
+                            '--page-size', 'A4',
+                            '--margin-top', '0.5in',
+                            '--margin-bottom', '0.5in',
+                            '--margin-left', '0.5in',
+                            '--margin-right', '0.5in',
+                            html_path,
+                            tmp_pdf_path
+                        ], check=True, capture_output=True, timeout=30)
+                        
+                        if os.path.exists(tmp_pdf_path) and os.path.getsize(tmp_pdf_path) > 1000:
+                            pdf_generated = True
+                        else:
+                            error_messages.append("wkhtmltopdf: File too small or empty")
+                    except Exception as e:
+                        error_messages.append(f"wkhtmltopdf: {str(e)}")
+                
+                # Method 2: Try weasyprint (HTML to PDF)
+                if not pdf_generated and html_generated:
+                    try:
+                        subprocess.run([
+                            'weasyprint',
+                            html_path,
+                            tmp_pdf_path
+                        ], check=True, capture_output=True, timeout=30)
+                        
+                        if os.path.exists(tmp_pdf_path) and os.path.getsize(tmp_pdf_path) > 1000:
+                            pdf_generated = True
+                        else:
+                            error_messages.append("weasyprint: File too small or empty")
+                    except Exception as e:
+                        error_messages.append(f"weasyprint: {str(e)}")
+                
+                # Method 2.5: Try direct markdown to PDF with embedded images
+                if not pdf_generated:
+                    try:
+                        subprocess.run([
+                            'pandoc', 
+                            tmp_md_pdf_path, 
+                            '-o', tmp_pdf_path,
+                            '--pdf-engine=wkhtmltopdf',
+                            '--pdf-engine-opt=--enable-local-file-access',
+                            '--pdf-engine-opt=--image-quality=100',
+                            '--pdf-engine-opt=--enable-javascript',
+                            '--pdf-engine-opt=--javascript-delay=1000'
+                        ], check=True, capture_output=True, timeout=30)
+                        
+                        if os.path.exists(tmp_pdf_path) and os.path.getsize(tmp_pdf_path) > 1000:
+                            pdf_generated = True
+                        else:
+                            error_messages.append("direct markdown to PDF: File too small or empty")
+                    except Exception as e:
+                        error_messages.append(f"direct markdown to PDF: {str(e)}")
+                
+                # Method 3: Try Prince (HTML to PDF)
+                if not pdf_generated and html_generated:
+                    try:
+                        subprocess.run([
+                            'prince',
+                            html_path,
+                            '-o', tmp_pdf_path
+                        ], check=True, capture_output=True, timeout=30)
+                        
+                        if os.path.exists(tmp_pdf_path) and os.path.getsize(tmp_pdf_path) > 1000:
+                            pdf_generated = True
+                        else:
+                            error_messages.append("Prince: File too small or empty")
+                    except Exception as e:
+                        error_messages.append(f"Prince: {str(e)}")
+                
+                # Method 4: Try pandoc HTML to PDF conversion with embedded images
+                if not pdf_generated and html_generated:
+                    try:
+                        subprocess.run([
+                            'pandoc', 
+                            html_path, 
+                            '-o', tmp_pdf_path,
+                            '--pdf-engine=wkhtmltopdf',
+                            '--pdf-engine-opt=--enable-local-file-access',
+                            '--pdf-engine-opt=--image-quality=100',
+                            '--pdf-engine-opt=--enable-javascript',
+                            '--pdf-engine-opt=--javascript-delay=1000'
+                        ], check=True, capture_output=True, timeout=30)
+                        
+                        if os.path.exists(tmp_pdf_path) and os.path.getsize(tmp_pdf_path) > 1000:
+                            pdf_generated = True
+                        else:
+                            error_messages.append("pandoc HTML to PDF: File too small or empty")
+                    except Exception as e:
+                        error_messages.append(f"pandoc HTML to PDF: {str(e)}")
+                
+                # Method 4.5: Try creating HTML with embedded images and convert to PDF
+                if not pdf_generated:
+                    try:
+                        # Create HTML from PDF-optimized markdown with embedded images
+                        html_pdf_path = tmp_md_pdf_path.replace('.md', '.html')
+                        subprocess.run([
+                            'pandoc', 
+                            tmp_md_pdf_path, 
+                            '-o', html_pdf_path,
+                            '--to=html5',
+                            '--standalone',
+                            '--css=' + css_path,
+                            '--metadata=title:Compliance Report'
+                        ], check=True, capture_output=True, timeout=30)
+                        
+                        # Manually embed the base64 image in the HTML
+                        if base64_image and os.path.exists(html_pdf_path):
+                            with open(html_pdf_path, 'r', encoding='utf-8') as f:
+                                html_content = f.read()
+                            
+                            # Replace any logo references with the base64 image
+                            html_content = re.sub(r'<img[^>]*src="[^"]*TruifyLogo\.png"[^>]*>', f'<img src="data:image/png;base64,{img_data}" alt="Logo" style="max-width: 150px; height: auto; display: block; margin: 0 auto;">', html_content)
+                            
+                            # Write the updated HTML with embedded base64 image
+                            with open(html_pdf_path, 'w', encoding='utf-8') as f:
+                                f.write(html_content)
+                        
+                        # Convert HTML to PDF
+                        subprocess.run([
+                            'wkhtmltopdf',
+                            '--enable-local-file-access',
+                            '--image-quality', '100',
+                            '--image-dpi', '300',
+                            '--page-size', 'A4',
+                            '--margin-top', '0.5in',
+                            '--margin-bottom', '0.5in',
+                            '--margin-left', '0.5in',
+                            '--margin-right', '0.5in',
+                            '--enable-javascript',
+                            '--javascript-delay', '1000',
+                            html_pdf_path,
+                            tmp_pdf_path
+                        ], check=True, capture_output=True, timeout=30)
+                        
+                        if os.path.exists(tmp_pdf_path) and os.path.getsize(tmp_pdf_path) > 1000:
+                            pdf_generated = True
+                        else:
+                            error_messages.append("HTML with embedded images to PDF: File too small or empty")
+                    except Exception as e:
+                        error_messages.append(f"HTML with embedded images to PDF: {str(e)}")
+                
+                # Method 5: Try using Chrome/Chromium headless with embedded images (if available)
+                if not pdf_generated:
+                    try:
+                        # Try to find Chrome or Chromium
+                        chrome_paths = [
+                            '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS
+                            '/usr/bin/google-chrome',  # Linux
+                            '/usr/bin/chromium-browser',  # Linux
+                            'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',  # Windows
+                            'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'  # Windows
+                        ]
+                        
+                        chrome_path = None
+                        for path in chrome_paths:
+                            if os.path.exists(path):
+                                chrome_path = path
+                                break
+                        
+                        if chrome_path:
+                            # Use the HTML file with embedded images if available, otherwise use the PDF-optimized HTML
+                            chrome_html_path = html_path if html_generated else html_pdf_path if 'html_pdf_path' in locals() and os.path.exists(html_pdf_path) else None
+                            
+                            if chrome_html_path and os.path.exists(chrome_html_path):
+                                subprocess.run([
+                                    chrome_path,
+                                    '--headless',
+                                    '--disable-gpu',
+                                    '--print-to-pdf=' + tmp_pdf_path,
+                                    '--print-to-pdf-no-header',
+                                    '--print-to-pdf-no-footer',
+                                    '--print-to-pdf-margin-top=0.5in',
+                                    '--print-to-pdf-margin-bottom=0.5in',
+                                    '--print-to-pdf-margin-left=0.5in',
+                                    '--print-to-pdf-margin-right=0.5in',
+                                    'file://' + os.path.abspath(chrome_html_path)
+                                ], check=True, capture_output=True, timeout=30)
+                                
+                                if os.path.exists(tmp_pdf_path) and os.path.getsize(tmp_pdf_path) > 1000:
+                                    pdf_generated = True
+                                else:
+                                    error_messages.append("Chrome headless: File too small or empty")
+                            else:
+                                error_messages.append("Chrome headless: No suitable HTML file found")
+                        else:
+                            error_messages.append("Chrome headless: Chrome/Chromium not found")
+                    except Exception as e:
+                        error_messages.append(f"Chrome headless: {str(e)}")
+                
+                # Method 6: Try creating a simple HTML file with embedded logo and Chrome headless
+                if not pdf_generated:
+                    try:
+                        # Create a simple HTML file with embedded logo
+                        simple_html_content = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Compliance Report</title>
+    <style>
+        body {{ font-family: Helvetica, Arial, sans-serif; margin: 1in; font-size: 12pt; line-height: 1.4; }}
+        img {{ max-width: 150px; height: auto; display: block; margin: 0 auto; }}
+        table {{ border-collapse: collapse; width: 100%; font-family: Helvetica, Arial, sans-serif; }}
+        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 10pt; }}
+        th {{ background-color: #f2f2f2; font-weight: bold; }}
+        h1, h2, h3, h4, h5, h6 {{ font-family: Helvetica, Arial, sans-serif; font-weight: bold; }}
+        h1 {{ text-align: center; margin-bottom: 1em; }}
+    </style>
+</head>
+<body>
+"""
+                        
+                        # Add logo if available
+                        if base64_image:
+                            simple_html_content += f'<img src="data:image/png;base64,{img_data}" alt="Logo" style="max-width: 150px; height: auto; display: block; margin: 0 auto;"><br><br>\n'
+                        
+                        # Convert markdown content to simple HTML
+                        import re
+                        # Remove markdown formatting and convert to simple HTML
+                        html_content = markdown_content
+                        
+                        # Convert headers
+                        html_content = re.sub(r'^# (.*?)$', r'<h1>\1</h1>', html_content, flags=re.MULTILINE)
+                        html_content = re.sub(r'^## (.*?)$', r'<h2>\1</h2>', html_content, flags=re.MULTILINE)
+                        html_content = re.sub(r'^### (.*?)$', r'<h3>\1</h3>', html_content, flags=re.MULTILINE)
+                        
+                        # Convert bold
+                        html_content = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', html_content)
+                        
+                        # Convert lists
+                        html_content = re.sub(r'^- (.*?)$', r'<li>\1</li>', html_content, flags=re.MULTILINE)
+                        html_content = re.sub(r'((?:<li>.*?</li>\n?)+)', r'<ul>\1</ul>', html_content, flags=re.DOTALL)
+                        
+                        # Convert line breaks
+                        html_content = html_content.replace('\n\n', '</p><p>')
+                        html_content = '<p>' + html_content + '</p>'
+                        
+                        simple_html_content += html_content + """
+</body>
+</html>
+"""
+                        
+                        # Write simple HTML file
+                        simple_html_path = tmp_md_path.replace('.md', '_simple.html')
+                        with open(simple_html_path, 'w', encoding='utf-8') as f:
+                            f.write(simple_html_content)
+                        
+                        # Try to find Chrome or Chromium
+                        chrome_paths = [
+                            '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',  # macOS
+                            '/usr/bin/google-chrome',  # Linux
+                            '/usr/bin/chromium-browser',  # Linux
+                            'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',  # Windows
+                            'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'  # Windows
+                        ]
+                        
+                        chrome_path = None
+                        for path in chrome_paths:
+                            if os.path.exists(path):
+                                chrome_path = path
+                                break
+                        
+                        if chrome_path and os.path.exists(simple_html_path):
+                            subprocess.run([
+                                chrome_path,
+                                '--headless',
+                                '--disable-gpu',
+                                '--print-to-pdf=' + tmp_pdf_path,
+                                '--print-to-pdf-no-header',
+                                '--print-to-pdf-no-footer',
+                                '--print-to-pdf-margin-top=0.5in',
+                                '--print-to-pdf-margin-bottom=0.5in',
+                                '--print-to-pdf-margin-left=0.5in',
+                                '--print-to-pdf-margin-right=0.5in',
+                                'file://' + os.path.abspath(simple_html_path)
+                            ], check=True, capture_output=True, timeout=30)
+                            
+                            if os.path.exists(tmp_pdf_path) and os.path.getsize(tmp_pdf_path) > 1000:
+                                pdf_generated = True
+                            else:
+                                error_messages.append("Simple HTML to PDF: File too small or empty")
+                        else:
+                            error_messages.append("Simple HTML to PDF: Chrome not found or HTML not created")
+                    except Exception as e:
+                        error_messages.append(f"Simple HTML to PDF: {str(e)}")
+                
+                if not pdf_generated:
+                    # Show diagnostic information
+                    st.error("**Error generating PDF: All PDF generation methods failed**")
+                    st.write("**Error details:**")
+                    for error in error_messages:
+                        st.write(f"- {error}")
+                    
+                    # Check what tools are available
+                    import shutil
+                    tools_available = {
+                        'pandoc': shutil.which('pandoc') is not None,
+                        'wkhtmltopdf': shutil.which('wkhtmltopdf') is not None,
+                        'weasyprint': shutil.which('weasyprint') is not None,
+                        'prince': shutil.which('prince') is not None
+                    }
+                    
+                    st.write("**Available tools:**")
+                    for tool, available in tools_available.items():
+                        status = "✅ Available" if available else "❌ Not found"
+                        st.write(f"- {tool}: {status}")
+                    
+                    # Don't raise exception, just show error
+                    pdf_generated = False
+                
+                # Create download button for PDF only
+                if pdf_generated:
+                    # Read the generated PDF file
+                    with open(tmp_pdf_path, 'rb') as pdf_file:
+                        pdf_data = pdf_file.read()
+                    
+                    # Create download button for PDF
+                    st.download_button(
+                        label="Download PDF Report",
+                        data=pdf_data,
+                        file_name="compliance_report.pdf",
+                        mime="application/pdf"
+                    )
+                
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                # Check what's available and provide specific guidance
+                import shutil
+                
+                pandoc_available = shutil.which('pandoc') is not None
+                pdflatex_available = shutil.which('pdflatex') is not None
+                
+                if pandoc_available and not pdflatex_available:
+                    st.warning("""
+                    **Pandoc is installed but pdflatex is not found in PATH.**
+                    
+                    On macOS with MacTeX, you may need to add LaTeX to your PATH:
+                    ```bash
+                    export PATH=$PATH:/Library/TeX/texbin
+                    ```
+                    
+                    Or restart your terminal after installing MacTeX.
+                    
+                    Alternatively, try installing BasicTeX instead:
+                    ```bash
+                    brew install --cask basictex
+                    ```
+                    """)
+                elif not pandoc_available:
+                    st.warning("""
+                    **Pandoc is not installed.**
+                    
+                    To install on macOS:
+                    ```bash
+                    brew install pandoc
+                    brew install --cask mactex
+                    ```
+                    
+                    To install on Ubuntu/Debian:
+                    ```bash
+                    sudo apt-get install pandoc texlive-latex-base texlive-fonts-recommended texlive-extra-utils texlive-latex-extra
+                    ```
+                    
+                    To install on Windows:
+                    1. Download Pandoc from https://pandoc.org/installing.html
+                    2. Download MiKTeX from https://miktex.org/download
+                    """)
+                else:
+                    st.warning("""
+                    **PDF generation failed despite having required tools.**
+                    
+                    This might be due to:
+                    - LaTeX packages not installed
+                    - Permission issues
+                    - Temporary system issues
+                    
+                    Try restarting your terminal or the application.
+                    """)
+                
+                # Alternative: provide markdown download
+                st.download_button(
+                    label="Download Report (Markdown)",
+                    data=st.session_state['compliance_report_md'],
+                    file_name="compliance_report.md",
+                    mime="text/markdown"
+                )
+                
+                # Also provide plain text download as alternative
+                st.download_button(
+                    label="Download Report (Plain Text)",
+                    data=st.session_state['compliance_report_md'],
+                    file_name="compliance_report.txt",
+                    mime="text/plain"
+                )
+            
+            # Clean up temporary files
+            try:
+                os.remove(tmp_md_path)
+                if 'tmp_md_pdf_path' in locals() and os.path.exists(tmp_md_pdf_path):
+                    os.remove(tmp_md_pdf_path)
+                if os.path.exists(tmp_pdf_path):
+                    os.remove(tmp_pdf_path)
+                if html_generated and os.path.exists(html_path):
+                    os.remove(html_path)
+                if 'html_pdf_path' in locals() and os.path.exists(html_pdf_path):
+                    os.remove(html_pdf_path)
+                if 'simple_html_path' in locals() and os.path.exists(simple_html_path):
+                    os.remove(simple_html_path)
+                if tmp_template_path and os.path.exists(tmp_template_path):
+                    os.remove(tmp_template_path)
+                if os.path.exists(logo_dest):
+                    os.remove(logo_dest)
+                # Clean up CSS file if it exists
+                css_path = tmp_md_path.replace('.md', '.css')
+                if os.path.exists(css_path):
+                    os.remove(css_path)
+            except:
+                pass
+                
+        except Exception as e:
+            st.error(f"Error generating PDF: {e}")
+            # Fallback: provide markdown download
+            st.download_button(
+                label="Download Report (Markdown)",
+                data=st.session_state['compliance_report_md'],
+                file_name="compliance_report.md",
+                mime="text/markdown"
+            )
