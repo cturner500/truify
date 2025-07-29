@@ -4,6 +4,9 @@ import hashlib
 import random
 import numpy as np
 from sklearn.impute import SimpleImputer
+from PII import pii_page
+from auth import is_authenticated, login_page, handle_oauth_callback, display_user_info, check_token_expiry
+from synthesizer import synthesize_page
 
 # Function to hash data
 def hash_data(value):
@@ -53,33 +56,101 @@ def fill_missing_values(df, method):
     return df
 
 # Streamlit app
-st.set_page_config(page_title='TRUIFY')
-st.sidebar.image("images/TruifyLogo.png")
+st.set_page_config(page_title='TRUIFY', layout="wide", initial_sidebar_state="expanded")
+
+# Add custom CSS for sidebar styling
+st.markdown("""
+<style>
+[data-testid="stSidebar"] {
+    background-color: #69b9e8;
+    min-width: 300px !important;
+    width: 20% !important;
+}
+[data-testid="stSidebar"] .css-1d391kg {
+    background-color: #69b9e8;
+}
+.main .block-container {
+    max-width: 80%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+/* Consistent button spacing */
+[data-testid="stSidebar"] button {
+    margin-bottom: 0.2rem !important;
+    margin-top: 0.2rem !important;
+}
+/* Consistent column spacing */
+[data-testid="stSidebar"] .row-widget {
+    margin-bottom: 0.2rem !important;
+    margin-top: 0.2rem !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.sidebar.image("images/TruifyLogoAlpha.png")
 #st.sidebar.title("TRUIFY.AI")
 
-# Define menu items
+# Define menu items and their data modification status
 menu_items = [
-    "Home",
-    "Import Data",
-    "Describe Data",
-    "Create Compliance Report",
-    "Deidentify Data",
-    "Reduce Bias",
-    "Fill Missingness",
-    "Merge Data",
-    "Synthesize Data",
-    "Export Data"
+    {"name": "Home", "modifies_data": False},
+    {"name": "Import Data", "modifies_data": True},
+    {"name": "Describe Data", "modifies_data": False},
+    {"name": "Create Compliance Report", "modifies_data": False},
+    {"name": "PII Analysis", "modifies_data": True},
+    {"name": "Reduce Bias", "modifies_data": True},
+    {"name": "Fill Missingness", "modifies_data": True},
+    {"name": "Merge Data", "modifies_data": True},
+    {"name": "Synthesize Data", "modifies_data": True},
+    {"name": "Export Data", "modifies_data": False}
 ]
 
 # Initialize current page in session state
 if 'current_page' not in st.session_state:
-    st.session_state['current_page'] = menu_items[0]
+    st.session_state['current_page'] = menu_items[0]["name"]
 
-# Render menu as linked text/buttons
-st.sidebar.markdown("## Menu")
+# Initialize visited pages tracking
+if 'visited_pages' not in st.session_state:
+    st.session_state['visited_pages'] = {"Home"}  # Home is always visited
+else:
+    # Ensure Home is always in visited_pages
+    st.session_state['visited_pages'].add("Home")
+
+# Track the previous page to detect navigation
+if 'previous_page' not in st.session_state:
+    st.session_state['previous_page'] = None
+
+# Render menu as hyperlinked text with checkboxes
+
 for item in menu_items:
-    if st.sidebar.button(item, key=f"menu_{item}"):
-        st.session_state['current_page'] = item
+    item_name = item["name"]
+    
+    # Determine checkbox status based on whether page has been visited
+    if item_name in st.session_state['visited_pages']:
+        checkbox = "✓"  # Check mark for visited pages
+    else:
+        checkbox = "○"  # Empty circle for unvisited pages
+    
+    # Create menu item with checkbox and clickable text
+    col1, col2 = st.sidebar.columns([1, 10])
+    with col1:
+        if item_name in st.session_state['visited_pages']:
+            # For visited pages: show circle with check mark overlay
+            st.markdown(f"""
+            <div style="position: relative; display: inline-block;">
+                <span style="font-size: 32px; color: #FFFFFF; position: relative; z-index: 1;">○</span>
+                <span style="font-size: 24px; color: #FFFFFF; position: absolute; top: 2px; left: 4px; z-index: 2; font-weight: bold;">✓</span>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            # For unvisited pages: show empty circle
+            st.markdown(f"<span style='font-size: 32px; color: #FFFFFF;'>{checkbox}</span>", unsafe_allow_html=True)
+    with col2:
+        if st.button(item_name, key=f"menu_{item_name.replace(' ', '_')}", use_container_width=True):
+            st.session_state['current_page'] = item_name
+            st.session_state['previous_page'] = item_name
+            # Mark the page as visited immediately when clicked
+            st.session_state['visited_pages'].add(item_name)
+            st.rerun()
 
 page = st.session_state['current_page']
 
@@ -105,23 +176,141 @@ if page == "Home":
 
 if page == "Import Data":
     st.title("Import Data")
+    
+    # Initialize session state for data type configuration
+    if 'data_type_config' not in st.session_state:
+        st.session_state['data_type_config'] = {}
+    if 'original_file' not in st.session_state:
+        st.session_state['original_file'] = None
+    if 'show_data_type_config' not in st.session_state:
+        st.session_state['show_data_type_config'] = False
+    if 'file_uploaded' not in st.session_state:
+        st.session_state['file_uploaded'] = False
+    
+    # Handle file upload
+    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+    
+    if uploaded_file is not None and not st.session_state['file_uploaded']:
+        # Store the original file for re-importing with data types
+        st.session_state['original_file'] = uploaded_file
+        
+        # Initial import to get default data types
+        df = pd.read_csv(uploaded_file)
+        
+        # Initialize data type configuration with default types
+        if not st.session_state['data_type_config']:
+            for col in df.columns:
+                if pd.api.types.is_numeric_dtype(df[col]):
+                    if df[col].dtype == 'int64':
+                        st.session_state['data_type_config'][col] = 'int64'
+                    else:
+                        st.session_state['data_type_config'][col] = 'float64'
+                else:
+                    st.session_state['data_type_config'][col] = 'object'
+        
+        st.session_state['df'] = df
+        st.session_state['file_uploaded'] = True
+        if 'genai_description' in st.session_state:
+            del st.session_state['genai_description']
+    
+    # Show data type configuration interface if file is uploaded or user wants to reconfigure
+    if (uploaded_file is not None and st.session_state['file_uploaded']) or st.session_state['show_data_type_config']:
+        if 'df' in st.session_state:
+            df = st.session_state['df']
+            
+            # Show data type configuration interface
+            st.subheader("Data Type Configuration")
+            st.write("Configure data types for each column. This is especially important for columns like ZIP codes that might have leading zeros.")
+            
+            # Data type selection interface
+            for col in df.columns:
+                current_dtype = st.session_state['data_type_config'].get(col, 'object')
+                new_dtype = st.selectbox(
+                    f"Data type for {col}",
+                    ['object', 'int64', 'float64', 'datetime64[ns]', 'bool'],
+                    index=['object', 'int64', 'float64', 'datetime64[ns]', 'bool'].index(current_dtype),
+                    key=f"dtype_{col}"
+                )
+                st.session_state['data_type_config'][col] = new_dtype
+            
+            # Apply data type changes button
+            if st.button("Apply Data Type Changes", type="primary"):
+                try:
+                    # Re-import with explicit data types
+                    uploaded_file.seek(0)  # Reset file pointer
+                    
+                    # Create dtype dictionary for pandas
+                    dtype_dict = {}
+                    for col, dtype in st.session_state['data_type_config'].items():
+                        if dtype == 'datetime64[ns]':
+                            # For datetime, we'll need to parse it after import
+                            dtype_dict[col] = 'object'
+                        else:
+                            dtype_dict[col] = dtype
+                    
+                    # Re-import with specified data types
+                    df_new = pd.read_csv(uploaded_file, dtype=dtype_dict)
+                    
+                    # Handle datetime columns separately
+                    for col, dtype in st.session_state['data_type_config'].items():
+                        if dtype == 'datetime64[ns]':
+                            try:
+                                df_new[col] = pd.to_datetime(df_new[col], errors='coerce')
+                            except Exception as e:
+                                st.warning(f"Could not convert {col} to datetime: {str(e)}")
+                    
+                    # Update the dataframe
+                    st.session_state['df'] = df_new
+                    st.session_state['show_data_type_config'] = False
+                    st.success("✅ Data types applied successfully!")
+                    st.info(f"Dataset shape: {df_new.shape}")
+                    st.rerun()
+                    
+                except Exception as e:
+                    st.error(f"Error applying data types: {str(e)}")
+                    st.error("Please check your data type selections. Some conversions may not be possible.")
+                    
+                    # Show detailed error information
+                    st.subheader("Debugging Information")
+                    st.write(f"Error details: {str(e)}")
+                    st.write("Common issues:")
+                    st.write("- Converting text to numeric when text contains non-numeric characters")
+                    st.write("- Converting to datetime when date format is inconsistent")
+                    st.write("- Converting to boolean when values are not True/False")
+                    
+                    # Show sample data for problematic columns
+                    st.write("**Sample data from each column:**")
+                    for col in df.columns:
+                        st.write(f"{col}: {df[col].head(3).tolist()}")
+    
+    # Show loaded dataframe and controls
     if 'df' in st.session_state:
         df = st.session_state['df']
         st.dataframe(df)
         st.success("A dataframe is loaded.")
-        if st.button("Upload New File"):
-            del st.session_state['df']
-            if 'genai_description' in st.session_state:
-                del st.session_state['genai_description']
-            st.rerun()
-    else:
-        uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
-        if uploaded_file is not None:
-            df = pd.read_csv(uploaded_file)
-            st.session_state['df'] = df
-            if 'genai_description' in st.session_state:
-                del st.session_state['genai_description']
-            st.rerun()
+        
+        # Show data type configuration if available
+        if st.session_state['data_type_config']:
+            st.subheader("Current Data Type Configuration")
+            for col, dtype in st.session_state['data_type_config'].items():
+                st.write(f"**{col}**: {dtype}")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Upload New File"):
+                del st.session_state['df']
+                st.session_state['data_type_config'] = {}
+                st.session_state['original_file'] = None
+                st.session_state['file_uploaded'] = False
+                st.session_state['show_data_type_config'] = False
+                if 'genai_description' in st.session_state:
+                    del st.session_state['genai_description']
+                st.rerun()
+        
+        with col2:
+            if st.button("Reconfigure Data Types"):
+                st.session_state['show_data_type_config'] = True
+                st.rerun()
 
 elif page == "Describe Data":
     st.title("Describe Data")
@@ -165,22 +354,8 @@ elif page == "Describe Data":
     else:
         st.write("Please import data first.")
 
-elif page == "Deidentify Data":
-    st.title("Deidentify Data")
-    if 'df' in st.session_state:
-        df = st.session_state['df']
-        st.dataframe(df)
-        personal_info_columns = identify_personal_info_columns(df)
-        for column in personal_info_columns:
-            df[column] = df[column].apply(lambda x: f'<span style="background-color: red;">{x}</span>')##, axis=1)
-        st.markdown(df.to_html(escape=False), unsafe_allow_html=True)
-        st.write("Columns containing personal information:", personal_info_columns)
-        if st.button("Deidentify"):
-            df = deidentify_data(df, personal_info_columns)
-            st.session_state['df'] = df
-            st.dataframe(df)
-    else:
-        st.write("Please import data first.")
+elif page == "PII Analysis":
+    pii_page()
 
 elif page == "Reduce Bias":
     st.title("Reduce Bias")
@@ -247,6 +422,8 @@ elif page == "Reduce Bias":
             if st.button("Keep Weights"):
                 st.session_state['df'] = st.session_state['preview_weighted_df']
                 del st.session_state['preview_weighted_df']
+                # Mark Reduce Bias as modified
+                # st.session_state['data_modified_pages'].add("Reduce Bias") # This line is removed
                 st.success("Weighted dataframe has replaced the original data.")
                 st.rerun()
     else:   
@@ -290,6 +467,8 @@ elif page == "Fill Missingness":
                 st.session_state['df'] = df
                 st.session_state['missingness_filled_count'] = filled_count
                 st.session_state['missingness_evaluated'] = False
+                # Mark Fill Missingness as modified
+                # st.session_state['data_modified_pages'].add("Fill Missingness") # This line is removed
                 st.rerun()
     elif 'df' in st.session_state:
         df = st.session_state['df']
@@ -329,19 +508,29 @@ elif page == "Merge Data":
     st.write("Coming Soon!")
 
 elif page == "Synthesize Data":
-    st.title("Synthesize Data")
-    try:
-        from synthesizer import data_synthesis
-        result = data_synthesis()
-        st.info(result)
-    except Exception as e:
-        st.error(f"Error: {e}")
+    synthesize_page()
 
 elif page == "Export Data":
     st.title("Export Data")
     if 'df' in st.session_state:
         df = st.session_state['df']
-        st.dataframe(df)
+        st.write(f"Dataset shape: {df.shape}")
+        st.write(f"Dataset columns: {list(df.columns)}")
+        
+        # Check if synthetic data exists
+        if 'synthetic_df' in st.session_state:
+            st.info("Synthetic data is available in session state.")
+            if st.button("Show Synthetic Data Instead"):
+                df = st.session_state['synthetic_df']
+                st.write(f"Synthetic dataset shape: {df.shape}")
+                st.write(f"Synthetic dataset columns: {list(df.columns)}")
+                st.write("**Synthetic Dataset Preview:**")
+                st.dataframe(df.head(10))
+        else:
+            st.info("No synthetic data available.")
+        
+        st.write("**Dataset Preview:**")
+        st.dataframe(df.head(10))
         filename = st.text_input("Enter filename for download (with .csv extension):", value="exported_data.csv")
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button(
