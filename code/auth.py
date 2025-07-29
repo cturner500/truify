@@ -1,255 +1,291 @@
+"""
+auth.py - Simple authentication system
+
+This module provides basic username/password authentication using a CSV file.
+"""
+
 import streamlit as st
-import requests
-from urllib.parse import urlencode
-import json
+import pandas as pd
 import os
-from datetime import datetime, timedelta
-import base64
-import hashlib
-import secrets
 
-# Load environment variables from .env file
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass  # python-dotenv not installed, use system environment variables
+def load_users():
+    """Load users from users.csv file"""
+    try:
+        users_df = pd.read_csv('users.csv')
+        return users_df
+    except Exception as e:
+        st.error(f"Error loading users: {e}")
+        return pd.DataFrame(columns=['username', 'password'])
 
-# Google OAuth configuration
-GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', 'your-google-client-id')
-GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', 'your-google-client-secret')
-GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI', 'http://localhost:8501')
-
-# Check if credentials are properly configured
-def check_oauth_config():
-    """Check if OAuth credentials are properly configured"""
-    if GOOGLE_CLIENT_ID == 'your-google-client-id' or GOOGLE_CLIENT_SECRET == 'your-google-client-secret':
-        return False, "OAuth credentials not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables."
-    return True, None
-
-GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
-GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
-GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo"
-
-def generate_state():
-    """Generate a random state parameter for OAuth security"""
-    return secrets.token_urlsafe(32)
-
-def get_google_auth_url():
-    """Generate Google OAuth authorization URL"""
-    params = {
-        'client_id': GOOGLE_CLIENT_ID,
-        'redirect_uri': GOOGLE_REDIRECT_URI,
-        'scope': 'openid email profile',
-        'response_type': 'code',
-        'state': st.session_state.get('oauth_state', generate_state()),
-        'access_type': 'offline',
-        'prompt': 'consent'
-    }
-    return f"{GOOGLE_AUTH_URL}?{urlencode(params)}"
-
-def exchange_code_for_token(code):
-    """Exchange authorization code for access token"""
-    data = {
-        'client_id': GOOGLE_CLIENT_ID,
-        'client_secret': GOOGLE_CLIENT_SECRET,
-        'code': code,
-        'grant_type': 'authorization_code',
-        'redirect_uri': GOOGLE_REDIRECT_URI
-    }
+def check_credentials(username, password):
+    """Check if username and password match any user in users.csv"""
+    users_df = load_users()
     
-    response = requests.post(GOOGLE_TOKEN_URL, data=data)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        st.error(f"Token exchange failed: {response.text}")
-        return None
+    # Check if the username and password combination exists
+    for _, user in users_df.iterrows():
+        if user['username'] == username and user['password'] == password:
+            return True
+    return False
 
-def get_user_info(access_token):
-    """Get user information from Google"""
-    headers = {'Authorization': f'Bearer {access_token}'}
-    response = requests.get(GOOGLE_USERINFO_URL, headers=headers)
+def login_page():
+    """Display the login page with logo and login form"""
     
-    if response.status_code == 200:
-        return response.json()
-    else:
-        st.error(f"Failed to get user info: {response.text}")
-        return None
+    # Set black background
+    st.markdown("""
+    <style>
+    .main {
+        background-color: black !important;
+    }
+    .stApp {
+        background-color: black !important;
+    }
+    .block-container {
+        background-color: black !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Center the logo
+    st.markdown("""
+    <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <img src="data:image/png;base64,{}" style="max-width: 900px; height: auto;">
+    </div>
+    """.format(get_logo_base64()), unsafe_allow_html=True)
+    
+    # Create login form with custom CSS
+    st.markdown("""
+    <style>
+    /* Center everything on the page */
+    .main {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 100vh !important;
+    }
+    .block-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    .login-form-container {
+        width: 300px !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+    }
+    .login-form-container .stForm {
+        width: 100% !important;
+        margin: 0 auto !important;
+    }
+    .stForm {
+        width: 300px !important;
+        max-width: 300px !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+    }
+    .stForm > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align: center !important;
+    }
+    .stForm input {
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align: left !important;
+    }
+    /* Fix password input and show password icon positioning */
+    .stForm [data-testid="stTextInput"] {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .stForm [data-testid="stTextInput"] > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        position: relative !important;
+    }
+    .stForm [data-testid="stTextInput"] input {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-right: 40px !important;
+    }
+    .stForm [data-testid="stTextInput"] button {
+        position: absolute !important;
+        right: 8px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: auto !important;
+        max-width: none !important;
+        background: none !important;
+        border: none !important;
+        padding: 4px !important;
+    }
+    /* Only target submit buttons, not input field buttons */
+    .stForm .stButton {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+    .stForm .stButton > button {
+        width: 50% !important;
+        max-width: 50% !important;
+        margin: 0 auto !important;
+    }
+    /* Text color styling for better readability on black background */
+    .stForm h3 {
+        color: #cccccc !important;
+    }
+    .stForm label {
+        color: #cccccc !important;
+    }
+    /* Light blue button styling - target all submit buttons in form */
+    .stForm .stButton > button {
+        background-color: #87CEEB !important;
+        color: #000000 !important;
+        border: none !important;
+        background-image: none !important;
+    }
+    .stForm .stButton > button:hover {
+        background-color: #B0E0E6 !important;
+        background-image: none !important;
+    }
+    /* Additional targeting for submit buttons */
+    .stForm button[type="submit"] {
+        background-color: #87CEEB !important;
+        color: #000000 !important;
+        border: none !important;
+        background-image: none !important;
+    }
+    .stForm button[type="submit"]:hover {
+        background-color: #B0E0E6 !important;
+        background-image: none !important;
+    }
+    </style>
+    <div class="login-form-container">
+    """, unsafe_allow_html=True)
+    
+    # Login form
+    with st.form("login_form"):
+        #st.markdown("### Login")
+        
+        username = st.text_input("Username", key="username_input")
+        password = st.text_input("Password", type="password", key="password_input")
+        
+        # Create custom styled submit button
+        st.markdown("""
+        <style>
+        /* Target submit button with multiple selectors */
+        .stForm button[type="submit"],
+        .stForm .stButton > button,
+        .stForm button[data-testid="baseButton-secondary"],
+        .stForm button[data-testid="baseButton-primary"] {
+            background-color: #87CEEB !important;
+            color: #000000 !important;
+            border: none !important;
+            padding: 10px 20px !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+            width: 50% !important;
+            max-width: 50% !important;
+            font-weight: bold !important;
+        }
+        .stForm button[type="submit"]:hover,
+        .stForm .stButton > button:hover,
+        .stForm button[data-testid="baseButton-secondary"]:hover,
+        .stForm button[data-testid="baseButton-primary"]:hover {
+            background-color: #B0E0E6 !important;
+        }
+        /* Force width override */
+        .stForm .stButton {
+            width: 50% !important;
+            max-width: 50% !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Create button with inline styling
+        st.markdown("""
+        <style>
+        /* Target only the submit button specifically */
+        .stForm .stButton > button {
+            width: 50% !important;
+            max-width: 50% !important;
+            min-width: 50% !important;
+            background-color: #87CEEB !important;
+            color: #000000 !important;
+            border: none !important;
+        }
+        /* Target the button container */
+        .stForm .stButton {
+            width: 50% !important;
+            max-width: 50% !important;
+            display: flex !important;
+            justify-content: center !important;
+        }
+        /* Hover state - blue instead of red */
+        .stForm .stButton > button:hover {
+            background-color: #B0E0E6 !important;
+            color: #000000 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Create the login button
+        submit_button = st.form_submit_button("Login")
+    
+    # Handle login outside the form
+    if submit_button:
+        if check_credentials(username, password):
+            st.session_state['authenticated'] = True
+            st.session_state['username'] = username
+            st.success("Login successful!")
+            st.rerun()
+        else:
+            st.error("User or Password do not match our records.")
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
+def get_logo_base64():
+    """Get the TruifyBanner2.png as base64 string"""
+    try:
+        import base64
+        logo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "images/TruifyBanner2.png")
+        if os.path.exists(logo_path):
+            with open(logo_path, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode()
+                return encoded_string
+        else:
+            # Fallback if logo doesn't exist
+            return ""
+    except Exception as e:
+        st.error(f"Error loading logo: {e}")
+        return ""
 
 def is_authenticated():
     """Check if user is authenticated"""
-    return 'user_info' in st.session_state and st.session_state['user_info'] is not None
-
-def login_page():
-    """Display login page"""
-    # Center the logo
-    col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col2:
-        st.image("images/TruifyLogo.png", width=300)
-    
-    st.markdown("---")
-    
-    # Check OAuth configuration
-    config_valid, error_message = check_oauth_config()
-    if not config_valid:
-        st.error("🔧 OAuth Configuration Error")
-        st.error(error_message)
-        st.markdown("""
-        ### Setup Instructions:
-        1. **Create Google Cloud Project**: Go to [Google Cloud Console](https://console.cloud.google.com/)
-        2. **Enable Google+ API**: In APIs & Services > Library
-        3. **Create OAuth Credentials**: In APIs & Services > Credentials
-        4. **Set Environment Variables**: Create a `.env` file with:
-           ```
-           GOOGLE_CLIENT_ID=your-actual-client-id
-           GOOGLE_CLIENT_SECRET=your-actual-client-secret
-           GOOGLE_REDIRECT_URI=http://localhost:8501
-           ```
-        5. **Restart the application**
-        
-        See `GOOGLE_OAUTH_SETUP.md` for detailed instructions.
-        """)
-        return
-    
-    # Center the login content
-    col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col2:
-        st.markdown("""
-        <div style="text-align: center; padding: 2rem;">
-            <h2>Sign in to continue</h2>
-            <p style="color: #666; margin-bottom: 2rem;">
-                Please authenticate with your Google account to access Truify.AI
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Google Sign-in button
-        auth_url = get_google_auth_url()
-        st.markdown(f"""
-        <div style="text-align: center;">
-            <a href="{auth_url}" target="_self">
-                <button style="
-                    background-color: #4285f4;
-                    color: white;
-                    border: none;
-                    padding: 12px 24px;
-                    border-radius: 4px;
-                    font-size: 16px;
-                    font-weight: 500;
-                    cursor: pointer;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                ">
-                    <svg width="18" height="18" viewBox="0 0 24 24">
-                        <path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    Sign in with Google
-                </button>
-            </a>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="text-align: center; margin-top: 2rem;">
-            <p style="color: #999; font-size: 14px;">
-                By signing in, you agree to our Terms of Service and Privacy Policy
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-def handle_oauth_callback():
-    """Handle OAuth callback and token exchange"""
-    # Get URL parameters using the new query_params API
-    if 'code' in st.query_params and 'state' in st.query_params:
-        code = st.query_params['code']
-        state = st.query_params['state']
-        
-        # Verify state parameter
-        if state != st.session_state.get('oauth_state'):
-            st.error("Invalid state parameter. Please try again.")
-            return False
-        
-        # Exchange code for token
-        token_data = exchange_code_for_token(code)
-        if token_data and 'access_token' in token_data:
-            # Get user information
-            user_info = get_user_info(token_data['access_token'])
-            if user_info:
-                # Store user info in session state
-                st.session_state['user_info'] = user_info
-                st.session_state['access_token'] = token_data['access_token']
-                st.session_state['token_expires_at'] = datetime.now() + timedelta(hours=1)
-                
-                # Clear URL parameters
-                st.query_params.clear()
-                return True
-        
-        st.error("Authentication failed. Please try again.")
-        return False
-    
-    return False
+    return st.session_state.get('authenticated', False)
 
 def logout():
-    """Logout user and clear session state"""
-    keys_to_remove = ['user_info', 'access_token', 'token_expires_at', 'oauth_state']
-    for key in keys_to_remove:
-        if key in st.session_state:
-            del st.session_state[key]
-    
-    # Clear all other session state except visited_pages
-    visited_pages = st.session_state.get('visited_pages', set())
-    st.session_state.clear()
-    st.session_state['visited_pages'] = visited_pages
-
-def check_token_expiry():
-    """Check if access token has expired"""
-    if 'token_expires_at' in st.session_state:
-        if datetime.now() > st.session_state['token_expires_at']:
-            st.warning("Your session has expired. Please log in again.")
-            logout()
-            return False
-    return True
+    """Logout the user"""
+    if 'authenticated' in st.session_state:
+        del st.session_state['authenticated']
+    if 'username' in st.session_state:
+        del st.session_state['username']
 
 def display_user_info():
-    """Display user information in sidebar"""
+    """Display user info in sidebar"""
     if is_authenticated():
-        user_info = st.session_state['user_info']
-        
-        st.sidebar.markdown("---")
-        st.sidebar.markdown("### 👤 User Info")
-        
-        # Display user avatar and name
-        if 'picture' in user_info:
-            st.sidebar.image(user_info['picture'], width=50)
-        
-        st.sidebar.markdown(f"**{user_info.get('name', 'Unknown')}**")
-        st.sidebar.markdown(f"*{user_info.get('email', 'No email')}*")
-        
-        # Logout button
-        if st.sidebar.button("🚪 Logout"):
+        username = st.session_state.get('username', 'Unknown')
+        st.sidebar.markdown(f"<span style='color: white;'>**Logged in as:** {username}</span>", unsafe_allow_html=True)
+
+def display_logout_button():
+    """Display logout button in sidebar"""
+    if is_authenticated():
+        if st.sidebar.button("Logout"):
             logout()
             st.rerun()
-        
-        st.sidebar.markdown("---")
-
-def require_auth():
-    """Decorator to require authentication for pages"""
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            if not is_authenticated():
-                login_page()
-                return
-            elif not check_token_expiry():
-                login_page()
-                return
-            else:
-                return func(*args, **kwargs)
-        return wrapper
-    return decorator 

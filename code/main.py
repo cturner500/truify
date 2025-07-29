@@ -5,7 +5,7 @@ import random
 import numpy as np
 from sklearn.impute import SimpleImputer
 from PII import pii_page
-from auth import is_authenticated, login_page, handle_oauth_callback, display_user_info, check_token_expiry
+from auth import is_authenticated, login_page, display_user_info, display_logout_button
 from synthesizer import synthesize_page
 
 # Function to hash data
@@ -87,6 +87,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Authentication check
+if not is_authenticated():
+    login_page()
+    st.stop()
+
+# Display user info at top of sidebar (before logo)
+display_user_info()
+
 st.sidebar.image("images/TruifyLogoAlpha.png")
 #st.sidebar.title("TRUIFY.AI")
 
@@ -151,6 +159,9 @@ for item in menu_items:
             # Mark the page as visited immediately when clicked
             st.session_state['visited_pages'].add(item_name)
             st.rerun()
+
+# Display logout button at bottom of sidebar
+display_logout_button()
 
 page = st.session_state['current_page']
 
