@@ -10,6 +10,16 @@ import os
 import json
 import time
 import hashlib
+import csv
+from datetime import datetime
+import pytz
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 def save_session_to_file(username):
     """Save session to file for persistence"""
@@ -291,6 +301,10 @@ def login_page():
             st.session_state['authenticated'] = True
             st.session_state['username'] = username
             save_session_to_file(username)
+            
+            # Send email notification
+            send_email_notification(username)
+            
             st.success("Login successful!")
             st.rerun()
         else:
@@ -333,6 +347,73 @@ def logout():
         del st.session_state['username']
     clear_session_file()
 
+def send_email_notification(username):
+    """Send email notification when user logs in using Gmail SMTP"""
+    try:
+        # Read email addresses from email.csv
+        email_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "email.csv")
+        
+        if not os.path.exists(email_file):
+            return
+        
+        # Get current time in local and Pacific timezone
+        local_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        pacific_tz = pytz.timezone('US/Pacific')
+        pacific_time = datetime.now(pacific_tz).strftime("%Y-%m-%d %H:%M:%S %Z")
+        
+        # Read email addresses from CSV
+        email_addresses = []
+        with open(email_file, 'r') as file:
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                if len(row) >= 2:
+                    email = row[1].strip()
+                    if '@' in email:  # Basic email validation
+                        email_addresses.append(email)
+        
+        if not email_addresses:
+            return
+        
+        # Email content
+        subject = "Successful TRUIFY.AI Login"
+        body = f"{username} has logged in at {local_time} which is {pacific_time}"
+        
+        # Create message
+        msg = MIMEMultipart()
+        msg['From'] = os.getenv('GMAIL_USER', 'truify@localhost')
+        msg['Subject'] = subject
+        
+        # Add body to email
+        msg.attach(MIMEText(body, 'plain'))
+        
+        # Send email to all addresses using Gmail SMTP
+        try:
+            # Get Gmail credentials from environment variables
+            gmail_user = os.getenv('GMAIL_USER')
+            gmail_password = os.getenv('GMAIL_APP_PASSWORD')
+            
+            if gmail_user and gmail_password:
+                # Use Gmail SMTP
+                server = smtplib.SMTP('smtp.gmail.com', 587)
+                server.starttls()
+                server.login(gmail_user, gmail_password)
+                
+                for email in email_addresses:
+                    try:
+                        msg['To'] = email
+                        text = msg.as_string()
+                        server.sendmail(gmail_user, email, text)
+                    except Exception as e:
+                        pass  # Silently handle email errors
+                
+                server.quit()
+            
+        except Exception as e:
+            pass  # Silently handle SMTP errors
+            
+    except Exception as e:
+        pass  # Silently handle any other errors
+
 def display_user_info():
     """Display user info in sidebar"""
     if is_authenticated():
@@ -345,3 +426,5 @@ def display_logout_button():
         if st.sidebar.button("Logout"):
             logout()
             st.rerun()
+        
+
