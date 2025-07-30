@@ -92,11 +92,12 @@ if not is_authenticated():
     login_page()
     st.stop()
 
-# Display user info at top of sidebar (before logo)
-display_user_info()
+
 
 st.sidebar.image("images/TruifyLogoAlpha.png")
 #st.sidebar.title("TRUIFY.AI")
+# Display user info at top of sidebar (after logo)
+display_user_info()
 
 # Define menu items and their data modification status
 menu_items = [
@@ -182,8 +183,22 @@ if page == "Home":
     st.write("Get started by importing your data, using the button on the left.")
     st.write("")
     st.write("To learn more, contact info@truify.ai")
-    st.image("images/diagram.png")
+    #st.image("images/diagram.png")
+    st.markdown("""
+    <style>
+    .centered-image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 20px 0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image("images/diagram.png", use_container_width=True)
 
 if page == "Import Data":
     st.title("Import Data")

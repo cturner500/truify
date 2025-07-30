@@ -267,7 +267,7 @@ def generate_synthesis_narrative(original_df, synthetic_df, validation_results):
             
         except ImportError:
             # gpt4all is not installed, use fallback narrative
-            raise ImportError("gpt4all module not available")
+            pass  # Silently continue to fallback narrative
         
     except Exception as e:
         # Generate comprehensive fallback narrative with actual metrics

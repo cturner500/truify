@@ -9,6 +9,7 @@ import warnings
 import hashlib
 import random
 
+
 def describe_dataset_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-instruct-v0.2.Q4_0.gguf") -> str:
     """
     Use a local generative AI model to describe the dataset, guess its source, assess usefulness, and discuss appropriateness for AI/ML training.
@@ -39,6 +40,28 @@ def describe_dataset_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-
         with model.chat_session():
             response = model.generate(prompt, max_tokens=256, temp=0.7)
         return response
+    except ImportError:
+        # gpt4all is not installed, provide a helpful fallback
+        return f"""**Dataset Description (AI Model Not Available)**
+
+**Dataset Overview:**
+This dataset contains {len(df.columns)} columns and {len(df)} rows of data.
+
+**Column Analysis:**
+"""
+        + "\n".join([f"- **{col}**: {df[col].dtype} data type" for col in df.columns]) + f"""
+
+**Data Summary:**
+- Numeric columns: {len(df.select_dtypes(include=['number']).columns)} columns
+- Categorical columns: {len(df.select_dtypes(include=['object']).columns)} columns
+- Missing values: {df.isnull().sum().sum()} total missing values
+
+**Recommendations:**
+- Consider the data types and potential uses for each column
+- Check for missing values and data quality issues
+- Evaluate whether this dataset is suitable for your intended analysis
+
+*Note: AI-powered analysis is not available because the required AI model is not installed. This is a basic statistical overview of your dataset.*"""
     except Exception as e:
         return f"Could not generate dataset description: {e}"
 
