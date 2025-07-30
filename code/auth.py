@@ -7,6 +7,53 @@ This module provides basic username/password authentication using a CSV file.
 import streamlit as st
 import pandas as pd
 import os
+import json
+import time
+import hashlib
+
+def save_session_to_file(username):
+    """Save session to file for persistence"""
+    session_data = {
+        'username': username,
+        'timestamp': int(time.time()),
+        'session_id': hashlib.sha256(f"{username}{time.time()}".encode()).hexdigest()
+    }
+    session_file = os.path.join(os.path.dirname(__file__), 'session.json')
+    try:
+        with open(session_file, 'w') as f:
+            json.dump(session_data, f)
+    except Exception as e:
+        st.error(f"Error saving session: {e}")
+
+def load_session_from_file():
+    """Load session from file"""
+    try:
+        session_file = os.path.join(os.path.dirname(__file__), 'session.json')
+        if os.path.exists(session_file):
+            with open(session_file, 'r') as f:
+                session_data = json.load(f)
+            if time.time() - session_data['timestamp'] < 86400:  # 24 hours
+                return session_data['username']
+            else:
+                os.remove(session_file)
+        return None
+    except Exception as e:
+        try:
+            session_file = os.path.join(os.path.dirname(__file__), 'session.json')
+            if os.path.exists(session_file):
+                os.remove(session_file)
+        except:
+            pass
+        return None
+
+def clear_session_file():
+    """Clear session file"""
+    try:
+        session_file = os.path.join(os.path.dirname(__file__), 'session.json')
+        if os.path.exists(session_file):
+            os.remove(session_file)
+    except Exception as e:
+        st.error(f"Error clearing session: {e}")
 
 def load_users():
     """Load users from users.csv file"""
@@ -243,6 +290,7 @@ def login_page():
         if check_credentials(username, password):
             st.session_state['authenticated'] = True
             st.session_state['username'] = username
+            save_session_to_file(username)
             st.success("Login successful!")
             st.rerun()
         else:
@@ -268,7 +316,14 @@ def get_logo_base64():
 
 def is_authenticated():
     """Check if user is authenticated"""
-    return st.session_state.get('authenticated', False)
+    if st.session_state.get('authenticated', False):
+        return True
+    username = load_session_from_file()
+    if username:
+        st.session_state['authenticated'] = True
+        st.session_state['username'] = username
+        return True
+    return False
 
 def logout():
     """Logout the user"""
@@ -276,6 +331,7 @@ def logout():
         del st.session_state['authenticated']
     if 'username' in st.session_state:
         del st.session_state['username']
+    clear_session_file()
 
 def display_user_info():
     """Display user info in sidebar"""

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truify Favicon</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f8ff;
+        }
+        
+        .favicon {
+            width: 32px;
+            height: 32px;
+            background-color: #87ceeb;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .checkmark {
+            width: 16px;
+            height: 12px;
+            position: relative;
+            transform: rotate(-45deg);
+        }
+        
+        .checkmark::before {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 8px;
+            background-color: white;
+            left: 0;
+            bottom: 0;
+            border-radius: 2px;
+        }
+        
+        .checkmark::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 12px;
+            background-color: white;
+            left: 0;
+            bottom: 0;
+            transform: rotate(90deg);
+            transform-origin: bottom left;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="favicon">
+        <div class="checkmark"></div>
+    </div>
+</body>
+</html> 

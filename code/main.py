@@ -56,7 +56,7 @@ def fill_missing_values(df, method):
     return df
 
 # Streamlit app
-st.set_page_config(page_title='TRUIFY', layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title='TRUIFY', layout="wide", initial_sidebar_state="expanded", page_icon="favicon.svg")
 
 # Add custom CSS for sidebar styling
 st.markdown("""
