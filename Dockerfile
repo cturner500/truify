@@ -20,8 +20,11 @@ ENV PYTHONPATH=/usr/local/lib/python3.12/site-packages
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application code and models directory
 COPY . .
+
+# Create models directory if it doesn't exist
+RUN mkdir -p /app/models
 
 # Expose port
 EXPOSE 8080
