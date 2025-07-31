@@ -10,30 +10,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Pre-download GPT4All models during build
-RUN python -c "
-from gpt4all import GPT4All
-import os
-
-# Create models directory
-os.makedirs('/root/.local/share/nomic.ai/GPT4All', exist_ok=True)
-
-# Download primary model
-try:
-    print('Downloading mistral-7b-instruct-v0.2.Q4_0.gguf...')
-    model1 = GPT4All('mistral-7b-instruct-v0.2.Q4_0.gguf', allow_download=True)
-    print('Primary model downloaded successfully')
-except Exception as e:
-    print(f'Primary model download failed: {e}')
-
-# Download fallback model
-try:
-    print('Downloading mistral-7b-openorca.Q4_0.gguf...')
-    model2 = GPT4All('mistral-7b-openorca.Q4_0.gguf', allow_download=True)
-    print('Fallback model downloaded successfully')
-except Exception as e:
-    print(f'Fallback model download failed: {e}')
-"
+# Pre-download GPT4All models during build (after pip install)
+RUN python -c "from gpt4all import GPT4All; import os; os.makedirs('/root/.local/share/nomic.ai/GPT4All', exist_ok=True); print('Downloading mistral-7b-instruct-v0.2.Q4_0.gguf...'); model1 = GPT4All('mistral-7b-instruct-v0.2.Q4_0.gguf', allow_download=True); print('Primary model downloaded successfully'); print('Downloading mistral-7b-openorca.Q4_0.gguf...'); model2 = GPT4All('mistral-7b-openorca.Q4_0.gguf', allow_download=True); print('Fallback model downloaded successfully')"
 
 # Expose port
 EXPOSE 8080
