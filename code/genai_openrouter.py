@@ -1,7 +1,7 @@
 """
 genai_openrouter.py - Generative AI utilities using OpenRouter.ai
 
-This module provides functions that leverage Claude Sonnet via OpenRouter.ai to analyze and describe datasets.
+This module provides functions that leverage Mistral via OpenRouter.ai to analyze and describe datasets.
 """
 
 import pandas as pd
@@ -17,17 +17,25 @@ def get_openrouter_api_key() -> Optional[str]:
     return os.getenv('OPENROUTER_API_KEY')
 
 
-def call_openrouter_api(prompt: str, model: str = "anthropic/claude-3-sonnet:20240229") -> str:
+def get_openrouter_model() -> str:
+    """Get OpenRouter model from environment variable with fallback to free Mistral."""
+    return os.getenv('OPENROUTER_MODEL', 'mistralai/mistral-7b-instruct:free')
+
+
+def call_openrouter_api(prompt: str, model: str = None) -> str:
     """
     Call OpenRouter API with the given prompt and model.
     
     Args:
         prompt: The prompt to send to the model
-        model: The model to use (default: Claude Sonnet)
+        model: The model to use (defaults to environment variable or free Mistral)
     
     Returns:
         The model's response as a string
     """
+    if model is None:
+        model = get_openrouter_model()
+    
     api_key = get_openrouter_api_key()
     if not api_key:
         return "Error: OPENROUTER_API_KEY environment variable not set"
@@ -73,7 +81,7 @@ def call_openrouter_api(prompt: str, model: str = "anthropic/claude-3-sonnet:202
 
 def describe_dataset_with_genai(df: pd.DataFrame) -> str:
     """
-    Use Claude Sonnet via OpenRouter to describe the dataset, guess its source, assess usefulness, and discuss appropriateness for AI/ML training.
+    Use Mistral via OpenRouter to describe the dataset, guess its source, assess usefulness, and discuss appropriateness for AI/ML training.
     """
     try:
         # Prepare a comprehensive prompt
@@ -128,7 +136,7 @@ Could not complete AI analysis due to: {str(e)}
 
 def analyze_bias_with_genai(df: pd.DataFrame) -> str:
     """
-    Use Claude Sonnet via OpenRouter to analyze the dataset and describe potential sources of bias in detail.
+    Use Mistral via OpenRouter to analyze the dataset and describe potential sources of bias in detail.
     """
     try:
         prompt = f"""You are a data ethics expert analyzing potential bias in a dataset. Please provide a detailed bias analysis of the following dataset:
@@ -181,7 +189,7 @@ Could not complete bias analysis due to: {str(e)}
 
 def PII_assessment(df: pd.DataFrame) -> dict:
     """
-    Use Claude Sonnet via OpenRouter to assess the dataset for Personally Identifiable Information (PII).
+    Use Mistral via OpenRouter to assess the dataset for Personally Identifiable Information (PII).
     """
     try:
         prompt = f"""You are a data privacy expert analyzing a dataset for Personally Identifiable Information (PII). Please assess the following dataset:
