@@ -10,7 +10,7 @@ import hashlib
 import random
 
 
-def describe_dataset_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-instruct-v0.2.Q4_0.gguf") -> str:
+def describe_dataset_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-instruct-v0.1.Q4_0.gguf") -> str:
     """
     Use a local generative AI model to describe the dataset, guess its source, assess usefulness, and discuss appropriateness for AI/ML training.
     Requires the gpt4all Python package and a compatible local model.
@@ -32,7 +32,7 @@ def describe_dataset_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-
                 model = GPT4All(model_name, allow_download=True)
             except Exception as model_error:
                 # If the specific model fails, try a fallback model
-                fallback_model = "mistral-7b-openorca.Q4_0.gguf"
+                fallback_model = "mistral-7b-openorca.gguf2.Q4_0.gguf"
                 try:
                     model = GPT4All(fallback_model, allow_download=True)
                 except Exception as fallback_error:
@@ -65,7 +65,7 @@ This dataset contains {len(df.columns)} columns and {len(df)} rows of data.
     except Exception as e:
         return f"Could not generate dataset description: {e}"
 
-def analyze_bias_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-instruct-v0.2.Q4_0.gguf") -> str:
+def analyze_bias_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-instruct-v0.1.Q4_0.gguf") -> str:
     """
     Use a local generative AI model to analyze the dataset and describe potential sources of bias in detail.
     The description should reference known sources of bias (e.g., selection, recency, geographical, gender, channel/market, etc.) and suggest where bias may exist, even if not certain.
@@ -86,7 +86,7 @@ def analyze_bias_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-inst
                 model = GPT4All(model_name, allow_download=True)
             except Exception as model_error:
                 # If the specific model fails, try a fallback model
-                fallback_model = "mistral-7b-openorca.Q4_0.gguf"
+                fallback_model = "mistral-7b-openorca.gguf2.Q4_0.gguf"
                 try:
                     model = GPT4All(fallback_model, allow_download=True)
                 except Exception as fallback_error:
@@ -183,7 +183,7 @@ def simple_pii_assessment(df: pd.DataFrame) -> dict:
         "method": "pattern_matching"
     }
 
-def PII_assessment(df: pd.DataFrame, model_name: str = "mistral-7b-instruct-v0.2.Q4_0.gguf") -> dict:
+def PII_assessment(df: pd.DataFrame, model_name: str = "mistral-7b-instruct-v0.1.Q4_0.gguf") -> dict:
     """
     PII Agent - Expert on data privacy assessment.
     Takes a sample of the data and identifies which columns might contain PII information.
@@ -229,7 +229,7 @@ def PII_assessment(df: pd.DataFrame, model_name: str = "mistral-7b-instruct-v0.2
                 model = GPT4All(model_name, allow_download=True)
             except Exception as model_error:
                 # If the specific model fails, try a fallback model
-                fallback_model = "mistral-7b-openorca.Q4_0.gguf"
+                fallback_model = "mistral-7b-openorca.gguf2.Q4_0.gguf"
                 try:
                     model = GPT4All(fallback_model, allow_download=True)
                 except Exception as fallback_error:
