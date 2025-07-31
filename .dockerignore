@@ -49,4 +49,8 @@ Thumbs.db
 *.log
 
 # Environment variables (will be set at runtime)
-.env 
+.env
+
+# Session files (should not be baked into image)
+session.json
+code/session.json 

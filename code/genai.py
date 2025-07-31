@@ -40,6 +40,28 @@ def describe_dataset_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-
         with model.chat_session():
             response = model.generate(prompt, max_tokens=256, temp=0.7)
         return response
+    except (ImportError, OSError) as e:
+        # Handle both import errors and library loading errors
+        return f"""**Dataset Description (AI Model Not Available)**
+
+**Dataset Overview:**
+This dataset contains {len(df.columns)} columns and {len(df)} rows of data.
+
+**Column Analysis:**
+"""
+        + "\n".join([f"- **{col}**: {df[col].dtype} data type" for col in df.columns]) + f"""
+
+**Data Summary:**
+- Numeric columns: {len(df.select_dtypes(include=['number']).columns)} columns
+- Categorical columns: {len(df.select_dtypes(include=['object']).columns)} columns
+- Missing values: {df.isnull().sum().sum()} total missing values
+
+**Recommendations:**
+- Consider the data types and potential uses for each column
+- Check for missing values and data quality issues
+- Evaluate whether this dataset is suitable for your intended analysis
+
+*Note: AI-powered analysis is not available because the required AI model libraries could not be loaded. This is a basic statistical overview of your dataset.*"""
     except ImportError:
         # gpt4all is not installed, provide a helpful fallback
         return f"""**Dataset Description (AI Model Not Available)**
@@ -94,6 +116,27 @@ def analyze_bias_with_genai(df: pd.DataFrame, model_name: str = "mistral-7b-inst
         with model.chat_session():
             response = model.generate(prompt, max_tokens=256, temp=0.7)
         return response
+    except (ImportError, OSError) as e:
+        # Handle both import errors and library loading errors
+        return f"""**Bias Analysis (AI Model Not Available)**
+
+**Dataset Overview:**
+This dataset contains {len(df.columns)} columns and {len(df)} rows of data.
+
+**Potential Bias Considerations:**
+- **Selection Bias**: Consider if the data collection method might favor certain groups
+- **Geographical Bias**: Check if data is limited to specific regions or locations
+- **Temporal Bias**: Assess if data represents a specific time period that might not be representative
+- **Demographic Bias**: Look for potential imbalances in age, gender, ethnicity, or other demographic factors
+- **Channel Bias**: Consider if data comes from specific sources that might not be representative
+
+**Recommendations:**
+- Examine the data collection methodology
+- Look for patterns in missing data
+- Consider the representativeness of your sample
+- Evaluate whether the data reflects the population you want to analyze
+
+*Note: AI-powered bias analysis is not available because the required AI model libraries could not be loaded. This is a general framework for bias assessment.*"""
     except Exception as e:
         return f"Could not generate bias analysis: {e}"
 
@@ -310,6 +353,14 @@ def PII_assessment(df: pd.DataFrame, model_name: str = "mistral-7b-instruct-v0.1
                 # Final fallback: use simple pattern matching
                 return simple_pii_assessment(df)
             
+    except (ImportError, OSError) as e:
+        # Handle both import errors and library loading errors
+        return {
+            "recommended_columns": [],
+            "assessment": {},
+            "error": f"AI model libraries could not be loaded. Using fallback pattern matching.",
+            "fallback_result": simple_pii_assessment(df)
+        }
     except Exception as e:
         return {
             "recommended_columns": [],
