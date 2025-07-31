@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     git \
+    wget \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables to force Linux ARM64 build
@@ -20,11 +22,15 @@ ENV PYTHONPATH=/usr/local/lib/python3.12/site-packages
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code and models directory
+# Copy application code
 COPY . .
 
-# Create models directory if it doesn't exist
-RUN mkdir -p /app/models
+# Create models directory and download Linux models during build
+RUN mkdir -p /app/models && \
+    cd /app/models && \
+    wget -O mistral-7b-instruct-v0.1.Q4_0.gguf https://gpt4all.io/models/gguf/mistral-7b-instruct-v0.1.Q4_0.gguf && \
+    wget -O mistral-7b-openorca.gguf2.Q4_0.gguf https://gpt4all.io/models/gguf/mistral-7b-openorca.gguf2.Q4_0.gguf && \
+    echo "Models downloaded successfully"
 
 # Expose port
 EXPOSE 8080
