@@ -1,0 +1,82 @@
+FROM nvidia/cuda:12.1-devel-ubuntu22.04
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies including CUDA and NVIDIA tools
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    wget \
+    curl \
+    python3 \
+    python3-pip \
+    python3-dev \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install NVIDIA Container Toolkit prerequisites
+RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID) && \
+    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg && \
+    curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+# Install NVIDIA Container Toolkit
+RUN apt-get update && apt-get install -y \
+    nvidia-container-toolkit \
+    nvidia-container-runtime \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install NVIDIA drivers (if needed for runtime)
+RUN wget -O /tmp/nvidia-driver.run https://us.download.nvidia.com/XFree86/Linux-x86_64/535.154.05/NVIDIA-Linux-x86_64-535.154.05.run && \
+    chmod +x /tmp/nvidia-driver.run && \
+    echo "NVIDIA driver downloaded (will be installed at runtime if needed)"
+
+# Download CUDA toolkit components if not already included
+RUN wget -O /tmp/cuda-toolkit.tar.gz https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run && \
+    echo "CUDA toolkit downloaded"
+
+# Set environment variables for GPU support
+ENV TARGET_ARCH=aarch64
+ENV TARGET_PLATFORM=linux
+ENV GPT4ALL_MODEL_DIR=/app/models
+ENV PYTHONPATH=/usr/local/lib/python3.12/site-packages
+ENV CUDA_VISIBLE_DEVICES=0
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
+ENV NVIDIA_RUNTIME_VERSION=12.1
+ENV CUDA_VERSION=12.1
+
+# Copy requirements and install Python dependencies
+COPY requirements.gpu.txt requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Create models directory and download Linux models during build
+RUN mkdir -p /app/models && \
+    cd /app/models && \
+    wget -O mistral-7b-instruct-v0.1.Q4_0.gguf https://gpt4all.io/models/gguf/mistral-7b-instruct-v0.1.Q4_0.gguf && \
+    wget -O mistral-7b-openorca.gguf2.Q4_0.gguf https://gpt4all.io/models/gguf/mistral-7b-openorca.gguf2.Q4_0.gguf && \
+    echo "Models downloaded successfully"
+
+# Create startup script for Cloud Run
+RUN echo '#!/bin/bash\n\
+echo "Starting Truify with GPU support..."\n\
+echo "CUDA Version: $CUDA_VERSION"\n\
+echo "NVIDIA Runtime Version: $NVIDIA_RUNTIME_VERSION"\n\
+echo "GPU Devices: $CUDA_VISIBLE_DEVICES"\n\
+nvidia-smi || echo "nvidia-smi not available (normal for Cloud Run)"\n\
+exec streamlit run code/main.py --server.port=8501 --server.address=0.0.0.0\n\
+' > /app/start.sh && chmod +x /app/start.sh
+
+# Expose port
+EXPOSE 8501
+
+# Start Streamlit
+CMD ["/app/start.sh"]

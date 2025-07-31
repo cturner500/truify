@@ -1,0 +1,48 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: truify-gpu
+  annotations:
+    run.googleapis.com/execution-environment: gen2
+    run.googleapis.com/cpu-throttling: "false"
+    run.googleapis.com/startup-cpu-boost: "true"
+    run.googleapis.com/vpc-access-connector: ""
+    run.googleapis.com/vpc-access-egress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/execution-environment: gen2
+        run.googleapis.com/cpu-throttling: "false"
+        run.googleapis.com/startup-cpu-boost: "true"
+        run.googleapis.com/memory: 16Gi
+        run.googleapis.com/cpu: 4
+        run.googleapis.com/gpu: 1
+        run.googleapis.com/gpu-type: nvidia-tesla-t4
+    spec:
+      containerConcurrency: 1
+      timeoutSeconds: 3600
+      containers:
+      - image: gcr.io/PROJECT_ID/truify-gpu
+        ports:
+        - containerPort: 8501
+        env:
+        - name: GMAIL_USER
+          valueFrom:
+            secretKeyRef:
+              name: gmail-secret
+              key: user
+        - name: GMAIL_APP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gmail-secret
+              key: password
+        - name: CUDA_VISIBLE_DEVICES
+          value: "0"
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: "all"
+        resources:
+          limits:
+            memory: 16Gi
+            cpu: "4"
+            nvidia.com/gpu: "1"
