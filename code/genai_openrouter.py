@@ -62,7 +62,16 @@ def call_openrouter_api(prompt: str, model: str = None) -> Tuple[str, str]:
     }
     
     try:
+        print(f"Making API call to: {url}")
+        print(f"Model: {model}")
+        print(f"Headers: {headers}")
+        print(f"Data: {data}")
+        
         response = requests.post(url, headers=headers, json=data, timeout=60)
+        print(f"Response status: {response.status_code}")
+        print(f"Response headers: {response.headers}")
+        print(f"Response text: {response.text[:500]}...")
+        
         response.raise_for_status()
         
         result = response.json()

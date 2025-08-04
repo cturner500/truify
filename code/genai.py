@@ -1,14 +1,14 @@
 """
 genai_openrouter.py - Generative AI utilities using OpenRouter.ai
 
-This module provides functions that leverage Claude Sonnet via OpenRouter.ai to analyze and describe datasets.
+This module provides functions that leverage Mistral via OpenRouter.ai to analyze and describe datasets.
 """
 
 import pandas as pd
 import requests
 import json
 import os
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 import time
 
 
@@ -17,20 +17,28 @@ def get_openrouter_api_key() -> Optional[str]:
     return os.getenv('OPENROUTER_API_KEY')
 
 
-def call_openrouter_api(prompt: str, model: str = "anthropic/claude-3-sonnet:20240229") -> str:
+def get_openrouter_model() -> str:
+    """Get OpenRouter model from environment variable with fallback to free Mistral."""
+    return os.getenv('OPENROUTER_MODEL', 'mistralai/mistral-7b-instruct:free')
+
+
+def call_openrouter_api(prompt: str, model: str = None) -> Tuple[str, str]:
     """
     Call OpenRouter API with the given prompt and model.
     
     Args:
         prompt: The prompt to send to the model
-        model: The model to use (default: Claude Sonnet)
+        model: The model to use (defaults to environment variable or free Mistral)
     
     Returns:
-        The model's response as a string
+        Tuple of (response_text, model_used)
     """
+    if model is None:
+        model = get_openrouter_model()
+    
     api_key = get_openrouter_api_key()
     if not api_key:
-        return "Error: OPENROUTER_API_KEY environment variable not set"
+        return "Error: OPENROUTER_API_KEY environment variable not set", model
     
     url = "https://openrouter.ai/api/v1/chat/completions"
     
@@ -54,26 +62,36 @@ def call_openrouter_api(prompt: str, model: str = "anthropic/claude-3-sonnet:202
     }
     
     try:
+        print(f"Making API call to: {url}")
+        print(f"Model: {model}")
+        print(f"Headers: {headers}")
+        print(f"Data: {data}")
+        
         response = requests.post(url, headers=headers, json=data, timeout=60)
+        print(f"Response status: {response.status_code}")
+        print(f"Response headers: {response.headers}")
+        print(f"Response text: {response.text[:500]}...")
+        
         response.raise_for_status()
         
         result = response.json()
         if 'choices' in result and len(result['choices']) > 0:
-            return result['choices'][0]['message']['content']
+            response_text = result['choices'][0]['message']['content']
+            return response_text, model
         else:
-            return "Error: Unexpected response format from OpenRouter API"
+            return "Error: Unexpected response format from OpenRouter API", model
             
     except requests.exceptions.RequestException as e:
-        return f"Error calling OpenRouter API: {str(e)}"
+        return f"Error calling OpenRouter API: {str(e)}", model
     except json.JSONDecodeError as e:
-        return f"Error parsing API response: {str(e)}"
+        return f"Error parsing API response: {str(e)}", model
     except Exception as e:
-        return f"Unexpected error: {str(e)}"
+        return f"Unexpected error: {str(e)}", model
 
 
 def describe_dataset_with_genai(df: pd.DataFrame) -> str:
     """
-    Use Claude Sonnet via OpenRouter to describe the dataset, guess its source, assess usefulness, and discuss appropriateness for AI/ML training.
+    Use Mistral via OpenRouter to describe the dataset, guess its source, assess usefulness, and discuss appropriateness for AI/ML training.
     """
     try:
         # Prepare a comprehensive prompt
@@ -103,7 +121,12 @@ Please provide a comprehensive analysis including:
 
 Format your response in clear sections with markdown formatting."""
 
-        return call_openrouter_api(prompt)
+        response_text, model_used = call_openrouter_api(prompt)
+        
+        # Add debug information about the model used
+        debug_info = f"\n\n---\n*Debug: Analysis performed using OpenRouter model: `{model_used}`*"
+        
+        return response_text + debug_info
         
     except Exception as e:
         return f"""**Dataset Description (API Error)**
@@ -128,7 +151,7 @@ Could not complete AI analysis due to: {str(e)}
 
 def analyze_bias_with_genai(df: pd.DataFrame) -> str:
     """
-    Use Claude Sonnet via OpenRouter to analyze the dataset and describe potential sources of bias in detail.
+    Use Mistral via OpenRouter to analyze the dataset and describe potential sources of bias in detail.
     """
     try:
         prompt = f"""You are a data ethics expert analyzing potential bias in a dataset. Please provide a detailed bias analysis of the following dataset:
@@ -160,7 +183,12 @@ For each potential bias source you identify:
 
 Format your response in clear sections with markdown formatting."""
 
-        return call_openrouter_api(prompt)
+        response_text, model_used = call_openrouter_api(prompt)
+        
+        # Add debug information about the model used
+        debug_info = f"\n\n---\n*Debug: Bias analysis performed using OpenRouter model: `{model_used}`*"
+        
+        return response_text + debug_info
         
     except Exception as e:
         return f"""**Bias Analysis (API Error)**
@@ -181,7 +209,7 @@ Could not complete bias analysis due to: {str(e)}
 
 def PII_assessment(df: pd.DataFrame) -> dict:
     """
-    Use Claude Sonnet via OpenRouter to assess the dataset for Personally Identifiable Information (PII).
+    Use Mistral via OpenRouter to assess the dataset for Personally Identifiable Information (PII).
     """
     try:
         prompt = f"""You are a data privacy expert analyzing a dataset for Personally Identifiable Information (PII). Please assess the following dataset:
@@ -214,16 +242,18 @@ Focus on identifying:
 
 Return only valid JSON without any additional text."""
 
-        response = call_openrouter_api(prompt)
+        response_text, model_used = call_openrouter_api(prompt)
         
         # Try to parse JSON response
         try:
             # Find JSON in the response (in case there's extra text)
-            start_idx = response.find('{')
-            end_idx = response.rfind('}') + 1
+            start_idx = response_text.find('{')
+            end_idx = response_text.rfind('}') + 1
             if start_idx != -1 and end_idx > start_idx:
-                json_str = response[start_idx:end_idx]
+                json_str = response_text[start_idx:end_idx]
                 result = json.loads(json_str)
+                # Add debug info to the result
+                result["debug_model_used"] = model_used
                 return result
             else:
                 # If no JSON found, return structured response
@@ -231,16 +261,18 @@ Return only valid JSON without any additional text."""
                     "pii_columns": [],
                     "risk_level": "unknown",
                     "recommendations": ["Could not parse API response"],
-                    "detailed_analysis": response,
-                    "compliance_notes": "API response parsing failed"
+                    "detailed_analysis": response_text,
+                    "compliance_notes": "API response parsing failed",
+                    "debug_model_used": model_used
                 }
         except json.JSONDecodeError:
             return {
                 "pii_columns": [],
                 "risk_level": "unknown", 
                 "recommendations": ["Could not parse API response as JSON"],
-                "detailed_analysis": response,
-                "compliance_notes": "API response was not valid JSON"
+                "detailed_analysis": response_text,
+                "compliance_notes": "API response was not valid JSON",
+                "debug_model_used": model_used
             }
             
     except Exception as e:
@@ -249,7 +281,8 @@ Return only valid JSON without any additional text."""
             "risk_level": "unknown",
             "recommendations": [f"Error during PII assessment: {str(e)}"],
             "detailed_analysis": f"Could not complete PII assessment due to error: {str(e)}",
-            "compliance_notes": "Assessment failed due to technical error"
+            "compliance_notes": "Assessment failed due to technical error",
+            "debug_model_used": "unknown"
         }
 
 
@@ -318,5 +351,6 @@ def simple_pii_assessment(df: pd.DataFrame) -> dict:
             "Ensure compliance with data protection regulations"
         ],
         "detailed_analysis": f"Found {len(pii_columns)} potential PII columns",
-        "compliance_notes": "Basic pattern matching assessment completed"
+        "compliance_notes": "Basic pattern matching assessment completed",
+        "debug_model_used": "pattern_matching_only"
     }
