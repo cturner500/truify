@@ -19,8 +19,8 @@ def get_openrouter_api_key() -> Optional[str]:
 
 def get_openrouter_model() -> str:
     """Get OpenRouter model from environment variable with fallback to free Mistral."""
-    return os.getenv('OPENROUTER_MODEL', 'mistralai/mistral-7b-instruct:free')
-
+    #return os.getenv('OPENROUTER_MODEL', 'mistralai/mistral-7b-instruct:free')
+    return os.getenv('OPENROUTER_MODEL', 'openai/gpt-oss')
 
 def call_openrouter_api(prompt: str, model: str = None) -> Tuple[str, str]:
     """

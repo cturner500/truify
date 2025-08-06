@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
 
 # Set environment variables with defaults
 #ENV OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
+ENV OPENROUTER_MODEL=openai/gpt-oss
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt .
