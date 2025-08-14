@@ -2,7 +2,7 @@
 
 # truify
 <h1>Introduction/Summary</h1>
-Truify is a module-based open source project to help data and AI pratcitioners prepare training data.  Truify provides CLI and web/GUI access to tooling enabling solutions to the following data preparation challenges:
+Truify is an agentic, open source project to help data and AI pratcitioners prepare training data.  Truify provides CLI and web/GUI access to tooling enabling solutions to the following data preparation challenges:
 <UL>
 <li>Bias (selection, recency, geographical, gender, channel/market)</li>
 <li>Compliance (GDPR, EU AI, SOC2, ISO 27001, HIPAA, CCPA)</li>
