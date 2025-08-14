@@ -55,6 +55,66 @@ def fill_missing_values(df, method):
     df = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
     return df
 
+# Function to display graphs
+def display_graphs(df, numeric_cols, categorical_cols):
+    st.subheader("Variable Visualizations")
+    
+    # Display numeric columns (histograms) 2 per row
+    if numeric_cols:
+        st.markdown("**Numeric Variables**")
+        for i in range(0, len(numeric_cols), 2):
+            col1, col2 = st.columns(2)
+            with col1:
+                col = numeric_cols[i]
+                st.markdown(f"**{col}**")
+                fig = px.histogram(df, x=col, nbins=20, title=f"Histogram of {col}", color_discrete_sequence=['#636EFA'])
+                fig.update_layout(bargap=0.1, xaxis_title=col, yaxis_title='Frequency', template='plotly_white')
+                st.plotly_chart(fig, use_container_width=True, key=f"hist_{col}_left")
+            
+            with col2:
+                if i + 1 < len(numeric_cols):
+                    col = numeric_cols[i + 1]
+                    st.markdown(f"**{col}**")
+                    fig = px.histogram(df, x=col, nbins=20, title=f"Histogram of {col}", color_discrete_sequence=['#636EFA'])
+                    fig.update_layout(bargap=0.1, xaxis_title=col, yaxis_title='Frequency', template='plotly_white')
+                    st.plotly_chart(fig, use_container_width=True, key=f"hist_{col}_right")
+    
+    # Display categorical columns (pie charts) 2 per row
+    if categorical_cols:
+        st.markdown("**Categorical Variables**")
+        for i in range(0, len(categorical_cols), 2):
+            col1, col2 = st.columns(2)
+            with col1:
+                col = categorical_cols[i]
+                st.markdown(f"**{col}**")
+                value_counts = df[col].value_counts(normalize=True)
+                mask = value_counts < 0.02
+                if mask.any():
+                    other_sum = value_counts[mask].sum()
+                    value_counts = value_counts[~mask]
+                    value_counts['Other'] = other_sum
+                pie_df = pd.DataFrame({col: value_counts.index, 'proportion': value_counts.values})
+                fig = px.pie(pie_df, names=col, values='proportion', title=f"Distribution of {col}", color_discrete_sequence=px.colors.sequential.RdBu)
+                fig.update_traces(textinfo='percent+label')
+                fig.update_layout(template='plotly_white')
+                st.plotly_chart(fig, use_container_width=True, key=f"pie_{col}_left")
+            
+            with col2:
+                if i + 1 < len(categorical_cols):
+                    col = categorical_cols[i + 1]
+                    st.markdown(f"**{col}**")
+                    value_counts = df[col].value_counts(normalize=True)
+                    mask = value_counts < 0.02
+                    if mask.any():
+                        other_sum = value_counts[mask].sum()
+                        value_counts = value_counts[~mask]
+                        value_counts['Other'] = other_sum
+                    pie_df = pd.DataFrame({col: value_counts.index, 'proportion': value_counts.values})
+                    fig = px.pie(pie_df, names=col, values='proportion', title=f"Distribution of {col}", color_discrete_sequence=px.colors.sequential.RdBu)
+                    fig.update_traces(textinfo='percent+label')
+                    fig.update_layout(template='plotly_white')
+                    st.plotly_chart(fig, use_container_width=True, key=f"pie_{col}_right")
+
 # Streamlit app
 st.set_page_config(page_title='TRUIFY', layout="wide", initial_sidebar_state="expanded", page_icon="favicon.svg")
 
@@ -178,7 +238,7 @@ if page == "Home":
     st.write("")
     st.write("Truify.ai generates new synthetic versions of your data that contain the same signals as your original data, while greatly reducing exposure to risk through bias, privacy leaks or compliance violations.")
     st.write("")
-    st.write("This site demonstrates the capabilities of the agentic Software-as-a-Service (SaaS) enabled by Truify.AIs API-based services.  These can be integrated into your systems on-prem, or in a private cloud.")
+    st.write("This site demonstrates the capabilities of the agentic Software-as-a-Service (SaaS) enabled by Truify.AI's API-based services.  These can be integrated into your systems on-premise, or in a private cloud.")
     st.write("")
     st.write("Get started by importing your data, using the button on the left.")
     st.write("")
@@ -243,6 +303,11 @@ if page == "Import Data":
     if (uploaded_file is not None and st.session_state['file_uploaded']) or st.session_state['show_data_type_config']:
         if 'df' in st.session_state:
             df = st.session_state['df']
+            
+            # Show data preview first
+            st.subheader("Data Preview")
+            st.dataframe(df)
+            st.success("A dataframe is loaded.")
             
             # Show data type configuration interface
             st.subheader("Data Type Configuration")
@@ -312,8 +377,6 @@ if page == "Import Data":
     # Show loaded dataframe and controls
     if 'df' in st.session_state:
         df = st.session_state['df']
-        st.dataframe(df)
-        st.success("A dataframe is loaded.")
         
         # Show data type configuration if available
         if st.session_state['data_type_config']:
@@ -345,6 +408,23 @@ elif page == "Describe Data":
         if 'genai_description' in st.session_state:
             st.subheader("AI-Generated Dataset Description")
             st.info(st.session_state['genai_description'])
+        if st.button("Show Graphs"):
+            import plotly.express as px
+            import pandas as pd
+            st.subheader("Variable Visualizations")
+            
+            # Process columns to create graphs
+            numeric_cols = []
+            categorical_cols = []
+            for col in df.columns:
+                if pd.api.types.is_numeric_dtype(df[col]):
+                    numeric_cols.append(col)
+                else:
+                    categorical_cols.append(col)
+            
+            # Display graphs
+            display_graphs(df, numeric_cols, categorical_cols)
+        
         if st.button("Describe data with AI"):
             try:
                 from genai import describe_dataset_with_genai
@@ -355,28 +435,7 @@ elif page == "Describe Data":
                 st.info(description)
             except Exception as e:
                 st.warning(f"Could not generate dataset description: {e}")
-        if st.button("Show Graphs"):
-            import plotly.express as px
-            import pandas as pd
-            st.subheader("Variable Visualizations")
-            for col in df.columns:
-                st.markdown(f"**{col}**")
-                if pd.api.types.is_numeric_dtype(df[col]):
-                    fig = px.histogram(df, x=col, nbins=20, title=f"Histogram of {col}", color_discrete_sequence=['#636EFA'])
-                    fig.update_layout(bargap=0.1, xaxis_title=col, yaxis_title='Frequency', template='plotly_white')
-                    st.plotly_chart(fig, use_container_width=True)
-                else:
-                    value_counts = df[col].value_counts(normalize=True)
-                    mask = value_counts < 0.02
-                    if mask.any():
-                        other_sum = value_counts[mask].sum()
-                        value_counts = value_counts[~mask]
-                        value_counts['Other'] = other_sum
-                    pie_df = pd.DataFrame({col: value_counts.index, 'proportion': value_counts.values})
-                    fig = px.pie(pie_df, names=col, values='proportion', title=f"Distribution of {col}", color_discrete_sequence=px.colors.sequential.RdBu)
-                    fig.update_traces(textinfo='percent+label')
-                    fig.update_layout(template='plotly_white')
-                    st.plotly_chart(fig, use_container_width=True)
+        
     else:
         st.write("Please import data first.")
 
@@ -571,7 +630,7 @@ elif page == "Export Data":
 elif page == "Create Compliance Report":
     st.title("Create New Compliance Evaluation")
     st.write("""
-    This tool evaluates your dataset for compliance risks relative to major data protection and AI regulations. It analyzes your data for personally identifiable information (PII), sensitive attributes, missingness, and risks related to automated decision-making. The tool generates a detailed markdown report describing the data, potential compliance risks (with references to GDPR, CCPA, and the EU AI Act), and an action plan for remediation.
+    This tool evaluates your dataset for compliance risks relative to major data protection and AI regulations. It analyzes your data for personally identifiable information (PII), sensitive attributes, missing values, and risks related to automated decision-making. The tool generates a detailed markdown report describing the data, potential compliance risks (with references to GDPR, CCPA, and the EU AI Act), and an action plan for remediation.
     """)
     st.subheader("Select Compliance Policies to Check:")
     

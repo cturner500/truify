@@ -2,6 +2,9 @@
 auth.py - Simple authentication system
 
 This module provides basic username/password authentication using a CSV file.
+
+IMPORTANT: Session persistence has been disabled to require re-authentication 
+on page refresh. Users must login again each time they refresh the page.
 """
 
 import streamlit as st
@@ -22,48 +25,63 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def save_session_to_file(username):
-    """Save session to file for persistence"""
-    session_data = {
-        'username': username,
-        'timestamp': int(time.time()),
-        'session_id': hashlib.sha256(f"{username}{time.time()}".encode()).hexdigest()
-    }
-    session_file = os.path.join(os.path.dirname(__file__), 'session.json')
-    try:
-        with open(session_file, 'w') as f:
-            json.dump(session_data, f)
-    except Exception as e:
-        st.error(f"Error saving session: {e}")
+    """Save session to file for persistence - DISABLED to force re-auth on refresh"""
+    # Session persistence is disabled to require re-authentication on page refresh
+    # This function is kept for compatibility but no longer saves sessions
+    pass
+    
+    # Original implementation (commented out):
+    # session_data = {
+    #     'username': username,
+    #     'timestamp': int(time.time()),
+    #     'session_id': hashlib.sha256(f"{username}{time.time()}".encode()).hexdigest()
+    # }
+    # session_file = os.path.join(os.path.dirname(__file__), 'session.json')
+    # try:
+    #     with open(session_file, 'w') as f:
+    #         json.dump(session_data, f)
+    # except Exception as e:
+    #     st.error(f"Error saving session: {e}")
 
 def load_session_from_file():
-    """Load session from file"""
-    try:
-        session_file = os.path.join(os.path.dirname(__file__), 'session.json')
-        if os.path.exists(session_file):
-            with open(session_file, 'r') as f:
-                session_data = json.load(f)
-            if time.time() - session_data['timestamp'] < 86400:  # 24 hours
-                return session_data['username']
-            else:
-                os.remove(session_file)
-        return None
-    except Exception as e:
-        try:
-            session_file = os.path.join(os.path.dirname(__file__), 'session.json')
-            if os.path.exists(session_file):
-                os.remove(session_file)
-        except:
-            pass
-        return None
+    """Load session from file - DISABLED to force re-auth on refresh"""
+    # Session persistence is disabled to require re-authentication on page refresh
+    # This function is kept for compatibility but no longer loads sessions
+    return None
+    
+    # Original implementation (commented out):
+    # try:
+    #     session_file = os.path.join(os.path.dirname(__file__), 'session_file')
+    #     if os.path.exists(session_file):
+    #         with open(session_file, 'r') as f:
+    #             session_data = json.load(f)
+    #         if time.time() - session_data['timestamp'] < 86400:  # 24 hours
+    #             return session_data['username']
+    #         else:
+    #             os.remove(session_file)
+    #     return None
+    # except Exception as e:
+    #     try:
+    #         session_file = os.path.join(os.path.dirname(__file__), 'session_file')
+    #         if os.path.exists(session_file):
+    #             os.remove(session_file)
+    #     except:
+    #         pass
+    #     return None
 
 def clear_session_file():
-    """Clear session file"""
-    try:
-        session_file = os.path.join(os.path.dirname(__file__), 'session.json')
-        if os.path.exists(session_file):
-            os.remove(session_file)
-    except Exception as e:
-        st.error(f"Error clearing session: {e}")
+    """Clear session file - DISABLED to force re-auth on refresh"""
+    # Session persistence is disabled to require re-authentication on page refresh
+    # This function is kept for compatibility but no longer clears sessions
+    pass
+    
+    # Original implementation (commented out):
+    # try:
+    #     session_file = os.path.join(os.path.dirname(__file__), 'session.json')
+    #     if os.path.exists(session_file):
+    #         os.remove(session_file)
+    # except Exception as e:
+    #     st.error(f"Error clearing session: {e}")
 
 def load_users():
     """Load users from users.csv file"""
@@ -328,15 +346,42 @@ def get_logo_base64():
         st.error(f"Error loading logo: {e}")
         return ""
 
+def detect_page_refresh():
+    """Detect if this is a page refresh by checking session state initialization"""
+    # Check if we have a session ID that persists across refreshes
+    if 'session_id' not in st.session_state:
+        # Generate a unique session ID for this browser session
+        import secrets
+        st.session_state['session_id'] = secrets.token_hex(16)
+        return True  # This is likely a page refresh or new session
+    
+    # Check if we have a page load counter
+    if 'page_load_count' not in st.session_state:
+        st.session_state['page_load_count'] = 1
+        return True  # First page load
+    
+    # Increment page load counter
+    st.session_state['page_load_count'] += 1
+    return False  # Not a refresh, just navigation within the app
+
 def is_authenticated():
     """Check if user is authenticated"""
+    # Check if this is a page refresh
+    if detect_page_refresh():
+        # This is likely a page refresh, clear any existing session
+        if 'authenticated' in st.session_state:
+            del st.session_state['authenticated']
+        if 'username' in st.session_state:
+            del st.session_state['username']
+        clear_session_file()
+        return False
+    
+    # Check if user is authenticated in current session
     if st.session_state.get('authenticated', False):
         return True
-    username = load_session_from_file()
-    if username:
-        st.session_state['authenticated'] = True
-        st.session_state['username'] = username
-        return True
+    
+    # Don't load from persistent session file on page refresh
+    # This forces users to login again after refreshing
     return False
 
 def logout():

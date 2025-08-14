@@ -760,31 +760,31 @@ def evaluate_compliance(df: pd.DataFrame, policies: list = None) -> Dict[str, An
     # Action Plan
     actions = []
     if pii_cols:
-        actions.append(f"- **De-identify PII:** Use de-identification tools to remove or hash PII columns: {pii_cols}")
+        actions.append(f"**De-identify PII:** Use Truify's PII Analysis tool to identify and hash PII columns: {pii_cols}. Navigate to 'PII Analysis' page to automatically detect and de-identify personal information.")
     if sensitive_cols:
-        actions.append(f"- **Review Sensitive Data:** Limit processing of sensitive attributes: {sensitive_cols}. Document legal basis.")
+        actions.append(f"**Review Sensitive Data:** Use Truify's PII Analysis tool to review sensitive attributes: {sensitive_cols}. The tool will help you document legal basis and implement appropriate safeguards.")
     if children_data:
-        actions.append("- **Children's Data:** Implement age verification and obtain parental consent if required")
+        actions.append("**Children's Data:** Use Truify's PII Analysis tool to identify age-related columns and implement age verification. Consider using the 'Reduce Bias' tool to ensure fair treatment across age groups.")
     if financial_data:
-        actions.append("- **Financial Compliance:** Implement GLBA, SOX, and Basel requirements for financial data")
+        actions.append("**Financial Compliance:** Use Truify's 'Reduce Bias' tool to analyze financial data for bias. The tool can help identify discriminatory patterns and create weighted datasets that comply with financial regulations.")
     if health_data:
-        actions.append("- **Health Data:** Implement HIPAA safeguards and FDA requirements for medical AI")
+        actions.append("**Health Data:** Use Truify's PII Analysis tool to identify health-related columns and implement HIPAA safeguards. The 'Reduce Bias' tool can help ensure fair treatment in healthcare AI systems.")
     if ai_risk:
-        actions.append("- **AI Governance:** Implement transparency, human oversight, and documentation for AI systems")
+        actions.append("**AI Governance:** Use Truify's 'Reduce Bias' tool to analyze your dataset for bias before training AI models. The tool provides bias analysis reports and can create weighted datasets to improve AI fairness.")
     if high_risk_ai:
-        actions.append(f"- **High-Risk AI:** Implement EU AI Act Title III requirements for: {high_risk_ai}")
+        actions.append(f"**High-Risk AI:** Use Truify's 'Reduce Bias' tool to analyze high-risk AI applications: {high_risk_ai}. The tool provides detailed bias analysis and can help create compliant training datasets.")
     if missingness:
-        actions.append("- **Data Quality:** Address missing values to ensure AI fairness and accuracy")
+        actions.append("**Data Quality:** Use Truify's 'Fill Missingness' tool to address missing values and ensure AI fairness. The tool evaluates missing data patterns and provides appropriate imputation methods.")
     
     # General actions
     actions.extend([
-        "- **Data Minimization:** Collect only necessary data for stated purposes",
-        "- **Consent Management:** Implement proper consent collection and management",
-        "- **Data Subject Rights:** Enable data access, rectification, deletion, and portability",
-        "- **Security Measures:** Implement appropriate technical and organizational security measures",
-        "- **Documentation:** Maintain records of processing activities and compliance measures",
-        "- **Training:** Train staff on applicable regulations and data handling procedures",
-        "- **Audit:** Conduct regular compliance audits and risk assessments"
+        "**Data Minimization:** Use Truify's PII Analysis tool to identify unnecessary columns and remove them. The tool helps you keep only essential data for your stated purposes.",
+        "**Consent Management:** Use Truify's PII Analysis tool to identify consent-related data and ensure proper consent tracking. The tool can help you document data collection purposes.",
+        "**Data Subject Rights:** Use Truify's PII Analysis tool to identify data that subjects may request access to, rectify, or delete. The tool helps you map data subject rights requirements.",
+        "**Security Measures:** Use Truify's 'Fill Missingness' tool to identify and handle sensitive data gaps securely. The tool provides secure imputation methods for sensitive information.",
+        "**Documentation:** Use Truify's 'Create Compliance Report' tool to generate detailed documentation of your compliance measures. The tool creates comprehensive reports for audit purposes.",
+        "**Training:** Use Truify's 'Describe Data' tool to understand your dataset structure and identify compliance risks. The AI-powered description helps staff understand data implications.",
+        "**Audit:** Use Truify's 'Create Compliance Report' tool to conduct regular compliance audits. The tool provides comprehensive risk assessments and action plans."
     ])
     
     report['actions'] = actions

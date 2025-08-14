@@ -84,7 +84,7 @@ def clean_logo(input_path='images/TruifyLogo.png', output_path='TruifyLogo2.png'
             unique_colors_after.add(tuple(cleaned_array[y, x]))
     
     print(f"Unique colors after cleaning: {len(unique_colors_after)}")
-    print(f"Colors: {list(unique_colors_after)}")
+q    print(f"Colors: {list(unique_colors_after)}")
 
 if __name__ == "__main__":
     if os.path.exists('images/TruifyLogo.png'):

@@ -424,14 +424,42 @@ def synthesize_page():
                 st.markdown("---")
                 st.subheader("Data Management")
                 
-                if st.button("Replace Original with Synthetic"):
+                # Debug information
+                st.write("**Debug Info:**")
+                st.write(f"- Original dataset in session: {'df' in st.session_state}")
+                st.write(f"- Synthetic dataset in session: {'synthetic_df' in st.session_state}")
+                if 'df' in st.session_state:
+                    st.write(f"- Current dataset shape: {st.session_state['df'].shape}")
+                if 'synthetic_df' in st.session_state:
+                    st.write(f"- Synthetic dataset shape: {st.session_state['synthetic_df'].shape}")
+                
+                if st.button("Replace Original with Synthetic", key="replace_synthetic_btn"):
                     if 'synthetic_df' in st.session_state:
+                        # Store the original data as backup (optional)
+                        st.session_state['original_df_backup'] = st.session_state['df'].copy()
+                        
+                        # Replace the main dataframe with synthetic data
                         st.session_state['df'] = st.session_state['synthetic_df'].copy()
+                        
+                        # Clear the synthetic data from session state to avoid confusion
+                        del st.session_state['synthetic_df']
+                        
                         st.success("✅ Original dataset replaced with synthetic data!")
                         st.info(f"Dataset shape: {st.session_state['df'].shape}")
+                        st.info("Original data has been backed up in session state as 'original_df_backup'")
+                        
+                        # Force a page rerun to update the display
                         st.rerun()
                     else:
                         st.error("No synthetic data available. Please generate synthetic data first.")
+                
+                # Add a backup restore option
+                if 'original_df_backup' in st.session_state:
+                    if st.button("Restore Original Data", key="restore_original_btn"):
+                        st.session_state['df'] = st.session_state['original_df_backup'].copy()
+                        del st.session_state['original_df_backup']
+                        st.success("✅ Original dataset restored!")
+                        st.rerun()
                 
             except Exception as e:
                 st.error(f"Error generating synthetic data: {str(e)}")
