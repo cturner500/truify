@@ -178,7 +178,7 @@ if page == "Home":
     st.write("")
     st.write("Truify.ai generates new synthetic versions of your data that contain the same signals as your original data, while greatly reducing exposure to risk through bias, privacy leaks or compliance violations.")
     st.write("")
-    st.write("This site demonstrates the capabilities of the agentic Software-as-a-Service (SaaS) enabled by Truify.AIs API-based services.  These can be integrated into your systems on-prem, or in a private cloud.")
+    st.write("This site demonstrates the capabilities of the agentic Software-as-a-Service (SaaS) enabled by Truify.AI's API-based services.  These can be integrated into your systems on-premise, or in a private cloud.")
     st.write("")
     st.write("Get started by importing your data, using the button on the left.")
     st.write("")
@@ -571,7 +571,7 @@ elif page == "Export Data":
 elif page == "Create Compliance Report":
     st.title("Create New Compliance Evaluation")
     st.write("""
-    This tool evaluates your dataset for compliance risks relative to major data protection and AI regulations. It analyzes your data for personally identifiable information (PII), sensitive attributes, missingness, and risks related to automated decision-making. The tool generates a detailed markdown report describing the data, potential compliance risks (with references to GDPR, CCPA, and the EU AI Act), and an action plan for remediation.
+    This tool evaluates your dataset for compliance risks relative to major data protection and AI regulations. It analyzes your data for personally identifiable information (PII), sensitive attributes, missing values, and risks related to automated decision-making. The tool generates a detailed markdown report describing the data, potential compliance risks (with references to GDPR, CCPA, and the EU AI Act), and an action plan for remediation.
     """)
     st.subheader("Select Compliance Policies to Check:")
     
