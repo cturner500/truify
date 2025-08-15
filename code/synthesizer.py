@@ -463,27 +463,6 @@ def synthesize_page():
                 
             except Exception as e:
                 st.error(f"Error generating synthetic data: {str(e)}")
-                st.error("Please ensure your dataset has sufficient data and appropriate column types.")
-                
-                # Add debugging information
-                st.subheader("Debugging Information")
-                st.write(f"Dataset shape: {df.shape}")
-                st.write(f"Dataset columns: {list(df.columns)}")
-                st.write(f"Data types: {df.dtypes.to_dict()}")
-                
-                # Check for potential issues
-                if df.shape[0] < 10:
-                    st.warning("Dataset has very few rows. Consider using a larger dataset for better synthesis.")
-                if df.shape[1] < 2:
-                    st.warning("Dataset has very few columns. Synthesis works best with multiple columns.")
-    
-    # Display existing synthetic data if available
-    if 'synthetic_df' in st.session_state:
-        st.markdown("---")
-        st.subheader("Previously Generated Synthetic Data")
-        st.dataframe(st.session_state['synthetic_df'].head(5), use_container_width=True)
-        
-        if st.button("Clear Synthetic Data"):
-            del st.session_state['synthetic_df']
-            st.success("Synthetic data cleared!")
-            st.rerun() 
+
+if __name__ == "__main__":
+    synthesize_page() 

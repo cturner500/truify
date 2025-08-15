@@ -6,7 +6,7 @@ This module provides PII risk assessment and data anonymization capabilities usi
 
 import streamlit as st
 import pandas as pd
-from genai import PII_assessment, PII_anonymize
+from genai import PII_assessment, PII_anonymize, simple_pii_assessment
 
 def pii_page():
     """
@@ -34,67 +34,112 @@ def pii_page():
     if 'anonymized_df' not in st.session_state:
         st.session_state.anonymized_df = None
     
-    # Button 1: Analyze data for PII risk using genAI
-    st.subheader("🤖 AI-Powered PII Risk Assessment")
+    # Button 1: Analyze Data for PII Risk
+    st.subheader("🔍 PII Risk Analysis")
     
-    if st.button("Analyze data for PII risk using genAI", type="primary"):
-        with st.spinner("Analyzing data for PII risks..."):
-            # Call the PII assessment function
-            assessment_result = PII_assessment(df)
-            st.session_state.pii_assessment = assessment_result
-            
-            if 'error' in assessment_result and assessment_result['error']:
-                st.error(f"Assessment failed: {assessment_result['error']}")
-                if 'raw_response' in assessment_result:
-                    st.text_area("Raw AI Response:", assessment_result['raw_response'], height=200)
-            else:
-                # Check which method was used
-                method = assessment_result.get('method', 'ai')
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("Analyze data for PII risk using genAI"):
+            with st.spinner("Analyzing data for PII risks..."):
+                # Run PII assessment
+                assessment_result = PII_assessment(df)
+                st.session_state.pii_assessment = assessment_result
                 
-                if method == 'pattern_matching':
-                    st.success("PII assessment completed using pattern matching (AI model not available)")
-                    st.info("Using pattern-based PII detection. For more advanced analysis, ensure AI models are available.")
-                elif method == 'ai_with_fallback_parsing':
-                    st.success("PII assessment completed using AI with fallback parsing")
-                    st.warning("AI response format was unclear, but PII columns were identified from the response.")
-                    if 'parsing_error' in assessment_result:
-                        st.info(f"Parsing note: {assessment_result['parsing_error']}")
-                else:
-                    st.success("PII assessment completed using AI!")
+                # If AI assessment didn't find PII, try pattern-based assessment as fallback
+                if not assessment_result.get('pii_columns') or len(assessment_result.get('pii_columns', [])) == 0:
+                    st.info("AI assessment didn't identify PII. Running pattern-based detection as backup...")
+                    pattern_assessment = simple_pii_assessment(df)
+                    
+                    # If pattern-based assessment found PII, use that instead
+                    if pattern_assessment.get('pii_columns') and len(pattern_assessment.get('pii_columns', [])) > 0:
+                        st.success("Pattern-based detection found PII that AI missed!")
+                        st.session_state.pii_assessment = pattern_assessment
+                        assessment_result = pattern_assessment
+                    else:
+                        st.warning("Neither AI nor pattern-based detection found PII. This may indicate the data is truly non-identifying.")
+    
+    with col2:
+        if st.button("Run Pattern-Based PII Detection"):
+            with st.spinner("Running pattern-based PII detection..."):
+                pattern_assessment = simple_pii_assessment(df)
+                st.session_state.pii_assessment = pattern_assessment
+                st.success("Pattern-based PII detection completed!")
+                st.info("This method uses rule-based detection for emails, phone numbers, names, and other common PII patterns.")
     
     # Display PII assessment results
     if st.session_state.pii_assessment:
-        st.subheader("📋 PII Risk Assessment Results")
-        
         assessment = st.session_state.pii_assessment
         
-        # Display recommended columns
-        if 'recommended_columns' in assessment and assessment['recommended_columns']:
-            st.write("**Recommended columns for anonymization:**")
-            for col in assessment['recommended_columns']:
-                st.write(f"- {col}")
+        # Extract PII columns from the assessment
+        pii_columns = assessment.get('pii_columns', [])
+        risk_level = assessment.get('risk_level', 'unknown')
+        
+        # If no PII columns found in structured response, try to extract from raw text
+        if not pii_columns and 'detailed_analysis' in assessment:
+            detailed_analysis = assessment['detailed_analysis']
             
-            # Initialize selected columns with recommended ones
+            # Try to extract column names from the detailed analysis text
+            import re
+            
+            # Look for column names mentioned in the response
+            column_patterns = [
+                r'column[s]?\s*["\']([^"\']+)["\']',  # "column_name"
+                r'column[s]?\s+([a-zA-Z_][a-zA-Z0-9_]*)',  # column_name
+                r'([a-zA-Z_][a-zA-Z0-9_]*)\s+contains?\s+PII',  # column_name contains PII
+                r'([a-zA-Z_][a-zA-Z0-9_]*)\s+is\s+a\s+PII',  # column_name is a PII
+            ]
+            
+            extracted_columns = []
+            for pattern in column_patterns:
+                matches = re.findall(pattern, detailed_analysis, re.IGNORECASE)
+                extracted_columns.extend(matches)
+            
+            # Also check if any actual column names from the dataset are mentioned
+            dataset_columns = list(df.columns)
+            for col in dataset_columns:
+                if col.lower() in detailed_analysis.lower():
+                    extracted_columns.append(col)
+            
+            # Remove duplicates and update the assessment
+            if extracted_columns:
+                pii_columns = list(set(extracted_columns))
+                assessment['pii_columns'] = pii_columns
+                st.success(f"✅ Extracted {len(pii_columns)} PII columns from AI response!")
+        
+        # Display the results
+        st.subheader("🔍 PII Risk Assessment Results")
+        
+        if pii_columns:
+            st.success(f"✅ **{len(pii_columns)} PII columns identified**")
+            st.write(f"**Risk Level:** {risk_level.upper()}")
+            
+            # Display identified PII columns
+            st.write("**Identified PII Columns:**")
+            for col in pii_columns:
+                st.write(f"• {col}")
+            
+            # Display recommendations if available
+            if 'recommendations' in assessment and assessment['recommendations']:
+                st.write("**Recommendations:**")
+                for rec in assessment['recommendations']:
+                    st.write(f"• {rec}")
+            
+            # Display detailed analysis if available
+            if 'detailed_analysis' in assessment and assessment['detailed_analysis']:
+                st.write("**Detailed Analysis:**")
+                st.info(assessment['detailed_analysis'])
+            
+            # Display compliance notes if available
+            if 'compliance_notes' in assessment and assessment['compliance_notes']:
+                st.write("**Compliance Notes:**")
+                st.warning(assessment['compliance_notes'])
+            
+            # Initialize selected columns with identified PII columns
             if not st.session_state.selected_columns:
-                st.session_state.selected_columns = assessment['recommended_columns'].copy()
+                st.session_state.selected_columns = pii_columns.copy()
         else:
             st.info("No PII risks identified in the data.")
-        
-        # Display detailed assessment
-        if 'assessment' in assessment and assessment['assessment']:
-            st.write("**Detailed Assessment:**")
-            for column, details in assessment['assessment'].items():
-                with st.expander(f"📝 {column}"):
-                    if isinstance(details, dict):
-                        risk_level = details.get('risk_level', 'Unknown')
-                        reason = details.get('reason', 'No reason provided')
-                        pii_type = details.get('pii_type', 'Unknown')
-                        
-                        st.write(f"**Risk Level:** {risk_level}")
-                        st.write(f"**PII Type:** {pii_type}")
-                        st.write(f"**Reason:** {reason}")
-                    else:
-                        st.write(f"Assessment: {details}")
         
         # Column selection interface
         st.subheader("⚙️ Select Columns to Anonymize")
@@ -120,7 +165,7 @@ def pii_page():
     # Button 2: Anonymize Data
     st.subheader("🔐 Data Anonymization")
     
-    if st.button("Anonymize Data", type="secondary"):
+    if st.button("Anonymize Data"):
         if not st.session_state.selected_columns:
             st.error("Please select columns to anonymize first.")
         else:
@@ -152,7 +197,7 @@ def pii_page():
     # Button 3: Keep Results and Update Data
     st.subheader("💾 Save Anonymized Data")
     
-    if st.button("Keep Results and Update Data", type="primary"):
+    if st.button("Keep Results and Update Data"):
         if st.session_state.anonymized_df is not None:
             # Update the session state with anonymized data
             st.session_state['df'] = st.session_state.anonymized_df.copy()

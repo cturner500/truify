@@ -115,6 +115,38 @@ def display_graphs(df, numeric_cols, categorical_cols):
                     fig.update_layout(template='plotly_white')
                     st.plotly_chart(fig, use_container_width=True, key=f"pie_{col}_right")
 
+def add_navigation_buttons():
+    """Add navigation buttons (previous/next) at the bottom of each page"""
+    st.markdown("---")
+    
+    # Get current page index
+    current_index = None
+    for i, item in enumerate(menu_items):
+        if item["name"] == st.session_state['current_page']:
+            current_index = i
+            break
+    
+    if current_index is not None:
+        col1, col2, col3 = st.columns([1, 1, 1])
+        
+        # Previous button (left-aligned)
+        with col1:
+            if current_index > 0:  # Not first page
+                if st.button("← Previous", key=f"prev_{current_index}", use_container_width=True):
+                    st.session_state['current_page'] = menu_items[current_index - 1]["name"]
+                    st.rerun()
+        
+        # Next button (right-aligned)
+        with col3:
+            if current_index < len(menu_items) - 1:  # Not last page
+                if st.button("Next →", key=f"next_{current_index}", use_container_width=True):
+                    st.session_state['current_page'] = menu_items[current_index + 1]["name"]
+                    st.rerun()
+        
+        # Center column for spacing
+        with col2:
+            st.write("")
+
 # Streamlit app
 st.set_page_config(page_title='TRUIFY', layout="wide", initial_sidebar_state="expanded", page_icon="favicon.svg")
 
@@ -143,6 +175,67 @@ st.markdown("""
 [data-testid="stSidebar"] .row-widget {
     margin-bottom: 0.2rem !important;
     margin-top: 0.2rem !important;
+}
+
+/* Navigation button styling */
+.navigation-button {
+    background-color: #69b9e8 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.navigation-button:hover {
+    background-color: #5aa8d7 !important;
+}
+
+/* Target the navigation buttons specifically */
+button[data-testid="baseButton-secondary"]:has-text("← Previous"),
+button[data-testid="baseButton-secondary"]:has-text("Next →") {
+    background-color: #69b9e8 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+}
+
+button[data-testid="baseButton-secondary"]:has-text("← Previous"):hover,
+button[data-testid="baseButton-secondary"]:has-text("Next →"):hover {
+    background-color: #5aa8d7 !important;
+}
+
+/* Alternative targeting for navigation buttons */
+button:contains("← Previous"),
+button:contains("Next →") {
+    background-color: #69b9e8 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+}
+
+/* Direct button styling for navigation */
+.stButton > button:has-text("← Previous"),
+.stButton > button:has-text("Next →") {
+    background-color: #69b9e8 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -240,6 +333,20 @@ if page == "Home":
     st.write("")
     st.write("This site demonstrates the capabilities of the agentic Software-as-a-Service (SaaS) enabled by Truify.AI's API-based services.  These can be integrated into your systems on-premise, or in a private cloud.")
     st.write("")
+    
+    st.write("**Here's what you can do with Truify:**")
+    st.write("1. **Import Data** - Upload your CSV file and preview your dataset")
+    st.write("2. **Describe Data** - Get AI-powered insights and visualizations of your data")
+    st.write("3. **Create Compliance Report** - Assess your data for regulatory compliance risks")
+    st.write("4. **PII Analysis** - Identify and anonymize personally identifiable information")
+    st.write("5. **Reduce Bias** - Analyze and mitigate bias in your dataset")
+    st.write("6. **Fill Missingness** - Handle missing data with intelligent imputation")
+    st.write("7. **Merge Data** - Combine multiple datasets efficiently")
+    st.write("8. **Synthesize Data** - Create synthetic versions that preserve data patterns")
+    st.write("9. **Export Data** - Download your processed dataset")
+    st.write("")
+    st.write("**Flexible Navigation:** You can use any or all of the features and hop around as you like. Use the Next/Previous buttons on each page or the menu on the left to move around freely. You can always go back to previous steps or jump ahead to any page.")
+    st.write("")
     st.write("Get started by importing your data, using the button on the left.")
     st.write("")
     st.write("To learn more, contact info@truify.ai")
@@ -260,6 +367,9 @@ if page == "Home":
     with col2:
         st.image("images/diagram.png", use_container_width=True)
 
+    # Add navigation buttons
+    add_navigation_buttons()
+
 if page == "Import Data":
     st.title("Import Data")
     
@@ -276,28 +386,49 @@ if page == "Import Data":
     # Handle file upload
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
     
-    if uploaded_file is not None and not st.session_state['file_uploaded']:
-        # Store the original file for re-importing with data types
-        st.session_state['original_file'] = uploaded_file
+    # Check if a new file has been uploaded (different from the current one)
+    if uploaded_file is not None:
+        current_file_name = uploaded_file.name if uploaded_file else None
+        stored_file_name = st.session_state.get('current_file_name', None)
         
+        # If this is a new file (different name or first file)
+        if current_file_name != stored_file_name:
+            # Store the original file for re-importing with data types
+            st.session_state['original_file'] = uploaded_file
+            st.session_state['current_file_name'] = current_file_name
+            
+            # Reset the file_uploaded flag to process the new file
+            st.session_state['file_uploaded'] = False
+            
+            # Clear any existing data
+            if 'df' in st.session_state:
+                del st.session_state['df']
+            if 'genai_description' in st.session_state:
+                del st.session_state['genai_description']
+            if 'data_type_config' in st.session_state:
+                del st.session_state['data_type_config']
+    
+    if uploaded_file is not None and not st.session_state['file_uploaded']:
         # Initial import to get default data types
         df = pd.read_csv(uploaded_file)
         
-        # Initialize data type configuration with default types
-        if not st.session_state['data_type_config']:
-            for col in df.columns:
-                if pd.api.types.is_numeric_dtype(df[col]):
-                    if df[col].dtype == 'int64':
-                        st.session_state['data_type_config'][col] = 'int64'
-                    else:
-                        st.session_state['data_type_config'][col] = 'float64'
+        # Initialize data type configuration with default types for the new file
+        st.session_state['data_type_config'] = {}
+        for col in df.columns:
+            if pd.api.types.is_numeric_dtype(df[col]):
+                if df[col].dtype == 'int64':
+                    st.session_state['data_type_config'][col] = 'int64'
                 else:
-                    st.session_state['data_type_config'][col] = 'object'
+                    st.session_state['data_type_config'][col] = 'float64'
+            else:
+                st.session_state['data_type_config'][col] = 'object'
         
         st.session_state['df'] = df
         st.session_state['file_uploaded'] = True
         if 'genai_description' in st.session_state:
             del st.session_state['genai_description']
+        
+        st.success(f"✅ New file '{current_file_name}' loaded successfully!")
     
     # Show data type configuration interface if file is uploaded or user wants to reconfigure
     if (uploaded_file is not None and st.session_state['file_uploaded']) or st.session_state['show_data_type_config']:
@@ -401,6 +532,9 @@ if page == "Import Data":
                 st.session_state['show_data_type_config'] = True
                 st.rerun()
 
+    # Add navigation buttons
+    add_navigation_buttons()
+
 elif page == "Describe Data":
     st.title("Describe Data")
     if 'df' in st.session_state:
@@ -439,8 +573,14 @@ elif page == "Describe Data":
     else:
         st.write("Please import data first.")
 
+    # Add navigation buttons
+    add_navigation_buttons()
+
 elif page == "PII Analysis":
     pii_page()
+    
+    # Add navigation buttons
+    add_navigation_buttons()
 
 elif page == "Reduce Bias":
     st.title("Reduce Bias")
@@ -513,6 +653,9 @@ elif page == "Reduce Bias":
                 st.rerun()
     else:   
         st.write("Please import data first.")
+
+    # Add navigation buttons
+    add_navigation_buttons()
 
 elif page == "Fill Missingness":
     st.title("Fill Missingness")
@@ -588,12 +731,21 @@ elif page == "Fill Missingness":
     else:
         st.write("Please import data first.")
 
+    # Add navigation buttons
+    add_navigation_buttons()
+
 elif page == "Merge Data":
     st.title("Merge Data")
     st.write("Coming Soon!")
 
+    # Add navigation buttons
+    add_navigation_buttons()
+
 elif page == "Synthesize Data":
     synthesize_page()
+    
+    # Add navigation buttons
+    add_navigation_buttons()
 
 elif page == "Export Data":
     st.title("Export Data")
@@ -626,6 +778,9 @@ elif page == "Export Data":
         )
     else:
         st.write("Please import data first.")
+
+    # Add navigation buttons
+    add_navigation_buttons()
 
 elif page == "Create Compliance Report":
     st.title("Create New Compliance Evaluation")
@@ -1251,7 +1406,7 @@ img {
                     label="Download Report (Plain Text)",
                     data=st.session_state['compliance_report_md'],
                     file_name="compliance_report.txt",
-                    mime="text/plain"
+                    mime='text/plain'
                 )
             
             # Clean up temporary files
@@ -1287,3 +1442,6 @@ img {
                 file_name="compliance_report.md",
                 mime="text/markdown"
             )
+
+    # Add navigation buttons
+    add_navigation_buttons()

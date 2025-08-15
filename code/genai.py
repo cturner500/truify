@@ -316,7 +316,9 @@ def simple_pii_assessment(df: pd.DataFrame) -> dict:
         'email': r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
         'phone': r'^\+?1?\d{9,15}$',
         'ssn': r'^\d{3}-\d{2}-\d{4}$',
-        'credit_card': r'^\d{4}-\d{4}-\d{4}-\d{4}$'
+        'credit_card': r'^\d{4}-\d{4}-\d{4}-\d{4}$',
+        'zip_code': r'^\d{5}(-\d{4})?$',
+        'date_of_birth': r'^\d{1,2}[/-]\d{1,2}[/-]\d{2,4}$'
     }
     
     import re
@@ -324,23 +326,69 @@ def simple_pii_assessment(df: pd.DataFrame) -> dict:
     for column in df.columns:
         column_lower = column.lower()
         
-        # Check column name for PII indicators
-        pii_keywords = ['name', 'email', 'phone', 'address', 'ssn', 'id', 'social', 'credit', 'card', 'account']
+        # Check column name for PII indicators (more comprehensive)
+        pii_keywords = [
+            'name', 'first', 'last', 'full', 'given', 'family', 'surname',
+            'email', 'e-mail', 'mail', 'address', 'addr', 'street', 'city', 'state', 'zip', 'postal',
+            'phone', 'telephone', 'mobile', 'cell', 'fax',
+            'ssn', 'social', 'security', 'number', 'ss#',
+            'credit', 'card', 'account', 'bank', 'routing', 'account',
+            'id', 'identifier', 'passport', 'license', 'drivers',
+            'birth', 'dob', 'age', 'gender', 'sex',
+            'ip', 'mac', 'device', 'cookie', 'session'
+        ]
+        
+        # Check if column name contains PII keywords
         if any(keyword in column_lower for keyword in pii_keywords):
-            pii_columns.append(column)
+            if column not in pii_columns:
+                pii_columns.append(column)
             risk_level = "medium" if risk_level == "low" else risk_level
         
-        # Check data patterns
+        # Check data patterns in the actual values
         if df[column].dtype == 'object':
-            sample_values = df[column].dropna().head(10)
+            sample_values = df[column].dropna().head(20)  # Check more samples
             for value in sample_values:
                 if isinstance(value, str):
-                    for pattern_name, pattern in pii_patterns.items():
-                        if re.match(pattern, value):
-                            if column not in pii_columns:
-                                pii_columns.append(column)
-                            risk_level = "high"
-                            break
+                    # Check for email patterns
+                    if '@' in value and '.' in value and len(value) > 5:
+                        if column not in pii_columns:
+                            pii_columns.append(column)
+                        risk_level = "high"
+                        break
+                    
+                    # Check for phone number patterns (various formats)
+                    phone_clean = re.sub(r'[\s\-\(\)\.]', '', str(value))
+                    if re.match(r'^\+?1?\d{9,15}$', phone_clean):
+                        if column not in pii_columns:
+                            pii_columns.append(column)
+                        risk_level = "high"
+                        break
+                    
+                    # Check for SSN patterns
+                    if re.match(r'^\d{3}[-]?\d{2}[-]?\d{4}$', str(value)):
+                        if column not in pii_columns:
+                            pii_columns.append(column)
+                        risk_level = "high"
+                        break
+                    
+                    # Check for credit card patterns
+                    if re.match(r'^\d{4}[-]?\d{4}[-]?\d{4}[-]?\d{4}$', str(value)):
+                        if column not in pii_columns:
+                            pii_columns.append(column)
+                        risk_level = "high"
+                        break
+                    
+                    # Check for ZIP code patterns
+                    if re.match(r'^\d{5}(-\d{4})?$', str(value)):
+                        if column not in pii_columns:
+                            pii_columns.append(column)
+                        risk_level = "medium" if risk_level == "low" else risk_level
+    
+    # Additional heuristic: if we found many PII columns, raise risk level
+    if len(pii_columns) >= 3:
+        risk_level = "high"
+    elif len(pii_columns) >= 1:
+        risk_level = "medium"
     
     return {
         "pii_columns": pii_columns,
@@ -348,9 +396,10 @@ def simple_pii_assessment(df: pd.DataFrame) -> dict:
         "recommendations": [
             "Consider anonymizing identified PII columns",
             "Review data retention policies",
-            "Ensure compliance with data protection regulations"
+            "Ensure compliance with data protection regulations",
+            "Implement access controls for sensitive data"
         ],
-        "detailed_analysis": f"Found {len(pii_columns)} potential PII columns",
-        "compliance_notes": "Basic pattern matching assessment completed",
-        "debug_model_used": "pattern_matching_only"
+        "detailed_analysis": f"Found {len(pii_columns)} potential PII columns using pattern matching",
+        "compliance_notes": "Pattern-based assessment completed. Consider manual review for complex cases.",
+        "debug_model_used": "enhanced_pattern_matching"
     }
