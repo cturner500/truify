@@ -14,7 +14,15 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     lsb-release \
     software-properties-common \
+    libgdk-pixbuf-xlib-2.0-0 \
+    equivs \
     && rm -rf /var/lib/apt/lists/*
+
+# Create dummy package for obsolete libgdk-pixbuf2.0-0
+RUN echo 'Package: libgdk-pixbuf2.0-0\nVersion: 2.42.10-1ubuntu1\nArchitecture: all\nDescription: Dummy package for libgdk-pixbuf2.0-0\nProvides: libgdk-pixbuf2.0-0' > /tmp/libgdk-pixbuf2.0-0.control && \
+    cd /tmp && equivs-build libgdk-pixbuf2.0-0.control && \
+    dpkg -i libgdk-pixbuf2.0-0_2.42.10-1ubuntu1_all.deb && \
+    rm -f /tmp/libgdk-pixbuf2.0-0*
 
 # Add NVIDIA repository and install CUDA
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb && \
