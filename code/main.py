@@ -55,6 +55,53 @@ def fill_missing_values(df, method):
     df = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
     return df
 
+# Function to display enhanced page headers
+def display_page_header(title, description, icon):
+    """Display a beautiful gradient page header with icon and description - COMPACT VERSION"""
+    st.markdown(f"""
+    <div style="
+        background: linear-gradient(135deg, #69b9e8 0%, #5aa8d7 100%);
+        padding: 1.2rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 10px rgba(105, 185, 232, 0.2);
+        border: 1px solid rgba(255,255,255,0.1);
+    ">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="
+                font-size: 2.5rem; 
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+                animation: float 3s ease-in-out infinite;
+            ">{icon}</div>
+            <div>
+                <h1 style="
+                    color: white; 
+                    margin: 0; 
+                    font-size: 2rem; 
+                    font-weight: 700;
+                    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    letter-spacing: -0.5px;
+                    line-height: 1.2;
+                ">{title}</h1>
+                <p style="
+                    color: rgba(255,255,255,0.95); 
+                    margin: 0.3rem 0 0 0; 
+                    font-size: 1rem;
+                    line-height: 1.3;
+                    font-weight: 300;
+                ">{description}</p>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+    @keyframes float {{
+        0%, 100% {{ transform: translateY(0px); }}
+        50% {{ transform: translateY(-3px); }}
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
 # Function to display graphs
 def display_graphs(df, numeric_cols, categorical_cols):
     st.subheader("Variable Visualizations")
@@ -116,7 +163,7 @@ def display_graphs(df, numeric_cols, categorical_cols):
                     st.plotly_chart(fig, use_container_width=True, key=f"pie_{col}_right")
 
 def add_navigation_buttons():
-    """Add navigation buttons (previous/next) at the bottom of each page"""
+    """Add simple navigation buttons (previous/next) without progress indicators"""
     st.markdown("---")
     
     # Get current page index
@@ -131,111 +178,448 @@ def add_navigation_buttons():
         
         # Previous button (left-aligned)
         with col1:
-            if current_index > 0:  # Not first page
+            if current_index > 0:
                 if st.button("← Previous", key=f"prev_{current_index}", use_container_width=True):
                     st.session_state['current_page'] = menu_items[current_index - 1]["name"]
-                    st.rerun()
-        
-        # Next button (right-aligned)
-        with col3:
-            if current_index < len(menu_items) - 1:  # Not last page
-                if st.button("Next →", key=f"next_{current_index}", use_container_width=True):
-                    st.session_state['current_page'] = menu_items[current_index + 1]["name"]
                     st.rerun()
         
         # Center column for spacing
         with col2:
             st.write("")
+        
+        # Next button (right-aligned)
+        with col3:
+            if current_index < len(menu_items) - 1:
+                if st.button("Next →", key=f"next_{current_index}", use_container_width=True):
+                    st.session_state['current_page'] = menu_items[current_index + 1]["name"]
+                    st.rerun()
 
 # Streamlit app
 st.set_page_config(page_title='TRUIFY', layout="wide", initial_sidebar_state="expanded", page_icon="favicon.svg")
 
-# Add custom CSS for sidebar styling
+# Add custom CSS for enhanced styling and micro-interactions
 st.markdown("""
 <style>
+/* Enhanced sidebar styling */
 [data-testid="stSidebar"] {
-    background-color: #69b9e8;
+    background: linear-gradient(180deg, #69b9e8 0%, #5aa8d7 100%);
     min-width: 300px !important;
     width: 20% !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
+
 [data-testid="stSidebar"] .css-1d391kg {
-    background-color: #69b9e8;
+    background: transparent;
 }
+
+/* Enhanced main container */
 .main .block-container {
     max-width: 80%;
     padding-left: 2rem;
     padding-right: 2rem;
+    animation: fadeIn 0.6s ease-out;
 }
-/* Consistent button spacing */
+
+/* Enhanced button styling with micro-interactions - COMPACT VERSION */
 [data-testid="stSidebar"] button {
-    margin-bottom: 0.2rem !important;
-    margin-top: 0.2rem !important;
+    margin-bottom: 0.1rem !important;
+    margin-top: 0.1rem !important;
+    border-radius: 6px !important;
+    padding: 0.4rem 0.8rem !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 2px solid transparent !important;
+    background: rgba(255,255,255,0.1) !important;
+    color: white !important;
+    backdrop-filter: blur(10px) !important;
+    min-height: 32px !important;
+    line-height: 1.2 !important;
 }
-/* Consistent column spacing */
+
+[data-testid="stSidebar"] button:hover {
+    background: rgba(255,255,255,0.2) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+    border-color: rgba(255,255,255,0.3) !important;
+}
+
+[data-testid="stSidebar"] button:active {
+    transform: translateY(0) !important;
+    transition: transform 0.1s !important;
+}
+
+/* Enhanced navigation buttons */
+button[data-testid="baseButton-secondary"] {
+    border-radius: 10px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 2px solid transparent !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+button[data-testid="baseButton-secondary"]:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(105, 185, 232, 0.3) !important;
+    border-color: #69b9e8 !important;
+}
+
+button[data-testid="baseButton-secondary"]:active {
+    transform: translateY(-1px) !important;
+    transition: transform 0.1s !important;
+}
+
+/* Enhanced form elements */
+.stTextInput > div > div > input,
+.stSelectbox > div > div > select,
+.stTextArea > div > div > textarea {
+    border-radius: 10px !important;
+    border: 2px solid #e9ecef !important;
+    padding: 12px 16px !important;
+    font-size: 16px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background: #ffffff !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stSelectbox > div > div > select:focus,
+.stTextArea > div > div > textarea:focus {
+    border-color: #69b9e8 !important;
+    box-shadow: 0 0 0 4px rgba(105, 185, 232, 0.1) !important;
+    transform: scale(1.02) !important;
+}
+
+/* Enhanced dataframes */
+[data-testid="stDataFrame"] {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+[data-testid="stDataFrame"]:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Enhanced success/error messages */
+.stAlert {
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.stAlert:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+}
+
+/* Enhanced progress bars */
+.stProgress > div > div > div {
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+
+.stProgress > div > div > div > div {
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Enhanced sidebar menu items - COMPACT VERSION */
 [data-testid="stSidebar"] .row-widget {
-    margin-bottom: 0.2rem !important;
-    margin-top: 0.2rem !important;
+    margin-bottom: 0.1rem !important;
+    margin-top: 0.1rem !important;
+    transition: all 0.3s ease !important;
 }
 
-/* Navigation button styling */
-.navigation-button {
-    background-color: #69b9e8 !important;
+/* Enhanced sidebar header spacing */
+[data-testid="stSidebar"] .css-1d391kg > div:first-child {
+    margin-bottom: 0.5rem !important;
+}
+
+/* Reduce spacing around sidebar logo */
+[data-testid="stSidebar"] img {
+    margin-bottom: 0.5rem !important;
+    margin-top: 0.5rem !important;
+}
+
+/* Enhanced file uploader */
+[data-testid="stFileUploader"] {
+    border-radius: 12px !important;
+    border: 2px dashed #69b9e8 !important;
+    padding: 2rem !important;
+    transition: all 0.3s ease !important;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: #5aa8d7 !important;
+    background: rgba(105, 185, 232, 0.05) !important;
+    transform: scale(1.02) !important;
+}
+
+/* Enhanced expanders */
+[data-testid="stExpander"] {
+    border-radius: 12px !important;
+    border: 1px solid #e9ecef !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    transition: all 0.3s ease !important;
+}
+
+[data-testid="stExpander"]:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Enhanced tabs */
+[data-testid="stTabs"] {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+
+/* Enhanced markdown content */
+.stMarkdown {
+    line-height: 1.6 !important;
+}
+
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    color: #374151 !important;
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+}
+
+.stMarkdown p {
+    margin-bottom: 1rem !important;
+    color: #6b7280 !important;
+}
+
+/* Force dark grey colors for Home page content */
+.stMarkdown h2 {
+    color: #374151 !important;
+}
+
+.stMarkdown p {
+    color: #6b7280 !important;
+}
+
+/* Override any Streamlit default colors */
+div[data-testid="stMarkdown"] h2 {
+    color: #374151 !important;
+}
+
+div[data-testid="stMarkdown"] p {
+    color: #6b7280 !important;
+}
+
+/* Additional specificity for markdown content */
+div[data-testid="stMarkdown"] div h2 {
+    color: #374151 !important;
+}
+
+div[data-testid="stMarkdown"] div p {
+    color: #6b7280 !important;
+}
+
+/* Force white color for splash image text overlay - more specific targeting */
+div[data-testid="stMarkdown"] div[style*="margin-top: -16rem"] h1 {
     color: white !important;
-    border: none !important;
-    padding: 10px 20px !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
-    transition: background-color 0.3s ease !important;
 }
 
-.navigation-button:hover {
-    background-color: #5aa8d7 !important;
-}
-
-/* Target the navigation buttons specifically */
-button[data-testid="baseButton-secondary"]:has-text("← Previous"),
-button[data-testid="baseButton-secondary"]:has-text("Next →") {
-    background-color: #69b9e8 !important;
+div[data-testid="stMarkdown"] div[style*="margin-top: -16rem"] p {
     color: white !important;
-    border: none !important;
-    padding: 10px 20px !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
 }
 
-button[data-testid="baseButton-secondary"]:has-text("← Previous"):hover,
-button[data-testid="baseButton-secondary"]:has-text("Next →"):hover {
-    background-color: #5aa8d7 !important;
+/* Remove the overly broad CSS rules that were turning everything white */
+
+/* Force reduced spacing for Home page elements */
+.stMarkdown {
+    margin-bottom: 0.5rem !important;
 }
 
-/* Alternative targeting for navigation buttons */
-button:contains("← Previous"),
-button:contains("Next →") {
-    background-color: #69b9e8 !important;
-    color: white !important;
-    border: none !important;
-    padding: 10px 20px !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
 }
 
-/* Direct button styling for navigation */
-.stButton > button:has-text("← Previous"),
-.stButton > button:has-text("Next →") {
-    background-color: #69b9e8 !important;
-    color: white !important;
-    border: none !important;
-    padding: 10px 20px !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
+.stMarkdown p {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Override Streamlit's default spacing more aggressively */
+div[data-testid="stMarkdown"] {
+    margin-bottom: 0.5rem !important;
+}
+
+div[data-testid="stMarkdown"] h1,
+div[data-testid="stMarkdown"] h2,
+div[data-testid="stMarkdown"] h3 {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+div[data-testid="stMarkdown"] p {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Target specific elements on the home page */
+div[data-testid="stMarkdown"] div[style*="margin-bottom: 1rem"] {
+    margin-bottom: 0.5rem !important;
+}
+
+div[data-testid="stMarkdown"] div[style*="margin-bottom: 1rem"] h2 {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+div[data-testid="stMarkdown"] div[style*="margin-bottom: 1rem"] p {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Enhanced focus states for accessibility */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #69b9e8 !important;
+    outline-offset: 2px !important;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth !important;
+}
+
+/* Enhanced loading states */
+.stSpinner > div {
+    border-color: #69b9e8 !important;
+    border-top-color: transparent !important;
+}
+
+/* Enhanced tooltips */
+[data-testid="stTooltip"] {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
+}
+
+/* Enhanced code blocks */
+.stMarkdown pre {
+    border-radius: 8px !important;
+    background: #f8f9fa !important;
+    border: 1px solid #e9ecef !important;
+    padding: 1rem !important;
+}
+
+/* Enhanced lists */
+.stMarkdown ul, .stMarkdown ol {
+    padding-left: 1.5rem !important;
+}
+
+.stMarkdown li {
+    margin-bottom: 0.5rem !important;
+    color: #495057 !important;
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+    .main .block-container {
+        max-width: 95% !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    [data-testid="stSidebar"] {
+        min-width: 250px !important;
+        width: 25% !important;
+    }
+}
+
+/* Enhanced focus states for accessibility */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #69b9e8 !important;
+    outline-offset: 2px !important;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth !important;
+}
+
+/* Enhanced loading states */
+.stSpinner > div {
+    border-color: #69b9e8 !important;
+    border-top-color: transparent !important;
+}
+
+/* Enhanced tooltips */
+[data-testid="stTooltip"] {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
+}
+
+/* Remove shadows from images */
+img {
+    box-shadow: none !important;
+}
+
+/* Remove shadows from Streamlit images specifically */
+[data-testid="stImage"] {
+    box-shadow: none !important;
+}
+
+[data-testid="stImage"] img {
+    box-shadow: none !important;
+}
+
+/* Remove shadows from all possible image containers and elements */
+img, 
+[data-testid="stImage"],
+[data-testid="stImage"] *,
+.stImage,
+.stImage *,
+div[style*="text-align: center"],
+div[style*="text-align: center"] * {
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+/* Remove any potential drop-shadows or filters */
+img {
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
+/* Target the specific splash image container */
+div[style*="margin-top: -16rem"] {
+    box-shadow: none !important;
+}
+
+/* Remove shadows from any elements that might contain the image */
+div[style*="text-align: center"] {
+    box-shadow: none !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -325,56 +709,178 @@ if page not in st.session_state['visited_pages']:
 
 
 if page == "Home":
-    #st.markdown("""
-    #    <div style='display: flex; justify-content: center; align-items: center; height: 60vh;'>
-   #         <img src='images/truify_animation_once.gif' style='max-width: 100%; height: auto;' />
-    #    </div>
-    #""", unsafe_allow_html=True)
-    st.image("images/truify_animation_once.gif")
-    st.write("Truify.ai is an agentic platform enabling trustworthy and more accurate AI through intelligent, automated data engineering.  The platform helps you identify risks and bias in your data, then clean, fill and fix your data.")
-    st.write("")
-    st.write("Truify.ai generates new synthetic versions of your data that contain the same signals as your original data, while greatly reducing exposure to risk through bias, privacy leaks or compliance violations.")
-    st.write("")
-    st.write("This site demonstrates the capabilities of the agentic Software-as-a-Service (SaaS) enabled by Truify.AI's API-based services.  These can be integrated into your systems on-premise, or in a private cloud.")
+    # Display splash image with overlaid welcome text using Streamlit native methods
+    # Create a container for the splash section
+    splash_container = st.container()
+    
+    with splash_container:
+        # Display the image at 50% size
+        col1, col2, col3 = st.columns([0.5, 3, 0.5])
+        with col2:
+            st.image("images/HomePageSplash3.png", use_container_width=True)
+            
+            # Overlay text directly on top of the image - positioned in the middle
+            st.markdown("""
+            <div style="
+                padding: 1.5rem;
+                text-align: center;
+                margin-top: -16rem;
+                position: relative;
+                z-index: 10;
+            ">
+                <h1 style="
+                    color: white; 
+                    margin: 0 0 0.5rem 0; 
+                    font-size: 2.5rem; 
+                    font-weight: 700;
+                    letter-spacing: -0.5px;
+                    line-height: 1.2;
+                ">Truify.AI</h1>
+                <p style="
+                    color: white; 
+                    margin: 0; 
+                    font-size: 1.2rem;
+                    line-height: 1.4;
+                    font-weight: 300;
+                ">An agentic platform enabling trustworthy and more accurate AI through intelligent, automated data engineering</p>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Add minimal spacing after the splash section
     st.write("")
     
-    st.write("**Here's what you can do with Truify:**")
-    st.write("1. **Import Data** - Upload your CSV file and preview your dataset")
-    st.write("2. **Describe Data** - Get AI-powered insights and visualizations of your data")
-    st.write("3. **Create Compliance Report** - Assess your data for regulatory compliance risks")
-    st.write("4. **PII Analysis** - Identify and anonymize personally identifiable information")
-    st.write("5. **Reduce Bias** - Analyze and mitigate bias in your dataset")
-    st.write("6. **Fill Missingness** - Handle missing data with intelligent imputation")
-    st.write("7. **Merge Data** - Combine multiple datasets efficiently")
-    st.write("8. **Synthesize Data** - Create synthetic versions that preserve data patterns")
-    st.write("9. **Export Data** - Download your processed dataset")
-    st.write("")
-    st.write("**Flexible Navigation:** You can use any or all of the features and hop around as you like. Use the Next/Previous buttons on each page or the menu on the left to move around freely. You can always go back to previous steps or jump ahead to any page.")
-    st.write("")
-    st.write("Get started by importing your data, using the button on the left.")
-    st.write("")
-    st.write("To learn more, contact info@truify.ai")
-    #st.image("images/diagram.png")
+    # Enhanced content layout - COMPACT VERSION (NO BOXES)
     st.markdown("""
-    <style>
-    .centered-image-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin: 20px 0;
-    }
-    </style>
+    <div style="margin-bottom: 1rem;">
+        <h2 style="color: #374151; margin-top: 0; margin-bottom: 0.5rem;">What Truify Does</h2>
+        <p style="color: #6b7280; line-height: 1.5; margin-bottom: 0.5rem;">
+            Truify.ai generates new synthetic versions of your data that contain the same signals as your original data, 
+            while greatly reducing exposure to risk through bias, privacy leaks or compliance violations.
+        </p>
+        <p style="color: #6b7280; line-height: 1.5; margin-bottom: 0;">
+            This site demonstrates the capabilities of the agentic Software-as-a-Service (SaaS) enabled by Truify.AI's 
+            API-based services. These can be integrated into your systems on-premise, or in a private cloud.
+        </p>
+    </div>
     """, unsafe_allow_html=True)
-
+    
+    # Enhanced features list - COMPACT VERSION (NO BOXES, ONE LINE PER STEP)
+    st.markdown("""
+    <div style="margin-bottom: 1rem;">
+        <h2 style="color: #374151; margin-top: 0; margin-bottom: 0.5rem;">What You Can Do with Truify</h2>
+        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+    """, unsafe_allow_html=True)
+    
+    # Feature list - COMPACT VERSION (ONE LINE PER STEP)
+    features = [
+        ("📥 Import Data", "Upload your CSV file and preview your dataset"),
+        ("📊 Describe Data", "Get AI-powered insights and visualizations of your data"),
+        ("📋 Create Compliance Report", "Assess your data for regulatory compliance risks"),
+        ("🔒 PII Analysis", "Identify and anonymize personally identifiable information"),
+        ("⚖️ Reduce Bias", "Analyze and mitigate bias in your dataset"),
+        ("🔧 Fill Missingness", "Handle missing data with intelligent imputation"),
+        ("🔗 Merge Data", "Combine multiple datasets efficiently"),
+        ("🧬 Synthesize Data", "Create synthetic versions that preserve data patterns"),
+        ("📤 Export Data", "Download your processed dataset")
+    ]
+    
+    for i, (title, description) in enumerate(features, 1):
+        st.markdown(f"""
+        <div style="
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.2rem 0;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+            padding-left: 0.5rem;
+        " onmouseover="this.style.backgroundColor='rgba(105, 185, 232, 0.05)'; this.style.transform='translateX(4px)'" onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateX(0)'">
+            <span style="
+                background: linear-gradient(135deg, #69b9e8 0%, #5aa8d7 100%);
+                color: white;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.8rem;
+                font-weight: bold;
+                flex-shrink: 0;
+            ">{i}</span>
+            <span style="
+                color: #374151; 
+                font-weight: 600; 
+                font-size: 0.95rem;
+                min-width: 140px;
+                flex-shrink: 0;
+            ">{title}</span>
+            <span style="
+                color: #6b7280; 
+                font-size: 0.9rem;
+                flex-grow: 1;
+            ">{description}</span>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("</div></div>", unsafe_allow_html=True)
+    
+    # Enhanced navigation info - COMPACT VERSION (NO BOXES)
+    st.markdown("""
+    <div style="margin-bottom: 1rem;">
+        <h2 style="color: #1e40af; margin-top: 0; margin-bottom: 0.5rem;">🧭 Flexible Navigation</h2>
+        <p style="color: #3b82f6; line-height: 1.5; margin-bottom: 0;">
+            You can use any or all of the features and hop around as you like. Use the Next/Previous buttons on each page 
+            or the menu on the left to move around freely. You can always go back to previous steps or jump ahead to any page.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Enhanced call-to-action - COMPACT VERSION (NO BOXES)
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #69b9e8 0%, #5aa8d7 100%);
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 3px 10px rgba(105, 185, 232, 0.3);
+        margin-bottom: 1rem;
+    ">
+        <h2 style="color: white; margin-top: 0; margin-bottom: 0.5rem;">🚀 Ready to Get Started?</h2>
+        <p style="color: rgba(255,255,255,0.9); line-height: 1.5; margin-bottom: 1rem;">
+            Import your data using the button on the left and begin your data engineering journey with Truify.
+        </p>
+        <p style="color: rgba(255,255,255,0.8); font-size: 0.85rem; margin: 0;">
+            To learn more, contact <strong>info@truify.ai</strong>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Enhanced diagram display - COMPACT VERSION (NO BOXES)
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
+        st.markdown("""
+        <div style="text-align: center; margin-bottom: 0.5rem;">
+            <h3 style="color: #374151; margin-top: 0; margin-bottom: 0.5rem;">🏗️ Conceptual Architecture</h3>
+        </div>
+        """, unsafe_allow_html=True)
         st.image("images/diagram.png", use_container_width=True)
 
-    # Add navigation buttons
-    add_navigation_buttons()
+    # Add Next button for Home page
+    st.markdown("---")
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col3:
+        if st.button("Next →", key="next_home", use_container_width=True):
+            st.session_state['current_page'] = "Import Data"
+            st.rerun()
 
 if page == "Import Data":
+    # Display enhanced page header
+    display_page_header(
+        "Import Data", 
+        "Upload your CSV files and configure data types for optimal analysis",
+        "📥"
+    )
     st.title("Import Data")
     
     # Initialize session state for data type configuration
@@ -540,6 +1046,12 @@ if page == "Import Data":
     add_navigation_buttons()
 
 elif page == "Describe Data":
+    # Display enhanced page header
+    display_page_header(
+        "Describe Data", 
+        "Get AI-powered insights and visualizations of your dataset",
+        "📊"
+    )
     st.title("Describe Data")
     if 'df' in st.session_state:
         df = st.session_state['df']
@@ -581,12 +1093,25 @@ elif page == "Describe Data":
     add_navigation_buttons()
 
 elif page == "PII Analysis":
+    # Display enhanced page header
+    display_page_header(
+        "PII Analysis & Anonymization", 
+        "Identify and protect personally identifiable information in your datasets",
+        "🔒"
+    )
+    
     pii_page()
     
     # Add navigation buttons
     add_navigation_buttons()
 
 elif page == "Reduce Bias":
+    # Display enhanced page header
+    display_page_header(
+        "Reduce Bias", 
+        "Analyze and mitigate bias in your dataset for fair AI outcomes",
+        "⚖️"
+    )
     st.title("Reduce Bias")
     if 'df' in st.session_state:
         df = st.session_state['df']
@@ -662,6 +1187,12 @@ elif page == "Reduce Bias":
     add_navigation_buttons()
 
 elif page == "Fill Missingness":
+    # Display enhanced page header
+    display_page_header(
+        "Fill Missingness", 
+        "Handle missing data with intelligent imputation techniques",
+        "🔧"
+    )
     st.title("Fill Missingness")
     if 'missingness_filled_count' in st.session_state:
         st.success(f"Filled {st.session_state['missingness_filled_count']} missing cells.")
@@ -739,6 +1270,12 @@ elif page == "Fill Missingness":
     add_navigation_buttons()
 
 elif page == "Merge Data":
+    # Display enhanced page header
+    display_page_header(
+        "Merge Data", 
+        "Combine multiple datasets efficiently and intelligently",
+        "🔗"
+    )
     st.title("Merge Data")
     st.write("Coming Soon!")
 
@@ -746,12 +1283,25 @@ elif page == "Merge Data":
     add_navigation_buttons()
 
 elif page == "Synthesize Data":
+    # Display enhanced page header
+    display_page_header(
+        "Synthesize Data", 
+        "Create synthetic versions that preserve data patterns and reduce risks",
+        "🧬"
+    )
+    
     synthesize_page()
     
     # Add navigation buttons
     add_navigation_buttons()
 
 elif page == "Export Data":
+    # Display enhanced page header
+    display_page_header(
+        "Export Data", 
+        "Download your processed and enhanced dataset",
+        "📤"
+    )
     st.title("Export Data")
     if 'df' in st.session_state:
         df = st.session_state['df']
@@ -787,7 +1337,13 @@ elif page == "Export Data":
     add_navigation_buttons()
 
 elif page == "Create Compliance Report":
-    st.title("Create New Compliance Evaluation")
+    # Display enhanced page header
+    display_page_header(
+        "Create Compliance Report", 
+        "Assess your data for regulatory compliance risks and generate detailed reports",
+        "📋"
+    )
+    st.title("Create Compliance Report")
     st.write("""
     This tool evaluates your dataset for compliance risks relative to major data protection and AI regulations. It analyzes your data for personally identifiable information (PII), sensitive attributes, missing values, and risks related to automated decision-making. The tool generates a detailed markdown report describing the data, potential compliance risks (with references to GDPR, CCPA, and the EU AI Act), and an action plan for remediation.
     """)
