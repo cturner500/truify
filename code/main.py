@@ -319,6 +319,10 @@ display_logout_button()
 
 page = st.session_state['current_page']
 
+# Mark the current page as visited (regardless of how user got there)
+if page not in st.session_state['visited_pages']:
+    st.session_state['visited_pages'].add(page)
+
 
 if page == "Home":
     #st.markdown("""
