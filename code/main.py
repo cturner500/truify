@@ -1391,15 +1391,25 @@ elif page == "Create Compliance Report":
             with st.spinner("Generating compliance report..."):
                 try:
                     import sys
+                    import importlib
                     sys.path.append("./code")
+                    
+                    # Force reload the compliance module to get latest changes
+                    if 'compliance' in sys.modules:
+                        importlib.reload(sys.modules['compliance'])
                     import compliance
+                    
                     df = st.session_state['df']
                     # Prepare policy list for compliance.py
                     policy_args = selected_policies
-                    result = compliance.evaluate_compliance(df, policies=policy_args)
+                    
+                    result = compliance.evaluate_compliance_risks(df)
+                    
+                    # Generate markdown report from the new compliance results
+                    markdown_report = compliance.generate_markdown_report(result)
                     
                     # Store the markdown report in session state
-                    st.session_state['compliance_report_md'] = result['markdown']
+                    st.session_state['compliance_report_md'] = markdown_report
                     st.session_state['compliance_report_generated'] = True
                     st.rerun()
                 except Exception as e:
