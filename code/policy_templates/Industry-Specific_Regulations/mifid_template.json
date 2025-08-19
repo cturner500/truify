@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Markets in Financial Instruments Directive II (MiFID II)",
+    "version": "2014",
+    "category": "Industry-Specific Regulations",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32014L0065",
+    "description": "EU regulation on financial markets and investment services",
+    "last_updated": "2025-08-17T21:02:24.667720",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "client_protection": {
+      "required_elements": [
+        "suitability_assessment",
+        "best_execution",
+        "conflict_management"
+      ],
+      "validation_rules": [
+        "assessment_conducted",
+        "execution_ensured",
+        "conflicts_resolved"
+      ],
+      "truify_relevance": "medium"
+    },
+    "transparency": {
+      "required_elements": [
+        "pre_trade_disclosure",
+        "post_trade_reporting",
+        "market_data"
+      ],
+      "validation_rules": [
+        "disclosure_made",
+        "reporting_accurate",
+        "data_available"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_governance": {
+      "required_elements": [
+        "data_quality",
+        "retention_policy",
+        "access_controls"
+      ],
+      "validation_rules": [
+        "quality_maintained",
+        "retention_enforced",
+        "controls_active"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate trading data integrity",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Critical for MiFID II compliance - ensures trading data accuracy"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

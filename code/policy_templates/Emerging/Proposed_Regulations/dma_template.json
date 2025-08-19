@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Digital Markets Act (DMA)",
+    "version": "2022",
+    "category": "Emerging/Proposed Regulations",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32022L1925",
+    "description": "EU regulation on digital market competition",
+    "last_updated": "2025-08-17T21:02:24.667779",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "gatekeeper_obligations": {
+      "required_elements": [
+        "interoperability_standards",
+        "data_portability",
+        "access_conditions"
+      ],
+      "validation_rules": [
+        "standards_established",
+        "portability_available",
+        "conditions_fair"
+      ],
+      "truify_relevance": "medium"
+    },
+    "anti_competitive_measures": {
+      "required_elements": [
+        "self_preference_prohibition",
+        "data_usage_restrictions",
+        "fair_ranking"
+      ],
+      "validation_rules": [
+        "prohibition_enforced",
+        "restrictions_applied",
+        "ranking_fair"
+      ],
+      "truify_relevance": "low"
+    },
+    "transparency_requirements": {
+      "required_elements": [
+        "algorithm_disclosure",
+        "data_usage",
+        "business_terms"
+      ],
+      "validation_rules": [
+        "disclosure_made",
+        "usage_clear",
+        "terms_transparent"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data quality for interoperability",
+      "relevance": "medium",
+      "page": "Describe Data",
+      "description": "Helps ensure DMA compliance by ensuring data quality for interoperability"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

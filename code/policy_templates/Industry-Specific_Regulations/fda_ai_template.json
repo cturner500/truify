@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "FDA AI/ML Software as a Medical Device Guidelines",
+    "version": "2021",
+    "category": "Industry-Specific Regulations",
+    "url": "https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-and-machine-learning-software-medical-device",
+    "description": "US FDA guidelines for AI/ML medical devices",
+    "last_updated": "2025-08-17T21:02:24.667723",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "clinical_validation": {
+      "required_elements": [
+        "performance_metrics",
+        "clinical_evidence",
+        "safety_assessment"
+      ],
+      "validation_rules": [
+        "metrics_defined",
+        "evidence_sufficient",
+        "safety_verified"
+      ],
+      "truify_relevance": "high"
+    },
+    "data_quality": {
+      "required_elements": [
+        "data_representativeness",
+        "bias_assessment",
+        "quality_metrics"
+      ],
+      "validation_rules": [
+        "data_representative",
+        "bias_evaluated",
+        "quality_measured"
+      ],
+      "truify_relevance": "high"
+    },
+    "change_management": {
+      "required_elements": [
+        "change_protocol",
+        "validation_process",
+        "regulatory_notification"
+      ],
+      "validation_rules": [
+        "protocol_established",
+        "process_documented",
+        "notification_timely"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns in medical data",
+      "relevance": "high",
+      "page": "Bias Analysis",
+      "description": "Critical for FDA AI compliance - ensures medical AI systems are fair"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate medical data quality",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Critical for FDA AI compliance - ensures medical data quality"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

@@ -324,7 +324,7 @@ def generate_synthesis_narrative(original_df, synthetic_df, validation_results):
 
 def synthesize_page():
     """Main function for the synthesizer page"""
-    st.title("Create Synthetic Dataset from Real Dataset")
+    #st.title("Create Synthetic Dataset from Real Dataset")
     
     # Check if data is loaded
     if 'df' not in st.session_state:
@@ -341,7 +341,6 @@ def synthesize_page():
     st.dataframe(df.head(10), use_container_width=True)
     
     # Display basic statistics
-    st.subheader("Dataset Statistics")
     col1, col2 = st.columns(2)
     
     with col1:

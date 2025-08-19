@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Basel III/IV Banking Regulations",
+    "version": "2023",
+    "category": "Industry-Specific Regulations",
+    "url": "https://www.bis.org/bcbs/basel3.htm",
+    "description": "International banking capital and risk standards",
+    "last_updated": "2025-08-17T21:02:24.667718",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "capital_adequacy": {
+      "required_elements": [
+        "capital_ratios",
+        "risk_weighting",
+        "stress_testing"
+      ],
+      "validation_rules": [
+        "ratios_adequate",
+        "weighting_appropriate",
+        "testing_conducted"
+      ],
+      "truify_relevance": "medium"
+    },
+    "risk_management": {
+      "required_elements": [
+        "risk_framework",
+        "governance_structure",
+        "monitoring_systems"
+      ],
+      "validation_rules": [
+        "framework_established",
+        "structure_clear",
+        "monitoring_active"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_quality": {
+      "required_elements": [
+        "data_accuracy",
+        "completeness_assessment",
+        "validation_processes"
+      ],
+      "validation_rules": [
+        "accuracy_verified",
+        "completeness_evaluated",
+        "validation_ongoing"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate financial data integrity",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Critical for Basel compliance - ensures financial data accuracy"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

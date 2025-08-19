@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "California Consumer Privacy Act",
+    "version": "2023",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://oag.ca.gov/privacy/ccpa",
+    "description": "California law giving consumers control over personal information",
+    "last_updated": "2025-08-17T21:02:24.667089",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "consumer_rights": {
+      "required_elements": [
+        "right_to_know",
+        "right_to_delete",
+        "right_to_opt_out"
+      ],
+      "validation_rules": [
+        "processes_documented",
+        "contact_method_specified",
+        "response_timeframe"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_disclosure": {
+      "required_elements": [
+        "data_categories",
+        "business_purposes",
+        "third_party_sharing"
+      ],
+      "validation_rules": [
+        "categories_listed",
+        "purposes_specified",
+        "sharing_disclosed"
+      ],
+      "truify_relevance": "low"
+    },
+    "opt_out_mechanism": {
+      "required_elements": [
+        "opt_out_link",
+        "do_not_sell_button",
+        "verification_process"
+      ],
+      "validation_rules": [
+        "mechanism_visible",
+        "process_simple",
+        "verification_required"
+      ],
+      "truify_relevance": "low"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify personal information",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Can anonymize personal data to reduce CCPA compliance risk"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

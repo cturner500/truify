@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "name": "Lei Geral de Proteção de Dados (LGPD)",
+    "version": "2020",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://www.lgpdbrasil.com.br/",
+    "description": "Brazil's General Data Protection Law",
+    "last_updated": "2025-08-17T21:02:24.667098",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "data_processing": {
+      "required_elements": [
+        "legal_basis",
+        "purpose_limitation",
+        "data_retention"
+      ],
+      "validation_rules": [
+        "basis_justified",
+        "purpose_specific",
+        "retention_limited"
+      ],
+      "truify_relevance": "high"
+    },
+    "user_rights": {
+      "required_elements": [
+        "right_to_access",
+        "right_to_deletion",
+        "right_to_portability"
+      ],
+      "validation_rules": [
+        "processes_documented",
+        "contact_method_specified"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_protection": {
+      "required_elements": [
+        "security_measures",
+        "breach_notification",
+        "dpo_contact"
+      ],
+      "validation_rules": [
+        "measures_described",
+        "notification_process",
+        "dpo_available"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify personal data",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Can anonymize personal data to reduce LGPD compliance risk"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

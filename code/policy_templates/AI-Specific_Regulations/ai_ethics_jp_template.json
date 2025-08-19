@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "Social Principles of Human-Centric AI (Japan)",
+    "version": "2019",
+    "category": "AI-Specific Regulations",
+    "url": "https://www.cao.go.jp/ai-policy/ai-policy_en.html",
+    "description": "Japan's human-centric AI ethics principles",
+    "last_updated": "2025-08-17T21:02:24.667711",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "human_centric_approach": {
+      "required_elements": [
+        "human_dignity",
+        "privacy_protection",
+        "autonomy_respect"
+      ],
+      "validation_rules": [
+        "dignity_respected",
+        "privacy_ensured",
+        "autonomy_maintained"
+      ],
+      "truify_relevance": "medium"
+    },
+    "fairness_transparency": {
+      "required_elements": [
+        "bias_mitigation",
+        "explainability",
+        "accountability"
+      ],
+      "validation_rules": [
+        "bias_addressed",
+        "decisions_explainable",
+        "responsibility_clear"
+      ],
+      "truify_relevance": "high"
+    },
+    "safety_security": {
+      "required_elements": [
+        "safety_measures",
+        "security_protocols",
+        "incident_response"
+      ],
+      "validation_rules": [
+        "measures_implemented",
+        "protocols_active",
+        "response_ready"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns in data",
+      "relevance": "high",
+      "page": "Bias Analysis",
+      "description": "Critical for Japanese AI Ethics compliance - ensures fairness"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data completeness and accuracy",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Helps ensure data quality for Japanese AI ethics requirements"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

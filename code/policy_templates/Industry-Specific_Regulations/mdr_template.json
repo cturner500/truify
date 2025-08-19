@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Medical Device Regulation (MDR)",
+    "version": "2017",
+    "category": "Industry-Specific Regulations",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745",
+    "description": "EU regulation on medical devices",
+    "last_updated": "2025-08-17T21:02:24.667725",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "clinical_evaluation": {
+      "required_elements": [
+        "clinical_data",
+        "performance_metrics",
+        "safety_profile"
+      ],
+      "validation_rules": [
+        "data_sufficient",
+        "metrics_defined",
+        "safety_assessed"
+      ],
+      "truify_relevance": "high"
+    },
+    "data_governance": {
+      "required_elements": [
+        "data_quality",
+        "traceability",
+        "verification_processes"
+      ],
+      "validation_rules": [
+        "quality_maintained",
+        "traceability_ensured",
+        "verification_ongoing"
+      ],
+      "truify_relevance": "high"
+    },
+    "post_market_surveillance": {
+      "required_elements": [
+        "monitoring_systems",
+        "incident_reporting",
+        "corrective_actions"
+      ],
+      "validation_rules": [
+        "monitoring_active",
+        "reporting_timely",
+        "actions_effective"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate medical device data quality",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Critical for MDR compliance - ensures medical device data quality"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

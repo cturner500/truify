@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Personal Data Protection Act (Thailand)",
+    "version": "2019",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://www.pdpc.go.th/",
+    "description": "Thailand's comprehensive data protection law",
+    "last_updated": "2025-08-17T21:02:24.667109",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "legal_basis": {
+      "required_elements": [
+        "lawful_basis",
+        "consent_obtained",
+        "legitimate_interest"
+      ],
+      "validation_rules": [
+        "basis_justified",
+        "consent_valid",
+        "interest_balanced"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_subject_rights": {
+      "required_elements": [
+        "access_rights",
+        "rectification_rights",
+        "erasure_rights"
+      ],
+      "validation_rules": [
+        "rights_documented",
+        "process_clear",
+        "mechanism_available"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_protection": {
+      "required_elements": [
+        "security_measures",
+        "breach_notification",
+        "dpo_contact"
+      ],
+      "validation_rules": [
+        "measures_implemented",
+        "notification_process",
+        "dpo_available"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify personal data",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Can anonymize personal data to reduce PDPA compliance risk"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

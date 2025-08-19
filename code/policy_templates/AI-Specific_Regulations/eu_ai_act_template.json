@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "name": "EU AI Act",
+    "version": "2024",
+    "category": "AI-Specific Regulations",
+    "url": "https://artificialintelligenceact.eu/",
+    "description": "European Union regulation on artificial intelligence systems",
+    "last_updated": "2025-08-17T21:02:24.667093",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "risk_assessment": {
+      "required_elements": [
+        "risk_level_determination",
+        "prohibited_uses",
+        "high_risk_requirements"
+      ],
+      "validation_rules": [
+        "level_justified",
+        "prohibitions_identified",
+        "requirements_met"
+      ],
+      "truify_relevance": "high"
+    },
+    "transparency": {
+      "required_elements": [
+        "ai_system_disclosure",
+        "decision_explanation",
+        "human_oversight"
+      ],
+      "validation_rules": [
+        "disclosure_made",
+        "explanation_provided",
+        "oversight_mechanism"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_quality": {
+      "required_elements": [
+        "training_data_assessment",
+        "bias_evaluation",
+        "accuracy_metrics"
+      ],
+      "validation_rules": [
+        "data_evaluated",
+        "bias_identified",
+        "metrics_tracked"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns in data",
+      "relevance": "high",
+      "page": "Bias Analysis",
+      "description": "Critical for EU AI Act compliance - identifies bias in training data"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data completeness and accuracy",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Helps ensure training data meets AI Act quality requirements"
+    },
+    {
+      "tool": "PII Analysis",
+      "function": "Identify sensitive data in training sets",
+      "relevance": "medium",
+      "page": "PII Analysis",
+      "description": "Ensures AI systems don't process unnecessary personal data"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

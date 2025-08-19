@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Act on the Protection of Personal Information (Japan)",
+    "version": "2022",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://www.ppc.go.jp/en/",
+    "description": "Japan's comprehensive personal information protection law",
+    "last_updated": "2025-08-17T21:02:24.667107",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "data_utilization": {
+      "required_elements": [
+        "purpose_specification",
+        "consent_obtained",
+        "retention_policy"
+      ],
+      "validation_rules": [
+        "purpose_clear",
+        "consent_valid",
+        "retention_defined"
+      ],
+      "truify_relevance": "high"
+    },
+    "individual_rights": {
+      "required_elements": [
+        "disclosure_rights",
+        "correction_rights",
+        "suspension_rights"
+      ],
+      "validation_rules": [
+        "rights_documented",
+        "process_clear",
+        "mechanism_available"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_security": {
+      "required_elements": [
+        "security_measures",
+        "breach_notification",
+        "supervision"
+      ],
+      "validation_rules": [
+        "measures_implemented",
+        "notification_process",
+        "supervision_active"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify personal data",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Can anonymize personal data to reduce APPI compliance risk"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

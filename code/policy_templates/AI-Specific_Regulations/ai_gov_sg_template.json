@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "Model AI Governance Framework (Singapore)",
+    "version": "2020",
+    "category": "AI-Specific Regulations",
+    "url": "https://www.pdpc.gov.sg/help-and-resources/2020/01/model-ai-governance-framework",
+    "description": "Singapore's voluntary AI governance framework",
+    "last_updated": "2025-08-17T21:02:24.667709",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "internal_governance": {
+      "required_elements": [
+        "ai_governance_policy",
+        "risk_management",
+        "training_programs"
+      ],
+      "validation_rules": [
+        "policy_established",
+        "management_active",
+        "training_conducted"
+      ],
+      "truify_relevance": "medium"
+    },
+    "human_ai_interaction": {
+      "required_elements": [
+        "human_oversight",
+        "decision_explanation",
+        "intervention_mechanism"
+      ],
+      "validation_rules": [
+        "oversight_implemented",
+        "explanation_provided",
+        "intervention_available"
+      ],
+      "truify_relevance": "high"
+    },
+    "operations_management": {
+      "required_elements": [
+        "incident_response",
+        "business_continuity",
+        "monitoring_systems"
+      ],
+      "validation_rules": [
+        "response_plan_exists",
+        "continuity_ensured",
+        "monitoring_active"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns in data",
+      "relevance": "high",
+      "page": "Bias Analysis",
+      "description": "Critical for Singapore AI Governance Framework compliance"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data completeness and accuracy",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Helps ensure training data meets Singapore AI governance requirements"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "name": "Sarbanes-Oxley Act",
+    "version": "2002",
+    "category": "Industry-Specific Regulations",
+    "url": "https://www.sec.gov/about/laws/soa2002.pdf",
+    "description": "US law establishing corporate accountability and financial reporting standards",
+    "last_updated": "2025-08-17T21:02:24.667095",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "financial_reporting": {
+      "required_elements": [
+        "internal_controls",
+        "audit_trails",
+        "data_integrity"
+      ],
+      "validation_rules": [
+        "controls_documented",
+        "trails_maintained",
+        "integrity_verified"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_retention": {
+      "required_elements": [
+        "retention_policy",
+        "destruction_procedures",
+        "access_controls"
+      ],
+      "validation_rules": [
+        "policy_defined",
+        "procedures_documented",
+        "controls_implemented"
+      ],
+      "truify_relevance": "low"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data completeness and accuracy",
+      "relevance": "medium",
+      "page": "Describe Data",
+      "description": "Helps ensure financial data integrity for SOX compliance"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

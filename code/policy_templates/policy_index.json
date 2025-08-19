@@ -1,0 +1,200 @@
+{
+  "metadata": {
+    "generated": "2025-08-17T21:02:24.672476",
+    "total_policies": 37,
+    "categories": [
+      "Data Protection & Privacy Laws",
+      "Industry-Specific Regulations",
+      "AI-Specific Regulations",
+      "Cybersecurity & Infrastructure",
+      "Emerging/Proposed Regulations"
+    ]
+  },
+  "policies": {
+    "gdpr": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2024",
+      "filename": "Data_Protection_and_Privacy_Laws/gdpr_template.json"
+    },
+    "hipaa": {
+      "category": "Industry-Specific Regulations",
+      "version": "2023",
+      "filename": "Industry-Specific_Regulations/hipaa_template.json"
+    },
+    "ccpa": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2023",
+      "filename": "Data_Protection_and_Privacy_Laws/ccpa_template.json"
+    },
+    "eu_ai_act": {
+      "category": "AI-Specific Regulations",
+      "version": "2024",
+      "filename": "AI-Specific_Regulations/eu_ai_act_template.json"
+    },
+    "sox": {
+      "category": "Industry-Specific Regulations",
+      "version": "2002",
+      "filename": "Industry-Specific_Regulations/sox_template.json"
+    },
+    "iso_27001": {
+      "category": "Cybersecurity & Infrastructure",
+      "version": "2022",
+      "filename": "Cybersecurity_and_Infrastructure/iso_27001_template.json"
+    },
+    "lgpd": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2020",
+      "filename": "Data_Protection_and_Privacy_Laws/lgpd_template.json"
+    },
+    "pipeda": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2022",
+      "filename": "Data_Protection_and_Privacy_Laws/pipeda_template.json"
+    },
+    "pdpa_sg": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2021",
+      "filename": "Data_Protection_and_Privacy_Laws/pdpa_sg_template.json"
+    },
+    "pipl": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2021",
+      "filename": "Data_Protection_and_Privacy_Laws/pipl_template.json"
+    },
+    "appi": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2022",
+      "filename": "Data_Protection_and_Privacy_Laws/appi_template.json"
+    },
+    "pdpa_th": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2019",
+      "filename": "Data_Protection_and_Privacy_Laws/pdpa_th_template.json"
+    },
+    "popia": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2013",
+      "filename": "Data_Protection_and_Privacy_Laws/popia_template.json"
+    },
+    "coppa": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2013",
+      "filename": "Data_Protection_and_Privacy_Laws/coppa_template.json"
+    },
+    "glba": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "1999",
+      "filename": "Data_Protection_and_Privacy_Laws/glba_template.json"
+    },
+    "eprivacy": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2002",
+      "filename": "Data_Protection_and_Privacy_Laws/eprivacy_template.json"
+    },
+    "nis2": {
+      "category": "Data Protection & Privacy Laws",
+      "version": "2022",
+      "filename": "Data_Protection_and_Privacy_Laws/nis2_template.json"
+    },
+    "ai_act_ca": {
+      "category": "AI-Specific Regulations",
+      "version": "2023",
+      "filename": "AI-Specific_Regulations/ai_act_ca_template.json"
+    },
+    "ai_gov_sg": {
+      "category": "AI-Specific Regulations",
+      "version": "2020",
+      "filename": "AI-Specific_Regulations/ai_gov_sg_template.json"
+    },
+    "ai_ethics_jp": {
+      "category": "AI-Specific Regulations",
+      "version": "2019",
+      "filename": "AI-Specific_Regulations/ai_ethics_jp_template.json"
+    },
+    "oecd_ai": {
+      "category": "AI-Specific Regulations",
+      "version": "2019",
+      "filename": "AI-Specific_Regulations/oecd_ai_template.json"
+    },
+    "unesco_ai": {
+      "category": "AI-Specific Regulations",
+      "version": "2021",
+      "filename": "AI-Specific_Regulations/unesco_ai_template.json"
+    },
+    "g7_ai": {
+      "category": "AI-Specific Regulations",
+      "version": "2023",
+      "filename": "AI-Specific_Regulations/g7_ai_template.json"
+    },
+    "basel": {
+      "category": "Industry-Specific Regulations",
+      "version": "2023",
+      "filename": "Industry-Specific_Regulations/basel_template.json"
+    },
+    "mifid": {
+      "category": "Industry-Specific Regulations",
+      "version": "2014",
+      "filename": "Industry-Specific_Regulations/mifid_template.json"
+    },
+    "dodd_frank": {
+      "category": "Industry-Specific Regulations",
+      "version": "2010",
+      "filename": "Industry-Specific_Regulations/dodd_frank_template.json"
+    },
+    "fda_ai": {
+      "category": "Industry-Specific Regulations",
+      "version": "2021",
+      "filename": "Industry-Specific_Regulations/fda_ai_template.json"
+    },
+    "mdr": {
+      "category": "Industry-Specific Regulations",
+      "version": "2017",
+      "filename": "Industry-Specific_Regulations/mdr_template.json"
+    },
+    "unece": {
+      "category": "Industry-Specific Regulations",
+      "version": "2021",
+      "filename": "Industry-Specific_Regulations/unece_template.json"
+    },
+    "iso_21434": {
+      "category": "Industry-Specific Regulations",
+      "version": "2021",
+      "filename": "Industry-Specific_Regulations/iso_21434_template.json"
+    },
+    "nist": {
+      "category": "Cybersecurity & Infrastructure",
+      "version": "2018",
+      "filename": "Cybersecurity_and_Infrastructure/nist_template.json"
+    },
+    "soc2": {
+      "category": "Cybersecurity & Infrastructure",
+      "version": "2017",
+      "filename": "Cybersecurity_and_Infrastructure/soc2_template.json"
+    },
+    "pci_dss": {
+      "category": "Cybersecurity & Infrastructure",
+      "version": "4.0",
+      "filename": "Cybersecurity_and_Infrastructure/pci_dss_template.json"
+    },
+    "ai_liability": {
+      "category": "Emerging/Proposed Regulations",
+      "version": "2022",
+      "filename": "Emerging/Proposed_Regulations/ai_liability_template.json"
+    },
+    "data_act": {
+      "category": "Emerging/Proposed Regulations",
+      "version": "2022",
+      "filename": "Emerging/Proposed_Regulations/data_act_template.json"
+    },
+    "dsa": {
+      "category": "Emerging/Proposed Regulations",
+      "version": "2022",
+      "filename": "Emerging/Proposed_Regulations/dsa_template.json"
+    },
+    "dma": {
+      "category": "Emerging/Proposed Regulations",
+      "version": "2022",
+      "filename": "Emerging/Proposed_Regulations/dma_template.json"
+    }
+  }
+}

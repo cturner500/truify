@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "G7 AI Principles",
+    "version": "2023",
+    "category": "AI-Specific Regulations",
+    "url": "https://www.g7uk.org/g7-ai-principles/",
+    "description": "G7 nations' AI governance principles",
+    "last_updated": "2025-08-17T21:02:24.667717",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "trustworthy_ai": {
+      "required_elements": [
+        "reliability_assessment",
+        "safety_measures",
+        "security_protocols"
+      ],
+      "validation_rules": [
+        "reliability_verified",
+        "safety_ensured",
+        "security_implemented"
+      ],
+      "truify_relevance": "high"
+    },
+    "human_centric": {
+      "required_elements": [
+        "human_oversight",
+        "decision_explanation",
+        "intervention_capability"
+      ],
+      "validation_rules": [
+        "oversight_active",
+        "explanation_provided",
+        "intervention_available"
+      ],
+      "truify_relevance": "high"
+    },
+    "transparency": {
+      "required_elements": [
+        "system_disclosure",
+        "process_explanation",
+        "information_access"
+      ],
+      "validation_rules": [
+        "disclosure_made",
+        "explanation_clear",
+        "access_provided"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns in data",
+      "relevance": "high",
+      "page": "Bias Analysis",
+      "description": "Critical for G7 AI Principles compliance - ensures trustworthy AI"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data completeness and accuracy",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Helps ensure data quality for G7 AI principles"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

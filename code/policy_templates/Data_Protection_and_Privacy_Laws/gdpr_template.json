@@ -1,0 +1,95 @@
+{
+  "metadata": {
+    "name": "General Data Protection Regulation",
+    "version": "2024",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://gdpr-info.eu/",
+    "description": "EU regulation on data protection and privacy for individuals within the European Union",
+    "last_updated": "2025-08-17T21:02:24.667075",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "data_minimization": {
+      "required_elements": [
+        "purpose_limitation",
+        "data_retention_period",
+        "deletion_process"
+      ],
+      "validation_rules": [
+        "retention_justified",
+        "deletion_mechanism_exists",
+        "purpose_specific"
+      ],
+      "truify_relevance": "high"
+    },
+    "user_rights": {
+      "required_elements": [
+        "right_to_access",
+        "right_to_erasure",
+        "right_to_portability",
+        "right_to_rectification"
+      ],
+      "validation_rules": [
+        "processes_documented",
+        "contact_method_specified",
+        "response_timeframe"
+      ],
+      "truify_relevance": "medium"
+    },
+    "legal_basis": {
+      "required_elements": [
+        "lawful_basis_identified",
+        "consent_process",
+        "legitimate_interest_assessment"
+      ],
+      "validation_rules": [
+        "basis_justified",
+        "consent_mechanism_exists",
+        "interest_balancing_done"
+      ],
+      "truify_relevance": "low"
+    },
+    "data_protection": {
+      "required_elements": [
+        "encryption_mentioned",
+        "access_controls",
+        "breach_notification"
+      ],
+      "validation_rules": [
+        "security_measures_described",
+        "incident_response_plan",
+        "dpo_contact"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "Dynamic hashing for data de-identification",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Can anonymize PII columns to reduce GDPR compliance risk"
+    },
+    {
+      "tool": "Data Synthesis",
+      "function": "Generate synthetic datasets",
+      "relevance": "high",
+      "page": "Synthesize Data",
+      "description": "Creates GDPR-compliant synthetic data for testing"
+    },
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns",
+      "relevance": "medium",
+      "page": "Bias Analysis",
+      "description": "Helps ensure automated decisions don't discriminate"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

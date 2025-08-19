@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Digital Services Act (DSA)",
+    "version": "2022",
+    "category": "Emerging/Proposed Regulations",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32022L2065",
+    "description": "EU regulation on online platform responsibility",
+    "last_updated": "2025-08-17T21:02:24.667777",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "content_moderation": {
+      "required_elements": [
+        "moderation_policies",
+        "appeal_process",
+        "transparency_reports"
+      ],
+      "validation_rules": [
+        "policies_clear",
+        "process_fair",
+        "reports_published"
+      ],
+      "truify_relevance": "low"
+    },
+    "user_protection": {
+      "required_elements": [
+        "user_rights",
+        "complaint_mechanism",
+        "redress_process"
+      ],
+      "validation_rules": [
+        "rights_respected",
+        "mechanism_available",
+        "process_effective"
+      ],
+      "truify_relevance": "low"
+    },
+    "data_transparency": {
+      "required_elements": [
+        "algorithm_disclosure",
+        "data_usage",
+        "targeting_information"
+      ],
+      "validation_rules": [
+        "disclosure_made",
+        "usage_clear",
+        "information_provided"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis",
+      "function": "Identify personal data in digital services",
+      "relevance": "medium",
+      "page": "PII Analysis",
+      "description": "Helps ensure DSA compliance by identifying personal data"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

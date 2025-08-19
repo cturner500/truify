@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Personal Information Protection Law (China)",
+    "version": "2021",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://www.pipc.gov.cn/",
+    "description": "China's comprehensive personal information protection law",
+    "last_updated": "2025-08-17T21:02:24.667105",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "data_processing": {
+      "required_elements": [
+        "legal_basis",
+        "purpose_limitation",
+        "consent_obtained"
+      ],
+      "validation_rules": [
+        "basis_justified",
+        "purpose_specific",
+        "consent_valid"
+      ],
+      "truify_relevance": "high"
+    },
+    "data_localization": {
+      "required_elements": [
+        "local_storage",
+        "cross_border_assessment",
+        "government_approval"
+      ],
+      "validation_rules": [
+        "storage_local",
+        "assessment_done",
+        "approval_obtained"
+      ],
+      "truify_relevance": "low"
+    },
+    "individual_rights": {
+      "required_elements": [
+        "access_rights",
+        "deletion_rights",
+        "portability_rights"
+      ],
+      "validation_rules": [
+        "rights_documented",
+        "process_clear",
+        "mechanism_available"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify personal information",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Can anonymize personal data to reduce PIPL compliance risk"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

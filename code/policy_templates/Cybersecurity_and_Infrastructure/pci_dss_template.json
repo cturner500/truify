@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "name": "PCI DSS Payment Card Industry Data Security Standard",
+    "version": "4.0",
+    "category": "Cybersecurity & Infrastructure",
+    "url": "https://www.pcisecuritystandards.org/",
+    "description": "Payment card industry security standards",
+    "last_updated": "2025-08-17T21:02:24.667770",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "network_security": {
+      "required_elements": [
+        "firewall_configuration",
+        "network_segmentation",
+        "access_controls"
+      ],
+      "validation_rules": [
+        "firewall_active",
+        "segmentation_implemented",
+        "controls_enforced"
+      ],
+      "truify_relevance": "medium"
+    },
+    "cardholder_data": {
+      "required_elements": [
+        "data_encryption",
+        "retention_policy",
+        "disposal_procedures"
+      ],
+      "validation_rules": [
+        "encryption_implemented",
+        "retention_enforced",
+        "disposal_secure"
+      ],
+      "truify_relevance": "high"
+    },
+    "vulnerability_management": {
+      "required_elements": [
+        "security_patches",
+        "malware_protection",
+        "security_testing"
+      ],
+      "validation_rules": [
+        "patches_current",
+        "protection_active",
+        "testing_regular"
+      ],
+      "truify_relevance": "medium"
+    },
+    "access_control": {
+      "required_elements": [
+        "user_authentication",
+        "privilege_management",
+        "physical_security"
+      ],
+      "validation_rules": [
+        "authentication_strong",
+        "privileges_limited",
+        "security_maintained"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis",
+      "function": "Identify payment card data",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Critical for PCI DSS compliance - identifies cardholder data"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate payment data integrity",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Critical for PCI DSS compliance - ensures payment data quality"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

@@ -12,7 +12,7 @@ def pii_page():
     """
     Main PII analysis and anonymization page.
     """
-    st.header("🔒 PII Analysis & Anonymization")
+    # Header removed - now using gradient header from main.py
     st.write("Analyze your data for Personally Identifiable Information (PII) and anonymize sensitive columns.")
     
     # Check if data is loaded

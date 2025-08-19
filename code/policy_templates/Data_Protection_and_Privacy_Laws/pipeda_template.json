@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Personal Information Protection and Electronic Documents Act (PIPEDA)",
+    "version": "2022",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/",
+    "description": "Canada's federal privacy law for private sector organizations",
+    "last_updated": "2025-08-17T21:02:24.667102",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "consent": {
+      "required_elements": [
+        "informed_consent",
+        "withdrawal_mechanism",
+        "consent_management"
+      ],
+      "validation_rules": [
+        "consent_obtained",
+        "withdrawal_available",
+        "management_system"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_limitation": {
+      "required_elements": [
+        "purpose_specification",
+        "data_minimization",
+        "retention_policy"
+      ],
+      "validation_rules": [
+        "purpose_clear",
+        "minimization_applied",
+        "retention_defined"
+      ],
+      "truify_relevance": "high"
+    },
+    "individual_rights": {
+      "required_elements": [
+        "access_rights",
+        "correction_rights",
+        "complaint_process"
+      ],
+      "validation_rules": [
+        "rights_documented",
+        "process_clear",
+        "complaint_handling"
+      ],
+      "truify_relevance": "low"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify personal information",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Can anonymize personal data to reduce PIPEDA compliance risk"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

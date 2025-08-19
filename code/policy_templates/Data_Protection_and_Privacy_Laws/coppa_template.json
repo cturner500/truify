@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "Children's Online Privacy Protection Act (COPPA)",
+    "version": "2013",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://www.ftc.gov/enforcement/rules/rulemaking-regulatory-reform-proceedings/childrens-online-privacy-protection-rule",
+    "description": "US law protecting children's online privacy",
+    "last_updated": "2025-08-17T21:02:24.667112",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "parental_consent": {
+      "required_elements": [
+        "verifiable_consent",
+        "consent_mechanism",
+        "consent_management"
+      ],
+      "validation_rules": [
+        "consent_verified",
+        "mechanism_available",
+        "management_system"
+      ],
+      "truify_relevance": "low"
+    },
+    "data_collection": {
+      "required_elements": [
+        "age_verification",
+        "minimal_collection",
+        "purpose_limitation"
+      ],
+      "validation_rules": [
+        "age_verified",
+        "collection_minimal",
+        "purpose_specific"
+      ],
+      "truify_relevance": "high"
+    },
+    "data_security": {
+      "required_elements": [
+        "security_measures",
+        "data_retention",
+        "deletion_mechanism"
+      ],
+      "validation_rules": [
+        "measures_implemented",
+        "retention_limited",
+        "deletion_available"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify children's personal data",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Critical for COPPA compliance - can anonymize children's identifiers"
+    },
+    {
+      "tool": "Data Synthesis",
+      "function": "Generate synthetic children's data",
+      "relevance": "high",
+      "page": "Synthesize Data",
+      "description": "Creates COPPA-compliant synthetic datasets for research"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

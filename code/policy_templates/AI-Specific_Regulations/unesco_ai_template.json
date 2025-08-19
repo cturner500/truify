@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "UNESCO AI Ethics Framework",
+    "version": "2021",
+    "category": "AI-Specific Regulations",
+    "url": "https://en.unesco.org/artificial-intelligence/ethics",
+    "description": "UNESCO's global AI ethics framework",
+    "last_updated": "2025-08-17T21:02:24.667715",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "human_rights": {
+      "required_elements": [
+        "rights_assessment",
+        "impact_evaluation",
+        "mitigation_measures"
+      ],
+      "validation_rules": [
+        "assessment_complete",
+        "impact_evaluated",
+        "measures_implemented"
+      ],
+      "truify_relevance": "high"
+    },
+    "sustainability": {
+      "required_elements": [
+        "environmental_impact",
+        "resource_efficiency",
+        "long_term_planning"
+      ],
+      "validation_rules": [
+        "impact_assessed",
+        "efficiency_optimized",
+        "planning_established"
+      ],
+      "truify_relevance": "medium"
+    },
+    "diversity_inclusion": {
+      "required_elements": [
+        "bias_mitigation",
+        "representation_ensured",
+        "accessibility_provided"
+      ],
+      "validation_rules": [
+        "bias_addressed",
+        "representation_fair",
+        "accessibility_achieved"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns in data",
+      "relevance": "high",
+      "page": "Bias Analysis",
+      "description": "Critical for UNESCO AI Ethics compliance - ensures diversity and inclusion"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data completeness and accuracy",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Helps ensure data quality for UNESCO AI ethics requirements"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

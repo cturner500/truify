@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "NIS2 Directive",
+    "version": "2022",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32022L2555",
+    "description": "EU directive on network and information security",
+    "last_updated": "2025-08-17T21:02:24.667117",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "cybersecurity_measures": {
+      "required_elements": [
+        "security_policies",
+        "incident_response",
+        "business_continuity"
+      ],
+      "validation_rules": [
+        "policies_implemented",
+        "response_plan_exists",
+        "continuity_ensured"
+      ],
+      "truify_relevance": "medium"
+    },
+    "risk_management": {
+      "required_elements": [
+        "risk_assessment",
+        "mitigation_strategies",
+        "monitoring_systems"
+      ],
+      "validation_rules": [
+        "assessment_conducted",
+        "strategies_implemented",
+        "monitoring_active"
+      ],
+      "truify_relevance": "medium"
+    },
+    "incident_reporting": {
+      "required_elements": [
+        "detection_capabilities",
+        "reporting_timeline",
+        "coordination_mechanism"
+      ],
+      "validation_rules": [
+        "detection_working",
+        "timeline_met",
+        "coordination_established"
+      ],
+      "truify_relevance": "low"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data security and integrity",
+      "relevance": "medium",
+      "page": "Describe Data",
+      "description": "Helps assess data security for NIS2 compliance"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

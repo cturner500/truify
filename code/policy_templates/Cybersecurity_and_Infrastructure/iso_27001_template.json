@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "name": "ISO 27001",
+    "version": "2022",
+    "category": "Cybersecurity & Infrastructure",
+    "url": "https://www.iso.org/isoiec-27001-information-security.html",
+    "description": "International standard for information security management systems",
+    "last_updated": "2025-08-17T21:02:24.667096",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "information_security": {
+      "required_elements": [
+        "security_policy",
+        "risk_assessment",
+        "access_controls"
+      ],
+      "validation_rules": [
+        "policy_documented",
+        "risks_assessed",
+        "controls_implemented"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_protection": {
+      "required_elements": [
+        "encryption_standards",
+        "backup_procedures",
+        "incident_response"
+      ],
+      "validation_rules": [
+        "encryption_specified",
+        "backups_tested",
+        "response_plan_exists"
+      ],
+      "truify_relevance": "low"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis",
+      "function": "Identify sensitive data requiring protection",
+      "relevance": "medium",
+      "page": "PII Analysis",
+      "description": "Helps identify data that needs ISO 27001 protection measures"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

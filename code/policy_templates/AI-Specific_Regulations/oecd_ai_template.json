@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "name": "OECD AI Principles",
+    "version": "2019",
+    "category": "AI-Specific Regulations",
+    "url": "https://oecd.ai/en/ai-principles",
+    "description": "International AI ethics principles by OECD",
+    "last_updated": "2025-08-17T21:02:24.667714",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "inclusive_growth": {
+      "required_elements": [
+        "benefit_distribution",
+        "access_equity",
+        "skill_development"
+      ],
+      "validation_rules": [
+        "benefits_shared",
+        "access_fair",
+        "skills_supported"
+      ],
+      "truify_relevance": "low"
+    },
+    "human_centered_values": {
+      "required_elements": [
+        "human_rights",
+        "democratic_values",
+        "diversity_respect"
+      ],
+      "validation_rules": [
+        "rights_protected",
+        "values_upheld",
+        "diversity_celebrated"
+      ],
+      "truify_relevance": "medium"
+    },
+    "transparency_explainability": {
+      "required_elements": [
+        "decision_explanation",
+        "system_disclosure",
+        "information_access"
+      ],
+      "validation_rules": [
+        "explanation_clear",
+        "disclosure_made",
+        "access_provided"
+      ],
+      "truify_relevance": "high"
+    },
+    "robustness_security": {
+      "required_elements": [
+        "safety_measures",
+        "security_protocols",
+        "fallback_mechanisms"
+      ],
+      "validation_rules": [
+        "measures_implemented",
+        "protocols_active",
+        "fallbacks_available"
+      ],
+      "truify_relevance": "medium"
+    },
+    "accountability": {
+      "required_elements": [
+        "responsibility_assignment",
+        "oversight_mechanism",
+        "redress_process"
+      ],
+      "validation_rules": [
+        "responsibility_clear",
+        "oversight_active",
+        "redress_available"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns in data",
+      "relevance": "high",
+      "page": "Bias Analysis",
+      "description": "Critical for OECD AI Principles compliance - ensures fairness"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data completeness and accuracy",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Helps ensure data quality for OECD AI principles"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

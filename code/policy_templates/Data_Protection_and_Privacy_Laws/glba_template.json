@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "Gramm-Leach-Bliley Act (GLBA)",
+    "version": "1999",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://www.ftc.gov/tips-advice/business-center/privacy-and-security/gramm-leach-bliley-act",
+    "description": "US law protecting financial privacy",
+    "last_updated": "2025-08-17T21:02:24.667114",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "privacy_notice": {
+      "required_elements": [
+        "notice_provided",
+        "opt_out_mechanism",
+        "information_sharing"
+      ],
+      "validation_rules": [
+        "notice_clear",
+        "mechanism_available",
+        "sharing_disclosed"
+      ],
+      "truify_relevance": "low"
+    },
+    "data_security": {
+      "required_elements": [
+        "security_program",
+        "access_controls",
+        "incident_response"
+      ],
+      "validation_rules": [
+        "program_implemented",
+        "controls_active",
+        "response_plan"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_integrity": {
+      "required_elements": [
+        "data_accuracy",
+        "completeness_assessment",
+        "verification_process"
+      ],
+      "validation_rules": [
+        "accuracy_verified",
+        "completeness_evaluated",
+        "verification_available"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate financial data integrity",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Helps ensure financial data accuracy for GLBA compliance"
+    },
+    {
+      "tool": "PII Analysis",
+      "function": "Identify financial personal information",
+      "relevance": "medium",
+      "page": "PII Analysis",
+      "description": "Helps identify financial data requiring GLBA protection"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

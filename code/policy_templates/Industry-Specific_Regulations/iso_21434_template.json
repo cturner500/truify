@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "ISO 21434 Road Vehicle Cybersecurity Engineering",
+    "version": "2021",
+    "category": "Industry-Specific Regulations",
+    "url": "https://www.iso.org/standard/70918.html",
+    "description": "International standard for automotive cybersecurity",
+    "last_updated": "2025-08-17T21:02:24.667727",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "cybersecurity_engineering": {
+      "required_elements": [
+        "security_requirements",
+        "threat_analysis",
+        "risk_assessment"
+      ],
+      "validation_rules": [
+        "requirements_defined",
+        "analysis_complete",
+        "assessment_conducted"
+      ],
+      "truify_relevance": "medium"
+    },
+    "security_validation": {
+      "required_elements": [
+        "testing_methodology",
+        "verification_process",
+        "validation_criteria"
+      ],
+      "validation_rules": [
+        "methodology_established",
+        "process_documented",
+        "criteria_met"
+      ],
+      "truify_relevance": "medium"
+    },
+    "continuous_monitoring": {
+      "required_elements": [
+        "monitoring_systems",
+        "incident_detection",
+        "response_procedures"
+      ],
+      "validation_rules": [
+        "monitoring_active",
+        "detection_working",
+        "procedures_established"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate cybersecurity data quality",
+      "relevance": "medium",
+      "page": "Describe Data",
+      "description": "Helps ensure cybersecurity data quality for ISO 21434 compliance"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

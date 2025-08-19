@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "Health Insurance Portability and Accountability Act",
+    "version": "2023",
+    "category": "Industry-Specific Regulations",
+    "url": "https://www.hhs.gov/hipaa/index.html",
+    "description": "US law protecting health information privacy and security",
+    "last_updated": "2025-08-17T21:02:24.667086",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "privacy_rule": {
+      "required_elements": [
+        "phi_identification",
+        "minimum_necessary_principle",
+        "patient_consent"
+      ],
+      "validation_rules": [
+        "phi_protected",
+        "access_limited",
+        "consent_obtained"
+      ],
+      "truify_relevance": "high"
+    },
+    "security_rule": {
+      "required_elements": [
+        "access_controls",
+        "audit_logs",
+        "encryption_standards"
+      ],
+      "validation_rules": [
+        "authentication_required",
+        "logging_enabled",
+        "data_encrypted"
+      ],
+      "truify_relevance": "medium"
+    },
+    "breach_notification": {
+      "required_elements": [
+        "breach_detection",
+        "notification_timeline",
+        "mitigation_steps"
+      ],
+      "validation_rules": [
+        "process_documented",
+        "timeline_specified",
+        "steps_defined"
+      ],
+      "truify_relevance": "low"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify PHI columns",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Critical for HIPAA compliance - can anonymize medical identifiers"
+    },
+    {
+      "tool": "Data Synthesis",
+      "function": "Generate synthetic medical data",
+      "relevance": "high",
+      "page": "Synthesize Data",
+      "description": "Creates HIPAA-compliant synthetic datasets for research"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

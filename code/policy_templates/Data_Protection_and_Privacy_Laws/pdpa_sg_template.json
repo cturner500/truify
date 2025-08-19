@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Personal Data Protection Act (Singapore)",
+    "version": "2021",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://www.pdpc.gov.sg/Overview-of-PDPA/The-Legislation/Personal-Data-Protection-Act",
+    "description": "Singapore's comprehensive data protection law",
+    "last_updated": "2025-08-17T21:02:24.667104",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "consent_obligation": {
+      "required_elements": [
+        "consent_obtained",
+        "purpose_disclosure",
+        "withdrawal_right"
+      ],
+      "validation_rules": [
+        "consent_valid",
+        "purpose_clear",
+        "withdrawal_available"
+      ],
+      "truify_relevance": "medium"
+    },
+    "purpose_limitation": {
+      "required_elements": [
+        "purpose_specification",
+        "use_limitation",
+        "retention_policy"
+      ],
+      "validation_rules": [
+        "purpose_documented",
+        "limitation_enforced",
+        "retention_defined"
+      ],
+      "truify_relevance": "high"
+    },
+    "data_protection": {
+      "required_elements": [
+        "security_measures",
+        "breach_notification",
+        "dpo_contact"
+      ],
+      "validation_rules": [
+        "measures_implemented",
+        "notification_process",
+        "dpo_available"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify personal data",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Can anonymize personal data to reduce PDPA compliance risk"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

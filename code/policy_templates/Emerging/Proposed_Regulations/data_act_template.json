@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "Data Act (EU)",
+    "version": "2022",
+    "category": "Emerging/Proposed Regulations",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52022PC0068",
+    "description": "EU regulation on data sharing and access rights",
+    "last_updated": "2025-08-17T21:02:24.667776",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "data_sharing": {
+      "required_elements": [
+        "sharing_agreements",
+        "access_mechanisms",
+        "quality_standards"
+      ],
+      "validation_rules": [
+        "agreements_established",
+        "mechanisms_available",
+        "standards_met"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_portability": {
+      "required_elements": [
+        "portability_mechanism",
+        "format_standards",
+        "transfer_process"
+      ],
+      "validation_rules": [
+        "mechanism_available",
+        "standards_defined",
+        "process_clear"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_governance": {
+      "required_elements": [
+        "data_quality",
+        "access_controls",
+        "monitoring_systems"
+      ],
+      "validation_rules": [
+        "quality_maintained",
+        "controls_active",
+        "monitoring_ongoing"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data quality for sharing",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Critical for Data Act compliance - ensures data quality for sharing"
+    },
+    {
+      "tool": "PII Analysis",
+      "function": "Identify and protect sensitive data",
+      "relevance": "medium",
+      "page": "PII Analysis",
+      "description": "Helps ensure data protection during sharing processes"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "Artificial Intelligence and Data Act (Canada)",
+    "version": "2023",
+    "category": "AI-Specific Regulations",
+    "url": "https://www.parl.ca/DocumentViewer/en/44-1/bill/C-27/third-reading",
+    "description": "Canada's comprehensive AI regulation framework",
+    "last_updated": "2025-08-17T21:02:24.667705",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "ai_system_assessment": {
+      "required_elements": [
+        "risk_classification",
+        "impact_assessment",
+        "mitigation_measures"
+      ],
+      "validation_rules": [
+        "classification_justified",
+        "assessment_complete",
+        "measures_implemented"
+      ],
+      "truify_relevance": "high"
+    },
+    "data_governance": {
+      "required_elements": [
+        "data_quality_assessment",
+        "bias_evaluation",
+        "transparency_measures"
+      ],
+      "validation_rules": [
+        "quality_evaluated",
+        "bias_identified",
+        "transparency_ensured"
+      ],
+      "truify_relevance": "high"
+    },
+    "human_oversight": {
+      "required_elements": [
+        "oversight_mechanism",
+        "intervention_capability",
+        "accountability_framework"
+      ],
+      "validation_rules": [
+        "mechanism_active",
+        "capability_demonstrated",
+        "framework_established"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns in data",
+      "relevance": "high",
+      "page": "Bias Analysis",
+      "description": "Critical for Canadian AI Act compliance - identifies bias in training data"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data completeness and accuracy",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Helps ensure training data meets Canadian AI Act quality requirements"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

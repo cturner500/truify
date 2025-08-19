@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "Dodd-Frank Wall Street Reform and Consumer Protection Act",
+    "version": "2010",
+    "category": "Industry-Specific Regulations",
+    "url": "https://www.congress.gov/bill/111th-congress/house-bill/4173",
+    "description": "US financial reform legislation",
+    "last_updated": "2025-08-17T21:02:24.667721",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "derivatives_regulation": {
+      "required_elements": [
+        "clearing_requirements",
+        "trade_reporting",
+        "capital_standards"
+      ],
+      "validation_rules": [
+        "clearing_mandatory",
+        "reporting_accurate",
+        "standards_met"
+      ],
+      "truify_relevance": "medium"
+    },
+    "risk_management": {
+      "required_elements": [
+        "risk_limits",
+        "stress_testing",
+        "liquidity_requirements"
+      ],
+      "validation_rules": [
+        "limits_enforced",
+        "testing_regular",
+        "liquidity_adequate"
+      ],
+      "truify_relevance": "medium"
+    },
+    "data_integrity": {
+      "required_elements": [
+        "data_accuracy",
+        "audit_trails",
+        "verification_processes"
+      ],
+      "validation_rules": [
+        "accuracy_verified",
+        "trails_maintained",
+        "verification_ongoing"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate financial data integrity",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Critical for Dodd-Frank compliance - ensures financial data accuracy"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

@@ -104,7 +104,7 @@ def display_page_header(title, description, icon):
 
 # Function to display graphs
 def display_graphs(df, numeric_cols, categorical_cols):
-    st.subheader("Variable Visualizations")
+    #st.subheader("Variable Visualizations")
     
     # Display numeric columns (histograms) 2 per row
     if numeric_cols:
@@ -881,7 +881,7 @@ if page == "Import Data":
         "Upload your CSV files and configure data types for optimal analysis",
         "📥"
     )
-    st.title("Import Data")
+    #st.title("Import Data")
     
     # Initialize session state for data type configuration
     if 'data_type_config' not in st.session_state:
@@ -1052,7 +1052,7 @@ elif page == "Describe Data":
         "Get AI-powered insights and visualizations of your dataset",
         "📊"
     )
-    st.title("Describe Data")
+    #st.title("Describe Data")
     if 'df' in st.session_state:
         df = st.session_state['df']
         if 'genai_description' in st.session_state:
@@ -1061,7 +1061,7 @@ elif page == "Describe Data":
         if st.button("Show Graphs"):
             import plotly.express as px
             import pandas as pd
-            st.subheader("Variable Visualizations")
+            #st.subheader("Variable Visualizations")
             
             # Process columns to create graphs
             numeric_cols = []
@@ -1112,7 +1112,7 @@ elif page == "Reduce Bias":
         "Analyze and mitigate bias in your dataset for fair AI outcomes",
         "⚖️"
     )
-    st.title("Reduce Bias")
+    #st.title("Reduce Bias")
     if 'df' in st.session_state:
         df = st.session_state['df']
         st.dataframe(st.session_state['df'])
@@ -1193,7 +1193,7 @@ elif page == "Fill Missingness":
         "Handle missing data with intelligent imputation techniques",
         "🔧"
     )
-    st.title("Fill Missingness")
+    #st.title("Fill Missingness")
     if 'missingness_filled_count' in st.session_state:
         st.success(f"Filled {st.session_state['missingness_filled_count']} missing cells.")
         st.dataframe(st.session_state['df'])
@@ -1276,7 +1276,7 @@ elif page == "Merge Data":
         "Combine multiple datasets efficiently and intelligently",
         "🔗"
     )
-    st.title("Merge Data")
+    #st.title("Merge Data")
     st.write("Coming Soon!")
 
     # Add navigation buttons
@@ -1343,7 +1343,7 @@ elif page == "Create Compliance Report":
         "Assess your data for regulatory compliance risks and generate detailed reports",
         "📋"
     )
-    st.title("Create Compliance Report")
+    #st.title("Create Compliance Report")
     st.write("""
     This tool evaluates your dataset for compliance risks relative to major data protection and AI regulations. It analyzes your data for personally identifiable information (PII), sensitive attributes, missing values, and risks related to automated decision-making. The tool generates a detailed markdown report describing the data, potential compliance risks (with references to GDPR, CCPA, and the EU AI Act), and an action plan for remediation.
     """)

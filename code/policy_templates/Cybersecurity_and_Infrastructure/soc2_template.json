@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "name": "SOC 2 Service Organization Control 2",
+    "version": "2017",
+    "category": "Cybersecurity & Infrastructure",
+    "url": "https://www.aicpa.org/interestareas/frc/assuranceadvisoryservices/aicpasoc2report.html",
+    "description": "AICPA standard for service organization controls",
+    "last_updated": "2025-08-17T21:02:24.667731",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "security": {
+      "required_elements": [
+        "access_controls",
+        "encryption",
+        "incident_response"
+      ],
+      "validation_rules": [
+        "controls_effective",
+        "encryption_implemented",
+        "response_ready"
+      ],
+      "truify_relevance": "medium"
+    },
+    "availability": {
+      "required_elements": [
+        "uptime_metrics",
+        "backup_procedures",
+        "disaster_recovery"
+      ],
+      "validation_rules": [
+        "metrics_tracked",
+        "backups_regular",
+        "recovery_tested"
+      ],
+      "truify_relevance": "low"
+    },
+    "processing_integrity": {
+      "required_elements": [
+        "data_validation",
+        "error_handling",
+        "quality_controls"
+      ],
+      "validation_rules": [
+        "validation_ongoing",
+        "errors_handled",
+        "controls_active"
+      ],
+      "truify_relevance": "high"
+    },
+    "confidentiality": {
+      "required_elements": [
+        "data_classification",
+        "encryption_standards",
+        "access_restrictions"
+      ],
+      "validation_rules": [
+        "classification_clear",
+        "encryption_implemented",
+        "restrictions_enforced"
+      ],
+      "truify_relevance": "medium"
+    },
+    "privacy": {
+      "required_elements": [
+        "consent_management",
+        "data_minimization",
+        "individual_rights"
+      ],
+      "validation_rules": [
+        "consent_tracked",
+        "minimization_applied",
+        "rights_respected"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data processing integrity",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Critical for SOC 2 compliance - ensures data processing integrity"
+    },
+    {
+      "tool": "PII Analysis",
+      "function": "Identify and protect sensitive data",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Critical for SOC 2 privacy compliance"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

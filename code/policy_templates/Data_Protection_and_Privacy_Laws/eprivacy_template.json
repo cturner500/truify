@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "name": "ePrivacy Directive",
+    "version": "2002",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32002L0058",
+    "description": "EU directive on privacy in electronic communications",
+    "last_updated": "2025-08-17T21:02:24.667116",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "electronic_communications": {
+      "required_elements": [
+        "consent_obtained",
+        "purpose_limitation",
+        "retention_policy"
+      ],
+      "validation_rules": [
+        "consent_valid",
+        "purpose_specific",
+        "retention_limited"
+      ],
+      "truify_relevance": "medium"
+    },
+    "cookies_tracking": {
+      "required_elements": [
+        "cookie_notice",
+        "consent_mechanism",
+        "opt_out_option"
+      ],
+      "validation_rules": [
+        "notice_clear",
+        "mechanism_available",
+        "opt_out_working"
+      ],
+      "truify_relevance": "low"
+    },
+    "marketing_communications": {
+      "required_elements": [
+        "opt_in_consent",
+        "unsubscribe_mechanism",
+        "sender_identification"
+      ],
+      "validation_rules": [
+        "consent_obtained",
+        "unsubscribe_available",
+        "sender_identified"
+      ],
+      "truify_relevance": "low"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis",
+      "function": "Identify communication-related personal data",
+      "relevance": "medium",
+      "page": "PII Analysis",
+      "description": "Helps identify data covered by ePrivacy Directive"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

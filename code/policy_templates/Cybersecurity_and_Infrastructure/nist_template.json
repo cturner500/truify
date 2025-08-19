@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "name": "NIST Cybersecurity Framework",
+    "version": "2018",
+    "category": "Cybersecurity & Infrastructure",
+    "url": "https://www.nist.gov/cyberframework",
+    "description": "US cybersecurity framework for critical infrastructure",
+    "last_updated": "2025-08-17T21:02:24.667729",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "identify": {
+      "required_elements": [
+        "asset_inventory",
+        "risk_assessment",
+        "governance_framework"
+      ],
+      "validation_rules": [
+        "inventory_complete",
+        "assessment_conducted",
+        "framework_established"
+      ],
+      "truify_relevance": "medium"
+    },
+    "protect": {
+      "required_elements": [
+        "access_controls",
+        "data_security",
+        "maintenance_procedures"
+      ],
+      "validation_rules": [
+        "controls_implemented",
+        "security_ensured",
+        "procedures_followed"
+      ],
+      "truify_relevance": "medium"
+    },
+    "detect": {
+      "required_elements": [
+        "monitoring_systems",
+        "anomaly_detection",
+        "incident_detection"
+      ],
+      "validation_rules": [
+        "monitoring_active",
+        "detection_working",
+        "incidents_identified"
+      ],
+      "truify_relevance": "medium"
+    },
+    "respond": {
+      "required_elements": [
+        "response_plan",
+        "communications",
+        "analysis_process"
+      ],
+      "validation_rules": [
+        "plan_established",
+        "communications_clear",
+        "analysis_ongoing"
+      ],
+      "truify_relevance": "low"
+    },
+    "recover": {
+      "required_elements": [
+        "recovery_plan",
+        "improvements",
+        "communications"
+      ],
+      "validation_rules": [
+        "plan_ready",
+        "improvements_identified",
+        "communications_established"
+      ],
+      "truify_relevance": "low"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data security and integrity",
+      "relevance": "medium",
+      "page": "Describe Data",
+      "description": "Helps assess data security for NIST framework compliance"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

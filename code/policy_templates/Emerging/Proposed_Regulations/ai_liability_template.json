@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "AI Liability Directive (EU)",
+    "version": "2022",
+    "category": "Emerging/Proposed Regulations",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52022PC0496",
+    "description": "Proposed EU directive on AI liability and compensation",
+    "last_updated": "2025-08-17T21:02:24.667772",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "liability_framework": {
+      "required_elements": [
+        "liability_assignment",
+        "compensation_mechanism",
+        "burden_of_proof"
+      ],
+      "validation_rules": [
+        "assignment_clear",
+        "mechanism_established",
+        "burden_defined"
+      ],
+      "truify_relevance": "low"
+    },
+    "ai_system_tracking": {
+      "required_elements": [
+        "system_identification",
+        "operation_logging",
+        "decision_records"
+      ],
+      "validation_rules": [
+        "identification_clear",
+        "logging_active",
+        "records_maintained"
+      ],
+      "truify_relevance": "medium"
+    },
+    "risk_assessment": {
+      "required_elements": [
+        "risk_evaluation",
+        "mitigation_measures",
+        "monitoring_systems"
+      ],
+      "validation_rules": [
+        "evaluation_conducted",
+        "measures_implemented",
+        "monitoring_active"
+      ],
+      "truify_relevance": "high"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "Bias Analysis",
+      "function": "Identify discriminatory patterns in data",
+      "relevance": "high",
+      "page": "Bias Analysis",
+      "description": "Critical for AI Liability Directive compliance - reduces liability risk"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data quality and reliability",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Critical for AI Liability Directive compliance - ensures data reliability"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}

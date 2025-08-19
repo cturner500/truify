@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "name": "Protection of Personal Information Act (South Africa)",
+    "version": "2013",
+    "category": "Data Protection & Privacy Laws",
+    "url": "https://www.justice.gov.za/inforeg/docs/InfoRegSA-POPIA-act2013-004.pdf",
+    "description": "South Africa's comprehensive data protection law",
+    "last_updated": "2025-08-17T21:02:24.667110",
+    "generator_version": "1.0"
+  },
+  "validation_rules": {
+    "processing_limitation": {
+      "required_elements": [
+        "lawful_processing",
+        "purpose_limitation",
+        "data_minimization"
+      ],
+      "validation_rules": [
+        "processing_justified",
+        "purpose_specific",
+        "minimization_applied"
+      ],
+      "truify_relevance": "high"
+    },
+    "information_quality": {
+      "required_elements": [
+        "data_accuracy",
+        "completeness_assessment",
+        "updating_mechanism"
+      ],
+      "validation_rules": [
+        "accuracy_verified",
+        "completeness_evaluated",
+        "updating_available"
+      ],
+      "truify_relevance": "high"
+    },
+    "data_subject_rights": {
+      "required_elements": [
+        "access_rights",
+        "correction_rights",
+        "deletion_rights"
+      ],
+      "validation_rules": [
+        "rights_documented",
+        "process_clear",
+        "mechanism_available"
+      ],
+      "truify_relevance": "medium"
+    }
+  },
+  "truify_tools": [
+    {
+      "tool": "PII Analysis & Anonymization",
+      "function": "De-identify personal data",
+      "relevance": "high",
+      "page": "PII Analysis",
+      "description": "Can anonymize personal data to reduce POPIA compliance risk"
+    },
+    {
+      "tool": "Data Quality Assessment",
+      "function": "Evaluate data completeness and accuracy",
+      "relevance": "high",
+      "page": "Describe Data",
+      "description": "Helps ensure data quality for POPIA compliance"
+    }
+  ],
+  "compliance_checks": {
+    "data_content": [],
+    "data_handling": [],
+    "documentation": [],
+    "technical_controls": []
+  }
+}
