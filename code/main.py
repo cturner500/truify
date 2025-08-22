@@ -940,6 +940,378 @@ if page == "Import Data":
         
         st.success(f"✅ New file '{current_file_name}' loaded successfully!")
     
+    # Data Source Connectors Section
+    st.markdown("---")
+    st.subheader("🔌 Connect to Enterprise Data Sources")
+    st.info("Connection to these sources requires an Enterprise agreement. Contact [info@truify.ai](mailto:info@truify.ai) to get started!")
+    
+    # Enterprise Data Sources organized by groups
+    st.markdown("### 🏢 Enterprise Data Sources")
+    
+    # Database Connectors
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1200px-Postgresql_elephant.svg.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>PostgreSQL</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://cdn.freebiesupply.com/logos/large/2x/microsoft-sql-server-logo-png-transparent.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Microsoft SQL Server</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://companieslogo.com/img/orig/SNOW-35164165.png?t=1751096598" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Snowflake</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://images.icon-icons.com/2699/PNG/512/google_bigquery_logo_icon_168150.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Google BigQuery</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://zappysys.com/blog/wp-content/uploads/2019/08/amazon-redshift-logo.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Amazon Redshift</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://vectorseek.com/wp-content/uploads/2023/08/Azure-Synapse-Analytics-Logo-Vector.svg-.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Azure Synapse</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # CRM and Business Applications
+    st.markdown("### 💼 CRM & Business Applications")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://www.zealdocs.com/wp-content/uploads/2023/10/Salesforce-logo.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Salesforce</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://www.wealthbox.com/wp-content/uploads/2023/05/Dynamics-Logo.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Microsoft Dynamics</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://go.wmich.edu/servlet/rtaImage?eid=ka05e000001oLND&feoid=00N5e00000f17RD&refid=0EM5e0000014iyA" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Google Workspace</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Modern Data Stack
+    st.markdown("### 🚀 Modern Data Stack")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://avatars.githubusercontent.com/u/4998052?s=280&v=4" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Databricks</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://w7.pngwing.com/pngs/956/695/png-transparent-mongodb-original-wordmark-logo-icon-thumbnail.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>MongoDB</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/archive/0/01/20210416085517%21Apache_Kafka_logo.svg/120px-Apache_Kafka_logo.svg.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Apache Kafka</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://e7.pngegg.com/pngimages/66/424/png-clipart-square-red-and-white-shape-sorter-board-redis-logo-icons-logos-emojis-tech-companies.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Redis</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://cdn.worldvectorlogo.com/logos/tableau-software.svg" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Tableau</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Power BI</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Additional Enterprise Sources
+    st.markdown("### 🏛️ Additional Enterprise Sources")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://e7.pngegg.com/pngimages/323/215/png-clipart-sap-hana-sap-se-microsoft-management-sap-s-4hana-futuristic-building-blue-text-thumbnail.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>SAP HANA</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCShRM_x4zc55AyDJoEwFyc_zxVs8xrVu9Vg&s" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Oracle Database</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://img.favpng.com/20/1/3/ibm-db2-database-computer-software-business-productivity-software-png-favpng-9VeqSz5kjugTphL1Csg116RrV.jpg" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>IBM Db2</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://pbs.twimg.com/profile_images/1712543362882977792/2GkV7raD_400x400.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Teradata</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://cdn.worldvectorlogo.com/logos/elasticsearch.svg" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>Elasticsearch</strong>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div style="
+            background: #f0f0f0; 
+            border: 2px solid #d0d0d0; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+        ">
+            <img src="https://images.seeklogo.com/logo-png/43/2/dbt-logo-png_seeklogo-431111.png" 
+                 width="60" height="60" style="margin-bottom: 10px;">
+            <br><strong>dbt</strong>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
     # Show data type configuration interface if file is uploaded or user wants to reconfigure
     if (uploaded_file is not None and st.session_state['file_uploaded']) or st.session_state['show_data_type_config']:
         if 'df' in st.session_state:
@@ -1211,43 +1583,77 @@ elif page == "Fill Missingness":
                 df = st.session_state['df'].copy()
                 import numpy as np
                 df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
-                filled_count = 0
-                for info in col_info:
-                    col, pct_missing, method, dtype, reason = info
-                    if float(pct_missing.replace('%','')) == 0.0:
-                        continue
-                    before = df[col].isnull().sum()
-                    if method == 'mean':
-                        df[col] = pd.to_numeric(df[col], errors='coerce').fillna(df[col].astype(float).mean())
-                    elif method == 'median':
-                        df[col] = pd.to_numeric(df[col], errors='coerce').fillna(df[col].astype(float).median())
-                    elif method == 'mode':
-                        mode_val = df[col].mode(dropna=True)
-                        if not mode_val.empty:
-                            df[col] = df[col].fillna(mode_val[0])
-                    after = df[col].isnull().sum()
-                    filled_count += before - after
-                st.session_state['df'] = df
-                st.session_state['missingness_filled_count'] = filled_count
-                st.session_state['missingness_evaluated'] = False
+                
+                # Use the enhanced missingness module for intelligent imputation
+                try:
+                    import sys
+                    sys.path.append("./code")
+                    import missingness
+                    
+                    st.info("Using intelligent imputation methods...")
+                    
+                    # Use the intelligent imputation function
+                    df_imputed = missingness.impute_missing_values(df)
+                    
+                    # Calculate filled count
+                    filled_count = 0
+                    for col in df.columns:
+                        before = df[col].isnull().sum()
+                        after = df_imputed[col].isnull().sum()
+                        filled_count += before - after
+                    
+                    # Update session state
+                    st.session_state['df'] = df_imputed
+                    st.session_state['missingness_filled_count'] = filled_count
+                    st.session_state['missingness_evaluated'] = False
+                    
+                    st.success(f"Intelligent imputation completed! Filled {filled_count} missing values.")
+                    
+                except Exception as e:
+                    st.error(f"Error during intelligent imputation: {e}")
+                    st.info("Falling back to basic imputation methods...")
+                    
+                    # Fallback to basic methods
+                    filled_count = 0
+                    for info in col_info:
+                        col, pct_missing, method, dtype, reason = info
+                        if float(pct_missing.replace('%','')) == 0.0:
+                            continue
+                        before = df[col].isnull().sum()
+                        if method == 'mean':
+                            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(df[col].astype(float).mean())
+                        elif method == 'median':
+                            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(df[col].astype(float).median())
+                        elif method == 'mode':
+                            mode_val = df[col].mode(dropna=True)
+                            if not mode_val.empty:
+                                df[col] = df[col].fillna(mode_val[0])
+                        after = df[col].isnull().sum()
+                        filled_count += before - after
+                    
+                    st.session_state['df'] = df
+                    st.session_state['missingness_filled_count'] = filled_count
+                    st.session_state['missingness_evaluated'] = False
+                
                 # Mark Fill Missingness as modified
                 # st.session_state['data_modified_pages'].add("Fill Missingness") # This line is removed
                 st.rerun()
     elif 'df' in st.session_state:
         df = st.session_state['df']
         if st.button("Evaluate Data"):
-            import sys, os, tempfile, subprocess, re, pandas as pd
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as tmp:
-                df.to_csv(tmp.name, index=False)
-                tmp_path = tmp.name
-            missingness_report_path = os.path.join(os.path.dirname(tmp_path), "missingness_report.md")
-            result = subprocess.run([
-                sys.executable, os.path.join("code", "missingness.py"), tmp_path, "--output", missingness_report_path
-            ], capture_output=True, text=True)
-            if os.path.exists(missingness_report_path):
-                with open(missingness_report_path, "r") as f:
-                    md = f.read()
+            try:
+                # Use the enhanced missingness module directly
+                import sys
+                sys.path.append("./code")
+                import missingness
+                
+                st.info("Analyzing missingness with enhanced methods...")
+                
+                # Generate missingness report using the enhanced module
+                md = missingness.analyze_missingness(df)
                 st.session_state['missingness_report_md'] = md
+                
+                # Parse the markdown to extract column info
                 rows = [line for line in md.splitlines() if line.startswith('|') and not line.startswith('|---')]
                 if len(rows) > 0:
                     rows = rows[1:]
@@ -1256,13 +1662,43 @@ elif page == "Fill Missingness":
                     parts = [p.strip() for p in row.strip('|').split('|')]
                     if len(parts) == 5:
                         col_info.append(parts)
+                
                 st.session_state['missingness_col_info'] = col_info
                 st.session_state['missingness_evaluated'] = True
                 st.rerun()
-            else:
-                st.error("Missingness report could not be generated.\n" + result.stderr)
-            if os.path.exists(missingness_report_path):
-                os.remove(missingness_report_path)
+                
+            except Exception as e:
+                st.error(f"Error during missingness analysis: {e}")
+                st.info("Falling back to basic missingness analysis...")
+                
+                # Fallback to basic analysis
+                import sys, os, tempfile, subprocess, re, pandas as pd
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as tmp:
+                    df.to_csv(tmp.name, index=False)
+                    tmp_path = tmp.name
+                missingness_report_path = os.path.join(os.path.dirname(tmp_path), "missingness_report.md")
+                result = subprocess.run([
+                    sys.executable, os.path.join("code", "missingness.py"), tmp_path, "--output", missingness_report_path
+                ], capture_output=True, text=True)
+                if os.path.exists(missingness_report_path):
+                    with open(missingness_report_path, "r") as f:
+                        md = f.read()
+                    st.session_state['missingness_report_md'] = md
+                    rows = [line for line in md.splitlines() if line.startswith('|') and not line.startswith('|---')]
+                    if len(rows) > 0:
+                        rows = rows[1:]
+                    col_info = []
+                    for row in rows:
+                        parts = [p.strip() for p in row.strip('|').split('|')]
+                        if len(parts) == 5:
+                            col_info.append(parts)
+                    st.session_state['missingness_col_info'] = col_info
+                    st.session_state['missingness_evaluated'] = True
+                    st.rerun()
+                else:
+                    st.error("Missingness report could not be generated.\n" + result.stderr)
+                if os.path.exists(missingness_report_path):
+                    os.remove(missingness_report_path)
     else:
         st.write("Please import data first.")
 
@@ -1342,10 +1778,11 @@ elif page == "Create Compliance Report":
         "Create Compliance Report", 
         "Assess your data for regulatory compliance risks and generate detailed reports",
         "📋"
+        
     )
     #st.title("Create Compliance Report")
     st.write("""
-    This tool evaluates your dataset for compliance risks relative to major data protection and AI regulations. It analyzes your data for personally identifiable information (PII), sensitive attributes, missing values, and risks related to automated decision-making. The tool generates a detailed markdown report describing the data, potential compliance risks (with references to GDPR, CCPA, and the EU AI Act), and an action plan for remediation.
+    This tool evaluates your dataset for compliance risks relative to major data protection and AI regulations. It analyzes your data for personally identifiable information (PII), sensitive attributes, missing values, and risks related to automated decision-making. The tool generates a detailed markdown report describing the data, potential compliance risks (with references to GDPR, CCPA, and the EU AI Act), and an action plan for remediation. TRUIFY.AI does not guarantee compliance with any laws, regulations, or industry standards. Using the Service does not reduce, eliminate, or otherwise affect your legal or compliance risks.
     """)
     st.subheader("Select Compliance Policies to Check:")
     

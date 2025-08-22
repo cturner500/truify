@@ -250,6 +250,16 @@ def login_page():
         username = st.text_input("Username", key="username_input")
         password = st.text_input("Password", type="password", key="password_input")
         
+        # Terms and Conditions checkbox
+        st.markdown("""
+        <style>
+        .stCheckbox label {
+            color: white !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        terms_accepted = st.checkbox("I agree to TRUIFY.AI's Terms and Conditions", key="terms_checkbox")
+        
         # Create custom styled submit button
         st.markdown("""
         <style>
@@ -279,6 +289,22 @@ def login_page():
         .stForm .stButton {
             width: 50% !important;
             max-width: 50% !important;
+        }
+        /* Terms and conditions checkbox styling */
+        .stForm .stCheckbox {
+            margin: 15px 0 !important;
+            text-align: left !important;
+        }
+        .stForm .stCheckbox label {
+            color: #cccccc !important;
+            font-size: 14px !important;
+        }
+        .stForm .stCheckbox a {
+            color: #87CEEB !important;
+            text-decoration: underline !important;
+        }
+        .stForm .stCheckbox a:hover {
+            color: #B0E0E6 !important;
         }
         </style>
         """, unsafe_allow_html=True)
@@ -315,7 +341,9 @@ def login_page():
     
     # Handle login outside the form
     if submit_button:
-        if check_credentials(username, password):
+        if not terms_accepted:
+            st.error("You must accept the Terms and Conditions to proceed.")
+        elif check_credentials(username, password):
             st.session_state['authenticated'] = True
             st.session_state['username'] = username
             save_session_to_file(username)
@@ -329,6 +357,74 @@ def login_page():
             st.error("User or Password do not match our records.")
     
     st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Terms and Conditions expander (at the bottom of the page)
+    with st.expander("View Terms and Conditions", expanded=False):
+        # Custom CSS for white text on black background
+        st.markdown("""
+        <style>
+        .stExpander .stMarkdown {
+            color: white !important;
+        }
+        .stExpander h3 {
+            color: white !important;
+        }
+        .stExpander p {
+            color: white !important;
+        }
+        .stExpander a {
+            color: #87CEEB !important;
+        }
+        .stExpander strong {
+            color: #ffeb3b !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Important Legal Disclaimer
+        st.markdown("""
+        **IMPORTANT LEGAL DISCLAIMER:** TRUIFY.AI is a data analysis and compliance assessment tool that provides informational guidance only. This tool does not constitute legal advice, does not make legal recommendations, and does not confirm that your data will be compliant with any applicable laws or regulations. TRUIFY.AI does not reduce or eliminate your legal or compliance risks. You should consult with qualified legal counsel to review and finalize any changes recommended by TRUIFY.AI before using data for any production workflows.
+        """)
+        
+        # Section 1: Acceptance of Terms
+        st.subheader("1. Acceptance of Terms")
+        st.write("By accessing and using TRUIFY.AI (\"the Service\"), you accept and agree to be bound by the terms and provision of this agreement.")
+        
+        # Section 2: No Legal Advice
+        st.subheader("2. No Legal Advice")
+        st.markdown("""
+        **CRITICAL:** TRUIFY.AI is not a law firm and does not provide legal services. The information, tools, and recommendations provided through the Service are for informational and educational purposes only.
+        """)
+        
+        # Section 3: Compliance and Risk Disclaimer
+        st.subheader("3. Compliance and Risk Disclaimer")
+        st.markdown("""
+        **COMPLIANCE RISK DISCLAIMER:** TRUIFY.AI does not guarantee compliance with any laws, regulations, or industry standards. Using the Service does not reduce, eliminate, or otherwise affect your legal or compliance risks.
+        """)
+        
+        # Section 4: User Responsibilities
+        st.subheader("4. User Responsibilities")
+        st.write("Users are responsible for:")
+        st.markdown("""
+        • Consulting with qualified legal counsel before implementing any changes  
+        • Having legal counsel review all recommendations before production use  
+        • Understanding that compliance requirements vary by jurisdiction and industry  
+        • Recognizing that laws and regulations change over time
+        """)
+        
+        # Section 5: Contact Information
+        st.subheader("5. Contact Information")
+        st.markdown("""
+        **For questions about these Terms and Conditions:**  
+        Email: [info@truify.ai](mailto:info@truify.ai)  
+        Website: [https://truify.ai](https://truify.ai)
+        """)
+        
+        # Footer
+        st.markdown("""
+        ---
+        *© 2024 TRUIFY.AI. All rights reserved.*
+        """)
 
 def get_logo_base64():
     """Get the TruifyBanner2.png as base64 string"""
