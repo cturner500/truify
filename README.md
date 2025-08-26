@@ -54,8 +54,7 @@ Through these approaches, practitioners can achieve the following benefits:
 </ul>
 
 <h1>Getting Started</h1>
-To install the truify python library: <br>
-<code>pip install truify</code><br><br>
-To see a sample application using the truify libraries: <br>
-<code>streamlit run code/main.py --theme.base="dark"</code>
+
+To see a sample streamlit application using the truify libraries: <br>
+<code>OPENROUTER_API_KEY="your_api_key_here" python -m streamlit run code/main.py</code>
 

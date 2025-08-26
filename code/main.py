@@ -1427,6 +1427,12 @@ elif page == "Describe Data":
     #st.title("Describe Data")
     if 'df' in st.session_state:
         df = st.session_state['df']
+        
+        # Data preview section
+        st.subheader("📋 Data Preview")
+        st.write(f"Dataset shape: {df.shape[0]} rows × {df.shape[1]} columns")
+        st.dataframe(df.head(10), use_container_width=True)
+        
         if 'genai_description' in st.session_state:
             st.subheader("AI-Generated Dataset Description")
             st.info(st.session_state['genai_description'])
@@ -1766,6 +1772,7 @@ elif page == "Export Data":
             file_name=filename,
             mime='text/csv',
         )
+        st.button("Update Original Source")
     else:
         st.write("Please import data first.")
 
