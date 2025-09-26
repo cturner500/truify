@@ -13,7 +13,7 @@ Truify is an agentic, open source project to help data and AI pratcitioners prep
 <li>Inaccessibility (unstructured/semistructured i.e. PDFs and photos)</li>
 </UL>
 <br>
-<center></center><img src="diagram.png"/></center>
+<center></center><img src="/images/diagram.png"/></center>
 <h1>Approach</h1>
 Truify addresses each of these problems with known best-practice approaches as follows.
 <table>
